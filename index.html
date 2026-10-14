@@ -137,9 +137,6 @@ input[type="range"] { accent-color: var(--accent); flex: 1; min-width: 0; }
 .patch.cur .pl { color: var(--ink); }
 .pl { display: flex; justify-content: space-between; gap: 4px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
 .pl span { white-space: nowrap; }
-.pbar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
-.pbar span { display: block; height: 100%; background: var(--muted); }
-.patch.best .pbar span { background: var(--accent); }
 .vnote { font-size: 13px; color: var(--muted); padding: 12px 16px 14px; border-top: 1px solid var(--line); }
 /* specimen switcher: arrows on the stage, a dot per specimen, swipe or drag sideways */
 .lyr { position: absolute; inset: 0; }
@@ -498,7 +495,7 @@ html.lb-open { overflow: hidden; }
   .next::after { width: 220px; right: -130px; }
   footer::after { width: 260px; right: -150px; top: auto; bottom: -60px; opacity: .05; }
 }
-@media (max-width: 400px) { .pl .w { display: none; } .when { white-space: normal; } }
+@media (max-width: 400px) { .pl .w, .pl .off { display: none; } .when { white-space: normal; } }
 @media (max-width: 359px) { .navlinks a { font-size: 12px; } }
 </style>
 
@@ -609,13 +606,13 @@ html.lb-open { overflow: hidden; }
       <div class="evidence" id="fs-evidence">
         <div class="evhead"><span id="fs-readout" aria-live="polite">Hover or tap the specimen to see which slice is sharpest at that point.</span><span class="mono tnum" id="fs-xy"></span></div>
         <div class="patches" id="fs-patches">
-          <div class="patch" data-k="1"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>1</span><span class="tnum">–</span></div><div class="pbar"><span style="width:0"></span></div></div>
-          <div class="patch" data-k="2"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>2</span><span class="tnum">–</span></div><div class="pbar"><span style="width:0"></span></div></div>
-          <div class="patch" data-k="3"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>3</span><span class="tnum">–</span></div><div class="pbar"><span style="width:0"></span></div></div>
-          <div class="patch" data-k="4"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>4</span><span class="tnum">–</span></div><div class="pbar"><span style="width:0"></span></div></div>
+          <div class="patch" data-k="1"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>1</span><span class="tnum off"></span></div></div>
+          <div class="patch" data-k="2"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>2</span><span class="tnum off"></span></div></div>
+          <div class="patch" data-k="3"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>3</span><span class="tnum off"></span></div></div>
+          <div class="patch" data-k="4"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>4</span><span class="tnum off"></span></div></div>
         </div>
       </div>
-      <p class="vnote">Computed live in your browser with the method from my <a href="#focusstack2xr">FocusStack2XR</a> paper: a smoothed Laplacian focus response picks the sharpest slice at each point, the margin over the runner-up gives a confidence, and a 90th-percentile threshold gives a conservative validity mask. PMax blends slices, so the map shows which slice best supports a region, not what PMax used. <span id="fs-vn">The demo uses four slices at reduced resolution, rescaled to match the composite; with so few slices, confidence and agreement run higher than in the paper’s full stacks.</span> Treat the map, and the 2.5D view built from it, as a cue, not as measured depth.</p>
+      <p class="vnote">Computed from every slice of the stack with the method and settings of my <a href="#focusstack2xr">FocusStack2XR</a> paper: a smoothed Laplacian focus response picks the sharpest slice at each point, the margin over the runner-up gives a confidence, and a 90th-percentile threshold gives a conservative validity mask. PMax blends slices, so the map shows which slice best supports a region, not what PMax used. <span id="fs-vn">This specimen has only four slices, rescaled to match the composite and analyzed the same way; with so few slices, confidence and agreement run much higher than in a full stack.</span> Treat the map, and the 2.5D view built from it, as a cue, not as measured depth.</p>
     </div>
     <script type="application/json" id="fs-specimens">
 [
@@ -632,7 +629,22 @@ html.lb-open { overflow: hidden; }
   "comp": "stack-composite.jpg",
   "w": 1600,
   "h": 1067,
-  "note": "The demo uses four slices at reduced resolution, rescaled to match the composite; with so few slices, confidence and agreement run higher than in the paper’s full stacks."
+  "note": "This specimen has only four slices, rescaled to match the composite and analyzed the same way; with so few slices, confidence and agreement run much higher than in a full stack.",
+  "maps": "stack-maps.png",
+  "n": 4,
+  "pos": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "st": {
+   "cmed": 0.9216,
+   "lowc": 0.03,
+   "valid": 9.77,
+   "exact": 99.32,
+   "within1": 99.98
+  }
  },
  {
   "id": "bee-top",
@@ -653,11 +665,34 @@ html.lb-open { overflow: hidden; }
    "s12.jpg"
   ],
   "comp": "composite.jpg",
+  "maps": "maps.png",
   "w": 1600,
   "h": 1067,
-  "of": 127,
+  "n": 127,
+  "pos": [
+   13,
+   23,
+   32,
+   42,
+   51,
+   61,
+   70,
+   80,
+   89,
+   99,
+   108,
+   118
+  ],
+  "st": {
+   "cmed": 0.2997,
+   "lowc": 32.58,
+   "valid": 9.03,
+   "exact": 90.92,
+   "within1": 99.07
+  },
   "fused": true,
   "paper": [
+   "0.274",
    "86.7",
    "97.9"
   ]
@@ -681,11 +716,34 @@ html.lb-open { overflow: hidden; }
    "s12.jpg"
   ],
   "comp": "composite.jpg",
+  "maps": "maps.png",
   "w": 1600,
   "h": 1067,
-  "of": 75,
+  "n": 75,
+  "pos": [
+   25,
+   28,
+   31,
+   34,
+   37,
+   40,
+   44,
+   47,
+   50,
+   53,
+   56,
+   59
+  ],
+  "st": {
+   "cmed": 0.2543,
+   "lowc": 38.69,
+   "valid": 8.59,
+   "exact": 87.66,
+   "within1": 98.11
+  },
   "fused": true,
   "paper": [
+   "0.250",
    "83.8",
    "97.0"
   ]
@@ -709,11 +767,34 @@ html.lb-open { overflow: hidden; }
    "s12.jpg"
   ],
   "comp": "composite.jpg",
+  "maps": "maps.png",
   "w": 1600,
   "h": 1067,
-  "of": 91,
+  "n": 91,
+  "pos": [
+   19,
+   24,
+   30,
+   35,
+   40,
+   45,
+   51,
+   56,
+   61,
+   66,
+   72,
+   77
+  ],
+  "st": {
+   "cmed": 0.2188,
+   "lowc": 45.87,
+   "valid": 9.31,
+   "exact": 84.48,
+   "within1": 97.02
+  },
   "fused": true,
   "paper": [
+   "0.224",
    "80.9",
    "96.3"
   ]
@@ -737,11 +818,34 @@ html.lb-open { overflow: hidden; }
    "s12.jpg"
   ],
   "comp": "composite.jpg",
+  "maps": "maps.png",
   "w": 1600,
   "h": 1067,
-  "of": 63,
+  "n": 63,
+  "pos": [
+   19,
+   22,
+   25,
+   28,
+   31,
+   34,
+   37,
+   40,
+   43,
+   46,
+   49,
+   52
+  ],
+  "st": {
+   "cmed": 0.221,
+   "lowc": 44.83,
+   "valid": 9.31,
+   "exact": 81.8,
+   "within1": 97.51
+  },
   "fused": true,
   "paper": [
+   "0.220",
    "75.6",
    "94.8"
   ]
@@ -765,11 +869,34 @@ html.lb-open { overflow: hidden; }
    "s12.jpg"
   ],
   "comp": "composite.jpg",
+  "maps": "maps.png",
   "w": 1600,
   "h": 1067,
-  "of": 77,
+  "n": 77,
+  "pos": [
+   13,
+   17,
+   21,
+   26,
+   30,
+   34,
+   38,
+   42,
+   46,
+   51,
+   55,
+   59
+  ],
+  "st": {
+   "cmed": 0.2124,
+   "lowc": 46.92,
+   "valid": 8.66,
+   "exact": 76.82,
+   "within1": 95.64
+  },
   "fused": true,
   "paper": [
+   "0.200",
    "70.4",
    "92.7"
   ]
@@ -793,11 +920,34 @@ html.lb-open { overflow: hidden; }
    "s12.jpg"
   ],
   "comp": "composite.jpg",
+  "maps": "maps.png",
   "w": 1600,
   "h": 1067,
-  "of": 62,
+  "n": 62,
+  "pos": [
+   1,
+   6,
+   11,
+   16,
+   21,
+   26,
+   32,
+   37,
+   42,
+   47,
+   52,
+   57
+  ],
+  "st": {
+   "cmed": 0.2754,
+   "lowc": 35.3,
+   "valid": 9.98,
+   "exact": 65.77,
+   "within1": 76.21
+  },
   "fused": true,
   "paper": [
+   "0.266",
    "54.1",
    "72.6"
   ]
@@ -821,11 +971,34 @@ html.lb-open { overflow: hidden; }
    "s12.jpg"
   ],
   "comp": "composite.jpg",
+  "maps": "maps.png",
   "w": 1600,
   "h": 1067,
-  "of": 24,
+  "n": 24,
+  "pos": [
+   4,
+   5,
+   7,
+   8,
+   9,
+   10,
+   12,
+   13,
+   14,
+   15,
+   17,
+   18
+  ],
+  "st": {
+   "cmed": 0.2528,
+   "lowc": 40.41,
+   "valid": 9.98,
+   "exact": 72.34,
+   "within1": 84.05
+  },
   "fused": true,
   "paper": [
+   "0.230",
    "62.5",
    "83.2"
   ]
@@ -1256,7 +1429,7 @@ html.lb-open { overflow: hidden; }
 <footer>
   <div class="wrap">
     <span>© 2026 Bingxi Li (text and code)</span>
-    <span>Specimen images: Essig Museum of Entomology, UC Berkeley, photographed by Bingxi Li during URAP work. The focal-stack analysis on this page runs in your browser.</span>
+    <span>Specimen images: Essig Museum of Entomology, UC Berkeley, photographed by Bingxi Li during URAP work. The focal-stack maps were computed from every slice of each stack.</span>
   </div>
 </footer>
 
@@ -1660,11 +1833,13 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   }
 
   /* ---------- focal-stack viewer ----------
-     Same pipeline as FocusStack2XR, scaled to an 800 px analysis width:
-     S_i = G_sigma * |Laplacian(I_i)|, F = argmax_i S_i, C = (S(1) - S(2)) / (S(1) + 1e-8),
-     validity = max_i S_i >= 90th percentile, then morphological opening and closing.
-     The paper uses sigma = 2.0 and a 5x5 structuring element at 1600 px, so both are halved here.
-     Specimens come from #fs-specimens; only the one on screen is loaded and analyzed, and the last few results are kept. */
+     The maps come from every slice of each stack, computed offline with the FocusStack2XR pipeline at 1600 px
+     (scripts/stackmaps.py): S_i = G_2 * |Laplacian(I_i)|, F = argmax_i S_i, C = (S(1) - S(2)) / (S(1) + 1e-8),
+     validity = max_i S_i >= 90th percentile, then 5x5 opening and closing; FT is the same argmax for the Sobel magnitude.
+     They ship as one greyscale PNG per specimen holding three planes at the 800 px overlay size, one above the other:
+     F | valid << 7, FT (0 outside the mask), and round(100 C).
+     The slider shows a subset of the slices; POS gives each shown slice's number in the full stack.
+     Specimens come from #fs-specimens; only the one on screen is loaded, and the last few maps are kept. */
   const stage = $('fs-stage');
   if (!stage) return;
   let SPECS = [];
@@ -1673,8 +1848,10 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   const lyr = $('fs-lyr'), compImg = stage.querySelector('img.layer[data-k="0"]'), d3Img = $('fs-d3r').querySelector('img');
   let layers = [...stage.querySelectorAll('img.layer')];
   let sliceImgs = layers.filter((im) => im.dataset.k !== '0').sort((a, b) => a.dataset.k - b.dataset.k);
-  const SIGMA = 1.0, MORPH_R = 1;
-  let N = sliceImgs.length, SW = 1600, SH = 1067, AW = 800, AH = 533, PW = AW + 2;
+  let N = sliceImgs.length, SW = 1600, SH = 1067, AW = 800, AH = 533;
+  let NT = N, POS = sliceImgs.map((_, k) => k + 1);   // slices in the whole stack, and the stack numbers of the shown ones
+  function counts(sp) { NT = sp.n || sp.slices.length; POS = sp.pos || sp.slices.map((_, k) => k + 1); }
+  if (SPECS[0]) counts(SPECS[0]);
   // slice colours run indigo, blue, teal, gold from far to near; longer stacks interpolate along the same ramp
   const ANCHORS = [[59, 44, 143], [47, 111, 208], [31, 163, 155], [226, 185, 59]];
   function palette(n) {
@@ -1683,7 +1860,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
       return ANCHORS[a].map((v, c) => Math.round(v + (ANCHORS[a + 1][c] - v) * f));
     });
   }
-  let COLORS = palette(N);
+  let COLORS = palette(NT);
   const ov = $('fs-ov'), octx = ov.getContext('2d');
   const status = $('fs-status'), badge = $('fs-badge'), legend = $('fs-legend'), nameEl = $('fs-name'), vn = $('fs-vn');
   const zInput = $('fs-z'), zRow = $('fs-zrow'), ovRow = $('fs-ovrow'), ovSel = $('fs-overlay');
@@ -1695,13 +1872,13 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   const PROMPT = 'Hover or tap the specimen to see which slice is sharpest at that point.';
 
   let mode = 'fused', z = 1, overlay = ovSel.value, ready = false, userTouched = false;
-  let S = [], F, FT, C, V, stats = {};
+  let F, FT, C, V, stats = {};
   let pinned = null, sweepTimer = null, sweepRaf = 0, zf = 1, zAnim = 0;
   let cur = 0, loadTok = 0, firstRun = true;
   const cache = new Map();   // specimen id -> analysis; the three most recent are kept
 
   function geometry(sp) {
-    SW = sp.w; SH = sp.h; AW = 800; AH = Math.floor(AW * SH / SW); PW = AW + 2;
+    SW = sp.w; SH = sp.h; AW = 800; AH = Math.floor(AW * SH / SW);
     ov.width = AW; ov.height = AH;
   }
   if (SPECS[0]) geometry(SPECS[0]); else { ov.width = AW; ov.height = AH; }
@@ -1710,7 +1887,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   function buildPatches() {
     const n = Math.min(N, 5);
     patchBox.style.gridTemplateColumns = 'repeat(' + n + ', minmax(0, 1fr))';
-    patchBox.innerHTML = Array.from({ length: n }, (_, i) => '<div class="patch" data-k="' + (i + 1) + '"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span><span class="pn">' + (i + 1) + '</span></span><span class="tnum">–</span></div><div class="pbar"><span style="width:0"></span></div></div>').join('');
+    patchBox.innerHTML = Array.from({ length: n }, (_, i) => '<div class="patch" data-k="' + (i + 1) + '"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span><span class="pn">' + POS[i] + '</span></span><span class="tnum off"></span></div></div>').join('');
     patches = [...patchBox.querySelectorAll('.patch')];
   }
   buildPatches();
@@ -1724,7 +1901,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
       im.classList.remove('on'); im.style.opacity = k === lo ? 1 : top ? f.toFixed(3) : 0; im.style.zIndex = top ? 2 : k === lo ? 1 : 0;
     });
     const near = Math.abs(zf - z) < 0.12;
-    badge.textContent = near ? 'Slice ' + z + ' of ' + N : 'Between slices ' + lo + ' and ' + hi;
+    badge.textContent = near ? 'Slice ' + POS[z - 1] + ' of ' + NT : 'Between slices ' + POS[lo - 1] + ' and ' + POS[hi - 1];
   }
   function setMode(m) {
     mode = m;
@@ -1748,7 +1925,8 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     if (pinned && m !== 'depth') inspect(pinned.ax, pinned.ay, false);
   }
 
-  /* 2.5D view: the paper's relative focus-depth proxy D = F / (N - 1), slice 1 farthest; pixels outside the validity mask stay at D = 0 */
+  /* 2.5D view: the paper's relative focus-depth proxy D = F / (N - 1), slice 1 farthest; pixels outside the validity mask stay at D = 0.
+     Long stacks are drawn as at most 12 layers, each pixel on the layer nearest its D. */
   let depthKey = '', compRGBA = null, rockRaf = 0, tilt = 0, tiltY = 0;
   function buildDepth() {
     if (!ready) return;
@@ -1761,12 +1939,13 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
         compRGBA = x.getImageData(0, 0, AW, AH).data;
       }
       d3r.querySelectorAll('canvas').forEach((c) => c.remove());
-      const P = AW * AH; let raised = 0;
-      for (let k = 1; k < N; k++) {
-        const c = document.createElement('canvas'); c.width = AW; c.height = AH; c.dataset.k = k;
+      const P = AW * AH, L = Math.min(NT, 12), lv = new Uint8Array(P); let raised = 0;
+      for (let i = 0; i < P; i++) lv[i] = (lift === 'all' || V[i]) ? Math.round(F[i] / (NT - 1) * (L - 1)) : 0;
+      for (let k = 1; k < L; k++) {
+        const c = document.createElement('canvas'); c.width = AW; c.height = AH; c.dataset.k = k; c.dataset.l = L;
         const x = c.getContext('2d'), img = x.createImageData(AW, AH), d = img.data;
         for (let i = 0, j = 0; i < P; i++, j += 4) {
-          if (F[i] === k && (lift === 'all' || V[i])) { d[j] = compRGBA[j]; d[j + 1] = compRGBA[j + 1]; d[j + 2] = compRGBA[j + 2]; d[j + 3] = 255; raised++; }
+          if (lv[i] === k) { d[j] = compRGBA[j]; d[j + 1] = compRGBA[j + 1]; d[j + 2] = compRGBA[j + 2]; d[j + 3] = 255; raised++; }
         }
         x.putImageData(img, 0, 0); d3r.append(c);
       }
@@ -1776,7 +1955,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   }
   function placeDepth() {
     const dz = stage.clientWidth * 0.15;
-    d3r.querySelectorAll('canvas').forEach((c) => { c.style.transform = 'translateZ(' + (dz * c.dataset.k / (N - 1)).toFixed(1) + 'px)'; });
+    d3r.querySelectorAll('canvas').forEach((c) => { c.style.transform = 'translateZ(' + (dz * c.dataset.k / (c.dataset.l - 1)).toFixed(1) + 'px)'; });
     applyTilt();
   }
   function applyTilt() { d3r.style.transform = 'scale(0.86) rotateX(' + (tiltY * 10).toFixed(2) + 'deg) rotateY(' + (tilt * 32).toFixed(2) + 'deg)'; }
@@ -1794,7 +1973,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   }
   function setZ(v) {
     zf = Math.max(1, Math.min(N, v)); z = Math.round(zf);
-    zInput.value = zf; window.__fillRange(zInput); zInput.setAttribute('aria-valuetext', 'Slice ' + z + ' of ' + N);
+    zInput.value = zf; window.__fillRange(zInput); zInput.setAttribute('aria-valuetext', 'Slice ' + POS[z - 1] + ' of ' + NT);
     if (mode === 'slices') { stage.classList.add('scrub'); paintZ(); }
     markCurrent();
   }
@@ -1843,117 +2022,28 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   sweepBtn.addEventListener('click', () => { userTouched = true; if (sweeping()) stopSweep(); else startSweep(); });
   ovSel.addEventListener('change', () => { userTouched = true; overlay = ovSel.value; drawOverlay(); drawLegend(); });
 
-  /* image math */
-  function grayOf(img) {
-    const c = document.createElement('canvas'); c.width = AW; c.height = AH;
-    const x = c.getContext('2d', { willReadFrequently: true });
-    x.drawImage(img, 0, 0, AW, AH);
-    const d = x.getImageData(0, 0, AW, AH).data, g = new Float32Array(AW * AH);
-    for (let i = 0, j = 0; i < g.length; i++, j += 4) g[i] = Math.round(0.299 * d[j] + 0.587 * d[j + 1] + 0.114 * d[j + 2]) / 255;
-    return g;
-  }
-  function pad(g) {  // replicate-pad by one pixel so the 3x3 operators need no bounds checks
-    const o = new Float32Array(PW * (AH + 2));
-    for (let y = -1; y <= AH; y++) {
-      const sy = y < 0 ? 0 : y >= AH ? AH - 1 : y;
-      for (let x = -1; x <= AW; x++) { const sx = x < 0 ? 0 : x >= AW ? AW - 1 : x; o[(y + 1) * PW + x + 1] = g[sy * AW + sx]; }
-    }
-    return o;
-  }
-  function absLaplacian(g) {
-    const p = pad(g), o = new Float32Array(AW * AH);
-    for (let y = 0; y < AH; y++) {
-      let i = (y + 1) * PW + 1, j = y * AW;
-      for (let x = 0; x < AW; x++, i++, j++) o[j] = Math.abs(p[i - 1] + p[i + 1] + p[i - PW] + p[i + PW] - 4 * p[i]);
-    }
-    return o;
-  }
-  function tenengrad(g) {
-    const p = pad(g), o = new Float32Array(AW * AH);
-    for (let y = 0; y < AH; y++) {
-      let i = (y + 1) * PW + 1, j = y * AW;
-      for (let x = 0; x < AW; x++, i++, j++) {
-        const a = p[i - PW - 1], b = p[i - PW], c = p[i - PW + 1], d = p[i - 1], f = p[i + 1], q0 = p[i + PW - 1], q = p[i + PW], r = p[i + PW + 1];
-        const gx = (c + 2 * f + r) - (a + 2 * d + q0), gy = (q0 + 2 * q + r) - (a + 2 * b + c);
-        o[j] = Math.sqrt(gx * gx + gy * gy);
-      }
-    }
-    return o;
-  }
-  const KR = Math.ceil(3 * SIGMA), KER = (() => {
-    const k = []; let s = 0;
-    for (let i = -KR; i <= KR; i++) { const v = Math.exp(-(i * i) / (2 * SIGMA * SIGMA)); k.push(v); s += v; }
-    return k.map((v) => v / s);
-  })();
-  function gaussian(src) {
-    const r = KR, k = KER, tmp = new Float32Array(AW * AH), out = new Float32Array(AW * AH);
-    for (let y = 0; y < AH; y++) {
-      const row = y * AW;
-      for (let x = 0; x < AW; x++) {
-        let a = 0;
-        if (x >= r && x < AW - r) { for (let i = -r; i <= r; i++) a += k[i + r] * src[row + x + i]; }
-        else { for (let i = -r; i <= r; i++) { const xx = x + i < 0 ? 0 : x + i >= AW ? AW - 1 : x + i; a += k[i + r] * src[row + xx]; } }
-        tmp[row + x] = a;
-      }
-    }
-    for (let y = 0; y < AH; y++) {
-      const inner = y >= r && y < AH - r;
-      for (let x = 0; x < AW; x++) {
-        let a = 0;
-        if (inner) { for (let i = -r; i <= r; i++) a += k[i + r] * tmp[(y + i) * AW + x]; }
-        else { for (let i = -r; i <= r; i++) { const yy = y + i < 0 ? 0 : y + i >= AH ? AH - 1 : y + i; a += k[i + r] * tmp[yy * AW + x]; } }
-        out[y * AW + x] = a;
-      }
-    }
-    return out;
-  }
-  function morph(m, r, isDilate) {
-    const tmp = new Uint8Array(AW * AH), out = new Uint8Array(AW * AH);
-    for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) {
-      let v = isDilate ? 0 : 1;
-      for (let i = -r; i <= r; i++) { const xx = x + i; const s = xx < 0 || xx >= AW ? (isDilate ? 0 : 1) : m[y * AW + xx]; v = isDilate ? (v | s) : (v & s); }
-      tmp[y * AW + x] = v;
-    }
-    for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) {
-      let v = isDilate ? 0 : 1;
-      for (let i = -r; i <= r; i++) { const yy = y + i; const s = yy < 0 || yy >= AH ? (isDilate ? 0 : 1) : tmp[yy * AW + x]; v = isDilate ? (v | s) : (v & s); }
-      out[y * AW + x] = v;
-    }
-    return out;
-  }
-  // one slice at a time with a yield in between, so a long stack never freezes the page; resolves false if the specimen changed meanwhile
-  async function analyze(tok) {
-    const t0 = performance.now(), sl = [], tl = [];
-    for (const im of sliceImgs) {
-      const g = grayOf(im); sl.push(gaussian(absLaplacian(g))); tl.push(gaussian(tenengrad(g)));
-      await new Promise((r) => setTimeout(r, 0));
-      if (tok !== loadTok) return false;
-    }
-    S = sl; const T = tl, P = AW * AH;
-    F = new Uint8Array(P); FT = new Uint8Array(P); C = new Float32Array(P);
-    const Mx = new Float32Array(P);
-    for (let i = 0; i < P; i++) {
-      let b = 0, s1 = -1, s2 = -1, bt = 0, t1 = -1;
-      for (let k = 0; k < N; k++) {
-        const v = S[k][i];
-        if (v > s1) { s2 = s1; s1 = v; b = k; } else if (v > s2) { s2 = v; }
-        if (T[k][i] > t1) { t1 = T[k][i]; bt = k; }
-      }
-      F[i] = b; FT[i] = bt; Mx[i] = s1; C[i] = (s1 - s2) / (s1 + 1e-8);
-    }
-    const sample = []; for (let i = 0; i < P; i += 7) sample.push(Mx[i]);
-    sample.sort((a, b) => a - b);
-    const p90 = sample[Math.floor(0.9 * (sample.length - 1))];
-    let m = new Uint8Array(P); for (let i = 0; i < P; i++) m[i] = Mx[i] >= p90 ? 1 : 0;
-    m = morph(morph(m, MORPH_R, false), MORPH_R, true);   // opening
-    m = morph(morph(m, MORPH_R, true), MORPH_R, false);   // closing
-    V = m;
-    let nv = 0, ex = 0, w1 = 0; const confs = [], perSlice = new Array(N).fill(0);
-    for (let i = 0; i < P; i++) if (V[i]) { nv++; perSlice[F[i]]++; const d = Math.abs(F[i] - FT[i]); if (d === 0) ex++; if (d <= 1) w1++; if ((i & 3) === 0) confs.push(C[i]); }
-    confs.sort((a, b) => a - b);
-    stats = { perSlice, valid: nv / P, exact: ex / nv, within1: w1 / nv, cmed: confs[Math.floor(confs.length / 2)], ms: Math.round(performance.now() - t0) };
-    ready = true;
-    return true;
+  /* the precomputed maps: one PNG of three stacked planes, drawn 1:1 and unpacked */
+  function loadMaps(sp, tok) {
+    return new Promise((resolve, reject) => {
+      const im = new Image();
+      im.onload = () => {
+        if (tok !== loadTok) { resolve(false); return; }
+        if (im.naturalWidth !== AW || im.naturalHeight !== 3 * AH) { reject(new Error('map size')); return; }
+        const c = document.createElement('canvas'); c.width = AW; c.height = 3 * AH;
+        const x = c.getContext('2d', { willReadFrequently: true });
+        x.drawImage(im, 0, 0);
+        const d = x.getImageData(0, 0, AW, 3 * AH).data, P = AW * AH, perSlice = new Array(NT).fill(0);
+        F = new Uint8Array(P); FT = new Uint8Array(P); C = new Float32Array(P); V = new Uint8Array(P);
+        for (let i = 0, j = 0; i < P; i++, j += 4) {
+          F[i] = d[j] & 127; V[i] = d[j] >> 7; FT[i] = d[j + 4 * P]; C[i] = d[j + 8 * P] / 100;
+          if (V[i]) perSlice[F[i]]++;
+        }
+        stats = Object.assign({}, sp.st, { perSlice });
+        ready = true; resolve(true);
+      };
+      im.onerror = reject;
+      im.src = src(sp, sp.maps);
+    });
   }
 
   function drawOverlay() {
@@ -1975,45 +2065,51 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   const pct = (v) => (100 * v).toFixed(1) + '%';
   function sw(rgb) { return '<i style="background:rgb(' + rgb.join(',') + ')"></i>'; }
   function drawLegend() {
-    if (mode === 'slices') { legend.innerHTML = 'Focus moves through the specimen from slice 1 to slice ' + N + '. Sweep to rack focus through the stack.'; return; }
+    if (mode === 'slices') {
+      legend.innerHTML = (N === NT ? 'Focus moves through the specimen from slice 1 to slice ' + N + '.'
+        : 'The slider steps through ' + N + ' of the stack’s ' + NT + ' slices, from slice ' + POS[0] + ' to slice ' + POS[N - 1] + ', far to near.') + ' Sweep to rack focus through the stack.';
+      return;
+    }
     if (mode === 'depth') {
-      legend.innerHTML = !ready ? '' : '<span>Height is the paper’s depth proxy D = (slice − 1)/(N − 1): slice 1 farthest, slice ' + N + ' nearest. It is a slice index, not a measured height.</span>'
+      legend.innerHTML = !ready ? '' : '<span>Height is the paper’s depth proxy D = (slice − 1)/(N − 1): slice 1 farthest, slice ' + NT + ' nearest. It is a slice index, not a measured height.</span>'
         + (liftSel.value === 'valid'
           ? '<span class="tnum">Only pixels inside the validity mask are lifted (' + pct(stats.raised || 0) + ' of the image sits above D = 0); everything else stays flat. Switch to “Every pixel” to see what the mask prevents.</span>'
           : '<span>Every pixel is lifted by its sharpest slice, so the smooth background gets scattered depths the data don’t support.</span>');
       return;
     }
     if (!ready) { legend.textContent = ''; return; }
-    if (overlay === 'index') legend.innerHTML = (N <= 6
+    if (overlay === 'index') legend.innerHTML = (NT <= 6
       ? COLORS.map((c, k) => '<span>' + sw(c) + 'slice ' + (k + 1) + (stats.perSlice[k] ? '' : ' (none)') + '</span>').join('')
-      : '<span>slice 1</span><span class="ramp" style="background:linear-gradient(90deg,' + ANCHORS.map((c) => 'rgb(' + c.join(',') + ')').join(',') + ')"></span><span>slice ' + N + '</span>')
+      : '<span>slice 1</span><span class="ramp" style="background:linear-gradient(90deg,' + ANCHORS.map((c) => 'rgb(' + c.join(',') + ')').join(',') + ')"></span><span>slice ' + NT + '</span>')
       + '<span>sharpest slice, shown only inside the validity mask</span>';
-    else if (overlay === 'conf') legend.innerHTML = '<span>0</span><span class="ramp" style="background:linear-gradient(90deg,rgb(40,30,110),rgb(255,230,70))"></span><span>1</span><span class="tnum">median C = ' + stats.cmed.toFixed(3) + '</span>';
-    else if (overlay === 'valid') legend.innerHTML = '<span class="tnum">' + pct(stats.valid) + ' of pixels pass the 90th-percentile evidence threshold</span>';
-    else if (overlay === 'agree') legend.innerHTML = '<span>' + sw([31, 163, 155]) + 'same slice</span><span>' + sw([226, 185, 59]) + '±1 slice</span><span>' + sw([214, 64, 69]) + 'disagree</span><span class="tnum">same slice at ' + pct(stats.exact) + ' of valid pixels</span>';
+    else if (overlay === 'conf') legend.innerHTML = '<span>0</span><span class="ramp" style="background:linear-gradient(90deg,rgb(40,30,110),rgb(255,230,70))"></span><span>1</span><span class="tnum">median C = ' + stats.cmed.toFixed(3) + ' over valid pixels; ' + stats.lowc.toFixed(1) + '% are below 0.2</span>';
+    else if (overlay === 'valid') legend.innerHTML = '<span class="tnum">' + stats.valid.toFixed(1) + '% of pixels are in the validity mask</span>';
+    else if (overlay === 'agree') legend.innerHTML = '<span>' + sw([31, 163, 155]) + 'same slice</span><span>' + sw([226, 185, 59]) + '±1 slice</span><span>' + sw([214, 64, 69]) + 'disagree</span><span class="tnum">same slice at ' + stats.exact.toFixed(1) + '% of valid pixels, within one slice at ' + stats.within1.toFixed(1) + '%</span>';
     else legend.textContent = '';
   }
 
   function markCurrent() { patches.forEach((p) => p.classList.toggle('cur', mode === 'slices' && Number(p.dataset.k) === z)); }
 
+  // the shown slice whose stack number is nearest to stack slice f (1-based); ties go to the nearer-focus side
+  function nearestShown(f) { let b = 0; POS.forEach((p, s) => { if (Math.abs(p - f) <= Math.abs(POS[b] - f)) b = s; }); return b; }
   function inspect(ax, ay, hover) {
     if (!ready) return;
-    const i = ay * AW + ax, vals = S.map((s) => s[i]), mx = Math.max(...vals, 1e-12), k = F[i];
+    const i = ay * AW + ax, k = F[i];
     const X = Math.round((ax + 0.5) * SW / AW), Y = Math.round((ay + 0.5) * SH / AH);
     xyOut.textContent = 'x ' + X + ' · y ' + Y;
     readout.innerHTML = V[i]
-      ? '<b>Sharpest slice: ' + (k + 1) + ' of ' + N + '</b> · confidence ' + C[i].toFixed(2) + (FT[i] === F[i] ? ' · Tenengrad agrees' : ' · Tenengrad picks slice ' + (FT[i] + 1))
-      : '<b>Low evidence here</b> · outside the validity mask. Sharpest slice ' + (k + 1) + ', confidence ' + C[i].toFixed(2);
-    const CROP = Math.round(120 * SW / 1600), np = patches.length;
-    const p0 = N <= np ? 0 : Math.max(0, Math.min(N - np, k - Math.floor(np / 2)));
+      ? '<b>Sharpest slice: ' + (k + 1) + ' of ' + NT + '</b> · confidence ' + C[i].toFixed(2) + (FT[i] === F[i] ? ' · Tenengrad agrees' : ' · Tenengrad picks slice ' + (FT[i] + 1))
+      : '<b>Low evidence here</b> · outside the validity mask' + (C[i] === 0 ? '; no slice stands out' : '. Sharpest slice ' + (k + 1) + ', confidence ' + C[i].toFixed(2));
+    const CROP = Math.round(120 * SW / 1600), np = patches.length, near = nearestShown(k + 1);
+    const p0 = N <= np ? 0 : Math.max(0, Math.min(N - np, near - Math.floor(np / 2)));
     patches.forEach((p, n) => {
-      const s = p0 + n, cv = p.querySelector('canvas'), cx = cv.getContext('2d');
-      p.dataset.k = s + 1; p.querySelector('.pn').textContent = s + 1;
+      const s = p0 + n, cv = p.querySelector('canvas'), cx = cv.getContext('2d'), off = POS[s] - (k + 1);
+      p.dataset.k = s + 1; p.querySelector('.pn').textContent = POS[s];
       const sx = Math.max(0, Math.min(SW - CROP, X - CROP / 2)), sy = Math.max(0, Math.min(SH - CROP, Y - CROP / 2));
       cx.drawImage(sliceImgs[s], sx, sy, CROP, CROP, 0, 0, cv.width, cv.height);
-      p.querySelector('.pl > span:last-child').textContent = (vals[s] / mx).toFixed(2);
-      p.querySelector('.pbar span').style.width = (100 * vals[s] / mx).toFixed(1) + '%';
-      p.classList.toggle('best', s === k);
+      p.querySelector('.pl > span:last-child').textContent = off === 0 ? 'sharpest' : (off > 0 ? '+' : '−') + Math.abs(off);
+      p.title = 'Slice ' + POS[s] + (off === 0 ? ', the sharpest here' : ', ' + Math.abs(off) + (Math.abs(off) === 1 ? ' slice ' : ' slices ') + (off > 0 ? 'nearer' : 'farther') + ' than the sharpest');
+      p.classList.toggle('best', s === near);
     });
     markCurrent();
     const el = hover ? hpin : pin;
@@ -2083,10 +2179,9 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   }
   function noteFor(sp) {
     if (sp.note) return sp.note;
-    return 'This specimen uses ' + sp.slices.length + (sp.of ? ' of its ' + sp.of + ' slices, evenly spaced through the focused part of the stack' : ' slices') + ' and aligned for scale and shift.'
+    return 'The maps use all ' + sp.n + ' slices of this stack, aligned for scale and shift; the slider shows ' + sp.slices.length + ' of them.'
       + (sp.fused ? ' Its composite was fused here from the aligned stack with a Laplacian pyramid, standing in for the Zerene PMax output.' : '')
-      + ' Fewer slices make confidence and agreement run higher than in the paper’s full-stack analysis'
-      + (sp.paper ? ' (' + sp.paper[0] + '% exact, ' + sp.paper[1] + '% within one slice).' : '.');
+      + (sp.paper ? ' The paper’s Table 2 analyzed the same stack without alignment: median C ' + sp.paper[0] + ', ' + sp.paper[1] + '% exact, ' + sp.paper[2] + '% within one slice.' : '');
   }
   const src = (sp, f) => sp.base + f;
   function showSpec(i, dir) {
@@ -2106,7 +2201,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
       });
       compImg.before(...sliceImgs);
       compImg.width = SW; compImg.height = SH; compImg.src = src(sp, sp.comp); d3Img.src = compImg.src;
-      layers = [...sliceImgs, compImg]; N = sliceImgs.length; COLORS = palette(N);
+      layers = [...sliceImgs, compImg]; N = sliceImgs.length; counts(sp); COLORS = palette(NT);
       zInput.max = N; setZ(1);
       depthKey = ''; compRGBA = null; d3r.querySelectorAll('canvas').forEach((c) => c.remove());
       nameEl.textContent = sp.name; vn.textContent = noteFor(sp);
@@ -2126,7 +2221,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   function prefetch() {
     if (!multi) return;
     const nx = SPECS[(cur + 1) % SPECS.length], pv = SPECS[(cur - 1 + SPECS.length) % SPECS.length];
-    [src(nx, nx.comp), ...nx.slices.map((f) => src(nx, f)), src(pv, pv.comp)].forEach((u) => { const im = new Image(); im.src = u; });
+    [src(nx, nx.comp), src(nx, nx.maps), ...nx.slices.map((f) => src(nx, f)), src(pv, pv.comp)].forEach((u) => { const im = new Image(); im.src = u; });
   }
 
   let raf = 0;
@@ -2162,7 +2257,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   function defaultPin() {
     let best = -1, bi = -1;
     for (let y = Math.floor(AH * 0.3); y < AH * 0.55; y++) for (let x = Math.floor(AW * 0.4); x < AW * 0.75; x++) {
-      const i = y * AW + x; if (V[i] && C[i] > 0.3) { const sc = S[F[i]][i]; if (sc > best) { best = sc; bi = i; } }
+      const i = y * AW + x; if (V[i] && C[i] > best) { best = C[i]; bi = i; }
     }
     return bi < 0 ? { ax: AW >> 1, ay: AH >> 1 } : { ax: bi % AW, ay: Math.floor(bi / AW) };
   }
@@ -2173,21 +2268,18 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     Promise.all(layers.map(loaded)).then(() => {
       if (tok !== loadTok) return;
       const hit = cache.get(id);
-      if (hit) { cache.delete(id); cache.set(id, hit); ({ S, F, FT, C, V, stats } = hit); ready = true; done(tok); return; }
-      status.textContent = 'Analyzing ' + N + ' slices…';
-      setTimeout(() => {
-        if (tok !== loadTok) return;
-        analyze(tok).then((ok) => {
-          if (!ok) return;
-          cache.set(id, { S, F, FT, C, V, stats });
-          while (cache.size > 3) cache.delete(cache.keys().next().value);
-          done(tok);
-        }, () => { if (tok === loadTok) status.textContent = 'Analysis unavailable in this browser'; });
-      }, 30);
+      if (hit) { cache.delete(id); cache.set(id, hit); ({ F, FT, C, V, stats } = hit); ready = true; done(tok); return; }
+      status.textContent = 'Loading maps…';
+      loadMaps(sp, tok).then((ok) => {
+        if (!ok) return;
+        cache.set(id, { F, FT, C, V, stats });
+        while (cache.size > 3) cache.delete(cache.keys().next().value);
+        done(tok);
+      }, () => { if (tok === loadTok) status.textContent = 'Could not load the maps'; });
     }).catch(() => { if (tok === loadTok) status.textContent = 'Could not load the slices'; });
   }
   function done(tok) {
-    status.textContent = N + ' slices · analyzed in ' + stats.ms + ' ms';
+    status.textContent = NT === N ? 'Maps from ' + NT + ' slices' : 'Maps from all ' + NT + ' slices';
     pinned = defaultPin(); inspect(pinned.ax, pinned.ay, false);
     prefetch();
     if (!firstRun) { setMode(mode); return; }
