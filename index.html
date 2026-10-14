@@ -141,6 +141,21 @@ input[type="range"] { accent-color: var(--accent); flex: 1; min-width: 0; }
 .pbar span { display: block; height: 100%; background: var(--muted); }
 .patch.best .pbar span { background: var(--accent); }
 .vnote { font-size: 13px; color: var(--muted); padding: 12px 16px 14px; border-top: 1px solid var(--line); }
+/* specimen switcher: arrows on the stage, a dot per specimen, swipe or drag sideways */
+.lyr { position: absolute; inset: 0; }
+.stage.multi { touch-action: pan-y pinch-zoom; }
+.snav { position: absolute; top: 50%; z-index: 5; width: 40px; height: 40px; margin-top: -20px; display: grid; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; background: rgba(12,16,22,.55); color: #fff; cursor: pointer; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); transition: background-color .2s, border-color .2s, transform .2s, opacity .2s; }
+.snav.sl { left: 12px; }
+.snav.sr { right: 12px; }
+.snav svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.snav:hover { background: rgba(12,16,22,.78); border-color: rgba(255,255,255,.6); }
+.snav:active { transform: scale(.94); }
+.snav:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.sdots { position: absolute; left: 50%; bottom: 12px; z-index: 5; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 999px; background: rgba(12,16,22,.55); font-family: var(--font-mono); font-size: 11px; color: #fff; pointer-events: none; white-space: nowrap; }
+.sdots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.45); transition: width .25s, background-color .25s; }
+.sdots i.on { width: 16px; border-radius: 3px; background: #fff; }
+.stage.dragging { cursor: grabbing; }
+@media (max-width: 640px) { .snav { width: 34px; height: 34px; margin-top: -17px; } .snav.sl { left: 8px; } .snav.sr { right: 8px; } }
 
 /* sections */
 section.sec { padding-block: 64px; border-top: 1px solid var(--line); }
@@ -538,20 +553,25 @@ html.lb-open { overflow: hidden; }
 
     <div class="viewer" id="viewer">
       <div class="vhead">
-        <span class="t">Focal stack · pinned weevil specimen</span>
+        <span class="t">Focal stack · <span id="fs-name">pinned weevil specimen</span></span>
         <span class="status" id="fs-status" aria-live="polite">Loading slices…</span>
       </div>
       <div class="stage" id="fs-stage" tabindex="0" role="img" aria-label="Focal stack of a pinned weevil specimen. Move through the slices, or inspect which slice is sharpest at each point of the all-in-focus image; use the arrow keys to move the probe.">
-        <img class="layer" src="assets/stack-1.jpg" alt="" data-k="1" width="1600" height="1067">
-        <img class="layer" src="assets/stack-2.jpg" alt="" data-k="2" width="1600" height="1067">
-        <img class="layer" src="assets/stack-3.jpg" alt="" data-k="3" width="1600" height="1067">
-        <img class="layer" src="assets/stack-4.jpg" alt="" data-k="4" width="1600" height="1067">
-        <img class="layer on" src="assets/stack-composite.jpg" alt="" data-k="0" width="1600" height="1067">
-        <div class="d3" id="fs-d3" hidden><div class="d3r" id="fs-d3r"><img src="assets/stack-composite.jpg" alt="" width="1600" height="1067"></div></div>
-        <canvas class="ov" id="fs-ov" hidden></canvas>
+        <div class="lyr" id="fs-lyr">
+          <img class="layer" src="assets/stack-1.jpg" alt="" data-k="1" width="1600" height="1067">
+          <img class="layer" src="assets/stack-2.jpg" alt="" data-k="2" width="1600" height="1067">
+          <img class="layer" src="assets/stack-3.jpg" alt="" data-k="3" width="1600" height="1067">
+          <img class="layer" src="assets/stack-4.jpg" alt="" data-k="4" width="1600" height="1067">
+          <img class="layer on" src="assets/stack-composite.jpg" alt="" data-k="0" width="1600" height="1067">
+          <div class="d3" id="fs-d3" hidden><div class="d3r" id="fs-d3r"><img src="assets/stack-composite.jpg" alt="" width="1600" height="1067"></div></div>
+          <canvas class="ov" id="fs-ov" hidden></canvas>
+        </div>
         <div class="pin hover" id="fs-hpin" hidden></div>
         <div class="pin" id="fs-pin" hidden></div>
         <div class="zbadge" id="fs-badge">All-in-focus composite</div>
+        <button type="button" class="snav sl" id="fs-prev" aria-label="Previous specimen" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="snav sr" id="fs-next" aria-label="Next specimen" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        <div class="sdots" id="fs-dots" aria-live="polite" hidden></div>
       </div>
       <div class="vctl">
         <div class="row">
@@ -595,8 +615,223 @@ html.lb-open { overflow: hidden; }
           <div class="patch" data-k="4"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span>4</span><span class="tnum">–</span></div><div class="pbar"><span style="width:0"></span></div></div>
         </div>
       </div>
-      <p class="vnote">Computed live in your browser with the method from my <a href="#focusstack2xr">FocusStack2XR</a> paper: a smoothed Laplacian focus response picks the sharpest slice at each point, the margin over the runner-up gives a confidence, and a 90th-percentile threshold gives a conservative validity mask. PMax blends slices, so the map shows which slice best supports a region, not what PMax used. The demo uses four slices at reduced resolution, rescaled to match the composite; with so few slices, confidence and agreement run higher than in the paper’s full stacks. Treat the map, and the 2.5D view built from it, as a cue, not as measured depth.</p>
+      <p class="vnote">Computed live in your browser with the method from my <a href="#focusstack2xr">FocusStack2XR</a> paper: a smoothed Laplacian focus response picks the sharpest slice at each point, the margin over the runner-up gives a confidence, and a 90th-percentile threshold gives a conservative validity mask. PMax blends slices, so the map shows which slice best supports a region, not what PMax used. <span id="fs-vn">The demo uses four slices at reduced resolution, rescaled to match the composite; with so few slices, confidence and agreement run higher than in the paper’s full stacks.</span> Treat the map, and the 2.5D view built from it, as a cue, not as measured depth.</p>
     </div>
+    <script type="application/json" id="fs-specimens">
+[
+ {
+  "id": "weevil",
+  "name": "pinned weevil specimen",
+  "base": "assets/",
+  "slices": [
+   "stack-1.jpg",
+   "stack-2.jpg",
+   "stack-3.jpg",
+   "stack-4.jpg"
+  ],
+  "comp": "stack-composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "note": "The demo uses four slices at reduced resolution, rescaled to match the composite; with so few slices, confidence and agreement run higher than in the paper’s full stacks."
+ },
+ {
+  "id": "bee-top",
+  "name": "bee, top view",
+  "base": "assets/stacks/bee-top/",
+  "slices": [
+   "s01.jpg",
+   "s02.jpg",
+   "s03.jpg",
+   "s04.jpg",
+   "s05.jpg",
+   "s06.jpg",
+   "s07.jpg",
+   "s08.jpg",
+   "s09.jpg",
+   "s10.jpg",
+   "s11.jpg",
+   "s12.jpg"
+  ],
+  "comp": "composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "of": 127,
+  "fused": true,
+  "paper": [
+   "86.7",
+   "97.9"
+  ]
+ },
+ {
+  "id": "bee-side",
+  "name": "bee, side view",
+  "base": "assets/stacks/bee-side/",
+  "slices": [
+   "s01.jpg",
+   "s02.jpg",
+   "s03.jpg",
+   "s04.jpg",
+   "s05.jpg",
+   "s06.jpg",
+   "s07.jpg",
+   "s08.jpg",
+   "s09.jpg",
+   "s10.jpg",
+   "s11.jpg",
+   "s12.jpg"
+  ],
+  "comp": "composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "of": 75,
+  "fused": true,
+  "paper": [
+   "83.8",
+   "97.0"
+  ]
+ },
+ {
+  "id": "bee-front",
+  "name": "bee, front view",
+  "base": "assets/stacks/bee-front/",
+  "slices": [
+   "s01.jpg",
+   "s02.jpg",
+   "s03.jpg",
+   "s04.jpg",
+   "s05.jpg",
+   "s06.jpg",
+   "s07.jpg",
+   "s08.jpg",
+   "s09.jpg",
+   "s10.jpg",
+   "s11.jpg",
+   "s12.jpg"
+  ],
+  "comp": "composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "of": 91,
+  "fused": true,
+  "paper": [
+   "80.9",
+   "96.3"
+  ]
+ },
+ {
+  "id": "beetle-shell",
+  "name": "beetle shell, top view",
+  "base": "assets/stacks/beetle-shell/",
+  "slices": [
+   "s01.jpg",
+   "s02.jpg",
+   "s03.jpg",
+   "s04.jpg",
+   "s05.jpg",
+   "s06.jpg",
+   "s07.jpg",
+   "s08.jpg",
+   "s09.jpg",
+   "s10.jpg",
+   "s11.jpg",
+   "s12.jpg"
+  ],
+  "comp": "composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "of": 63,
+  "fused": true,
+  "paper": [
+   "75.6",
+   "94.8"
+  ]
+ },
+ {
+  "id": "wings",
+  "name": "transparent wings",
+  "base": "assets/stacks/wings/",
+  "slices": [
+   "s01.jpg",
+   "s02.jpg",
+   "s03.jpg",
+   "s04.jpg",
+   "s05.jpg",
+   "s06.jpg",
+   "s07.jpg",
+   "s08.jpg",
+   "s09.jpg",
+   "s10.jpg",
+   "s11.jpg",
+   "s12.jpg"
+  ],
+  "comp": "composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "of": 77,
+  "fused": true,
+  "paper": [
+   "70.4",
+   "92.7"
+  ]
+ },
+ {
+  "id": "long-elongated",
+  "name": "long insect, elongated view",
+  "base": "assets/stacks/long-elongated/",
+  "slices": [
+   "s01.jpg",
+   "s02.jpg",
+   "s03.jpg",
+   "s04.jpg",
+   "s05.jpg",
+   "s06.jpg",
+   "s07.jpg",
+   "s08.jpg",
+   "s09.jpg",
+   "s10.jpg",
+   "s11.jpg",
+   "s12.jpg"
+  ],
+  "comp": "composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "of": 62,
+  "fused": true,
+  "paper": [
+   "54.1",
+   "72.6"
+  ]
+ },
+ {
+  "id": "long-left",
+  "name": "long insect, left lateral view",
+  "base": "assets/stacks/long-left/",
+  "slices": [
+   "s01.jpg",
+   "s02.jpg",
+   "s03.jpg",
+   "s04.jpg",
+   "s05.jpg",
+   "s06.jpg",
+   "s07.jpg",
+   "s08.jpg",
+   "s09.jpg",
+   "s10.jpg",
+   "s11.jpg",
+   "s12.jpg"
+  ],
+  "comp": "composite.jpg",
+  "w": 1600,
+  "h": 1067,
+  "of": 24,
+  "fused": true,
+  "paper": [
+   "62.5",
+   "83.2"
+  ]
+ }
+]
+    </script>
   </div>
 </section>
 <section class="sec" id="research" aria-labelledby="research-title">
@@ -1428,25 +1663,57 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
      Same pipeline as FocusStack2XR, scaled to an 800 px analysis width:
      S_i = G_sigma * |Laplacian(I_i)|, F = argmax_i S_i, C = (S(1) - S(2)) / (S(1) + 1e-8),
      validity = max_i S_i >= 90th percentile, then morphological opening and closing.
-     The paper uses sigma = 2.0 and a 5x5 structuring element at 1600 px, so both are halved here. */
+     The paper uses sigma = 2.0 and a 5x5 structuring element at 1600 px, so both are halved here.
+     Specimens come from #fs-specimens; only the one on screen is loaded and analyzed, and the last few results are kept. */
   const stage = $('fs-stage');
   if (!stage) return;
-  const layers = [...stage.querySelectorAll('img.layer')];
-  const sliceImgs = layers.filter((im) => im.dataset.k !== '0').sort((a, b) => a.dataset.k - b.dataset.k);
-  const N = sliceImgs.length, AW = 800, AH = 533, SIGMA = 1.0, MORPH_R = 1;
-  const COLORS = [[59, 44, 143], [47, 111, 208], [31, 163, 155], [226, 185, 59]];
+  let SPECS = [];
+  try { SPECS = JSON.parse($('fs-specimens').textContent); } catch (e) { SPECS = []; }
+  const multi = SPECS.length > 1;
+  const lyr = $('fs-lyr'), compImg = stage.querySelector('img.layer[data-k="0"]'), d3Img = $('fs-d3r').querySelector('img');
+  let layers = [...stage.querySelectorAll('img.layer')];
+  let sliceImgs = layers.filter((im) => im.dataset.k !== '0').sort((a, b) => a.dataset.k - b.dataset.k);
+  const SIGMA = 1.0, MORPH_R = 1;
+  let N = sliceImgs.length, SW = 1600, SH = 1067, AW = 800, AH = 533, PW = AW + 2;
+  // slice colours run indigo, blue, teal, gold from far to near; longer stacks interpolate along the same ramp
+  const ANCHORS = [[59, 44, 143], [47, 111, 208], [31, 163, 155], [226, 185, 59]];
+  function palette(n) {
+    return Array.from({ length: n }, (_, k) => {
+      const t = n > 1 ? k / (n - 1) * (ANCHORS.length - 1) : 0, a = Math.min(ANCHORS.length - 2, Math.floor(t)), f = t - a;
+      return ANCHORS[a].map((v, c) => Math.round(v + (ANCHORS[a + 1][c] - v) * f));
+    });
+  }
+  let COLORS = palette(N);
   const ov = $('fs-ov'), octx = ov.getContext('2d');
-  ov.width = AW; ov.height = AH;
-  const status = $('fs-status'), badge = $('fs-badge'), legend = $('fs-legend');
+  const status = $('fs-status'), badge = $('fs-badge'), legend = $('fs-legend'), nameEl = $('fs-name'), vn = $('fs-vn');
   const zInput = $('fs-z'), zRow = $('fs-zrow'), ovRow = $('fs-ovrow'), ovSel = $('fs-overlay');
   const bSlices = $('fs-m-slices'), bFused = $('fs-m-fused'), sweepBtn = $('fs-sweep');
   const bDepth = $('fs-m-depth'), dRow = $('fs-drow'), tiltIn = $('fs-tilt'), liftSel = $('fs-lift'), d3 = $('fs-d3'), d3r = $('fs-d3r');
   const pin = $('fs-pin'), hpin = $('fs-hpin'), readout = $('fs-readout'), xyOut = $('fs-xy');
-  const patches = [...document.querySelectorAll('#fs-patches .patch')];
+  const prevBtn = $('fs-prev'), nextBtn = $('fs-next'), dots = $('fs-dots'), patchBox = $('fs-patches');
+  let patches = [];
+  const PROMPT = 'Hover or tap the specimen to see which slice is sharpest at that point.';
 
   let mode = 'fused', z = 1, overlay = ovSel.value, ready = false, userTouched = false;
-  let S = [], T = [], F, FT, C, V, stats = {};
+  let S = [], F, FT, C, V, stats = {};
   let pinned = null, sweepTimer = null, sweepRaf = 0, zf = 1, zAnim = 0;
+  let cur = 0, loadTok = 0, firstRun = true;
+  const cache = new Map();   // specimen id -> analysis; the three most recent are kept
+
+  function geometry(sp) {
+    SW = sp.w; SH = sp.h; AW = 800; AH = Math.floor(AW * SH / SW); PW = AW + 2;
+    ov.width = AW; ov.height = AH;
+  }
+  if (SPECS[0]) geometry(SPECS[0]); else { ov.width = AW; ov.height = AH; }
+
+  // up to five evidence patches; in longer stacks they follow the sharpest slice and its neighbours
+  function buildPatches() {
+    const n = Math.min(N, 5);
+    patchBox.style.gridTemplateColumns = 'repeat(' + n + ', minmax(0, 1fr))';
+    patchBox.innerHTML = Array.from({ length: n }, (_, i) => '<div class="patch" data-k="' + (i + 1) + '"><canvas width="160" height="160"></canvas><div class="pl"><span><span class="w">slice </span><span class="pn">' + (i + 1) + '</span></span><span class="tnum">–</span></div><div class="pbar"><span style="width:0"></span></div></div>').join('');
+    patches = [...patchBox.querySelectorAll('.patch')];
+  }
+  buildPatches();
 
   function setLayer(k) { stage.classList.remove('scrub'); layers.forEach((im) => { im.style.opacity = ''; im.style.zIndex = ''; im.classList.toggle('on', Number(im.dataset.k) === k); }); }
   // between two slices, the nearer-focus slice fades over the other, so dragging reads as a continuous focus pull
@@ -1490,7 +1757,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
       if (!compRGBA) {
         const c = document.createElement('canvas'); c.width = AW; c.height = AH;
         const x = c.getContext('2d', { willReadFrequently: true });
-        x.drawImage(layers.find((im) => im.dataset.k === '0'), 0, 0, AW, AH);
+        x.drawImage(compImg, 0, 0, AW, AH);
         compRGBA = x.getImageData(0, 0, AW, AH).data;
       }
       d3r.querySelectorAll('canvas').forEach((c) => c.remove());
@@ -1585,7 +1852,6 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     for (let i = 0, j = 0; i < g.length; i++, j += 4) g[i] = Math.round(0.299 * d[j] + 0.587 * d[j + 1] + 0.114 * d[j + 2]) / 255;
     return g;
   }
-  const PW = AW + 2;
   function pad(g) {  // replicate-pad by one pixel so the 3x3 operators need no bounds checks
     const o = new Float32Array(PW * (AH + 2));
     for (let y = -1; y <= AH; y++) {
@@ -1655,12 +1921,15 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     }
     return out;
   }
-  function analyze() {
-    const t0 = performance.now();
-    const grays = sliceImgs.map(grayOf);
-    S = grays.map((g) => gaussian(absLaplacian(g)));
-    T = grays.map((g) => gaussian(tenengrad(g)));
-    const P = AW * AH;
+  // one slice at a time with a yield in between, so a long stack never freezes the page; resolves false if the specimen changed meanwhile
+  async function analyze(tok) {
+    const t0 = performance.now(), sl = [], tl = [];
+    for (const im of sliceImgs) {
+      const g = grayOf(im); sl.push(gaussian(absLaplacian(g))); tl.push(gaussian(tenengrad(g)));
+      await new Promise((r) => setTimeout(r, 0));
+      if (tok !== loadTok) return false;
+    }
+    S = sl; const T = tl, P = AW * AH;
     F = new Uint8Array(P); FT = new Uint8Array(P); C = new Float32Array(P);
     const Mx = new Float32Array(P);
     for (let i = 0; i < P; i++) {
@@ -1684,6 +1953,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     confs.sort((a, b) => a - b);
     stats = { perSlice, valid: nv / P, exact: ex / nv, within1: w1 / nv, cmed: confs[Math.floor(confs.length / 2)], ms: Math.round(performance.now() - t0) };
     ready = true;
+    return true;
   }
 
   function drawOverlay() {
@@ -1714,7 +1984,10 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
       return;
     }
     if (!ready) { legend.textContent = ''; return; }
-    if (overlay === 'index') legend.innerHTML = COLORS.map((c, k) => '<span>' + sw(c) + 'slice ' + (k + 1) + (stats.perSlice[k] ? '' : ' (none)') + '</span>').join('') + '<span>sharpest slice, shown only inside the validity mask</span>';
+    if (overlay === 'index') legend.innerHTML = (N <= 6
+      ? COLORS.map((c, k) => '<span>' + sw(c) + 'slice ' + (k + 1) + (stats.perSlice[k] ? '' : ' (none)') + '</span>').join('')
+      : '<span>slice 1</span><span class="ramp" style="background:linear-gradient(90deg,' + ANCHORS.map((c) => 'rgb(' + c.join(',') + ')').join(',') + ')"></span><span>slice ' + N + '</span>')
+      + '<span>sharpest slice, shown only inside the validity mask</span>';
     else if (overlay === 'conf') legend.innerHTML = '<span>0</span><span class="ramp" style="background:linear-gradient(90deg,rgb(40,30,110),rgb(255,230,70))"></span><span>1</span><span class="tnum">median C = ' + stats.cmed.toFixed(3) + '</span>';
     else if (overlay === 'valid') legend.innerHTML = '<span class="tnum">' + pct(stats.valid) + ' of pixels pass the 90th-percentile evidence threshold</span>';
     else if (overlay === 'agree') legend.innerHTML = '<span>' + sw([31, 163, 155]) + 'same slice</span><span>' + sw([226, 185, 59]) + '±1 slice</span><span>' + sw([214, 64, 69]) + 'disagree</span><span class="tnum">same slice at ' + pct(stats.exact) + ' of valid pixels</span>';
@@ -1726,19 +1999,21 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   function inspect(ax, ay, hover) {
     if (!ready) return;
     const i = ay * AW + ax, vals = S.map((s) => s[i]), mx = Math.max(...vals, 1e-12), k = F[i];
-    const X = Math.round((ax + 0.5) * 1600 / AW), Y = Math.round((ay + 0.5) * 1067 / AH);
+    const X = Math.round((ax + 0.5) * SW / AW), Y = Math.round((ay + 0.5) * SH / AH);
     xyOut.textContent = 'x ' + X + ' · y ' + Y;
     readout.innerHTML = V[i]
       ? '<b>Sharpest slice: ' + (k + 1) + ' of ' + N + '</b> · confidence ' + C[i].toFixed(2) + (FT[i] === F[i] ? ' · Tenengrad agrees' : ' · Tenengrad picks slice ' + (FT[i] + 1))
       : '<b>Low evidence here</b> · outside the validity mask. Sharpest slice ' + (k + 1) + ', confidence ' + C[i].toFixed(2);
-    const CROP = 120;
+    const CROP = Math.round(120 * SW / 1600), np = patches.length;
+    const p0 = N <= np ? 0 : Math.max(0, Math.min(N - np, k - Math.floor(np / 2)));
     patches.forEach((p, n) => {
-      const cv = p.querySelector('canvas'), cx = cv.getContext('2d');
-      const sx = Math.max(0, Math.min(1600 - CROP, X - CROP / 2)), sy = Math.max(0, Math.min(1067 - CROP, Y - CROP / 2));
-      cx.drawImage(sliceImgs[n], sx, sy, CROP, CROP, 0, 0, cv.width, cv.height);
-      p.querySelector('.pl > span:last-child').textContent = (vals[n] / mx).toFixed(2);
-      p.querySelector('.pbar span').style.width = (100 * vals[n] / mx).toFixed(1) + '%';
-      p.classList.toggle('best', n === k);
+      const s = p0 + n, cv = p.querySelector('canvas'), cx = cv.getContext('2d');
+      p.dataset.k = s + 1; p.querySelector('.pn').textContent = s + 1;
+      const sx = Math.max(0, Math.min(SW - CROP, X - CROP / 2)), sy = Math.max(0, Math.min(SH - CROP, Y - CROP / 2));
+      cx.drawImage(sliceImgs[s], sx, sy, CROP, CROP, 0, 0, cv.width, cv.height);
+      p.querySelector('.pl > span:last-child').textContent = (vals[s] / mx).toFixed(2);
+      p.querySelector('.pbar span').style.width = (100 * vals[s] / mx).toFixed(1) + '%';
+      p.classList.toggle('best', s === k);
     });
     markCurrent();
     const el = hover ? hpin : pin;
@@ -1750,8 +2025,113 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     const ay = Math.max(0, Math.min(AH - 1, Math.floor((ev.clientY - r.top) / r.height * AH)));
     return { ax, ay };
   }
+
+  /* switching specimens: arrows, or a sideways swipe or drag on the image */
+  let drag = null, swallowUntil = 0, outAnim = null;
+  stage.addEventListener('dragstart', (ev) => ev.preventDefault());
+  stage.addEventListener('pointerdown', (ev) => {
+    if (!multi || ev.button !== 0 || ev.target.closest('.snav')) return;
+    if (ev.pointerType === 'mouse' && mode === 'depth') return;
+    drag = { id: ev.pointerId, x: ev.clientX, y: ev.clientY, on: false, dx: 0 };
+  });
+  stage.addEventListener('pointermove', (ev) => {
+    if (!drag || ev.pointerId !== drag.id) return;
+    const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y;
+    if (!drag.on) {
+      if (Math.abs(dx) < 12 || Math.abs(dx) < 1.3 * Math.abs(dy)) return;
+      drag.on = true; stage.classList.add('dragging'); hpin.hidden = true;
+      try { stage.setPointerCapture(ev.pointerId); } catch (e) { /* capture is optional */ }
+    }
+    drag.dx = dx;
+    lyr.style.transform = 'translateX(' + (dx * 0.6).toFixed(1) + 'px)';
+    lyr.style.opacity = Math.max(0.3, 1 - Math.abs(dx) / (stage.clientWidth * 1.1)).toFixed(3);
+  });
+  function endDrag(ev, cancelled) {
+    if (!drag || ev.pointerId !== drag.id) return;
+    const d = drag; drag = null; stage.classList.remove('dragging');
+    if (!d.on) return;
+    swallowUntil = performance.now() + 400;
+    if (!cancelled && Math.abs(d.dx) > Math.min(80, stage.clientWidth * 0.16)) { userTouched = true; const dir = d.dx < 0 ? 1 : -1; showSpec(cur + dir, dir); }
+    else snapBack();
+  }
+  stage.addEventListener('pointerup', (ev) => endDrag(ev, false));
+  stage.addEventListener('pointercancel', (ev) => endDrag(ev, true));
+  function snapBack() {
+    const from = lyr.style.transform, op = lyr.style.opacity || '1';
+    lyr.style.transform = ''; lyr.style.opacity = '';
+    if (from && !reduceMotion && lyr.animate) lyr.animate([{ transform: from, opacity: op }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  }
+  function slideOut(dir, done) {
+    const from = lyr.style.transform || 'none', op = lyr.style.opacity || '1';
+    lyr.style.transform = ''; lyr.style.opacity = '';
+    if (reduceMotion || !lyr.animate) { done(); return; }
+    if (outAnim) outAnim.cancel();
+    outAnim = lyr.animate([{ transform: from, opacity: op }, { transform: 'translateX(' + (-dir * 10) + '%)', opacity: 0 }], { duration: 170, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' });
+    outAnim.onfinish = done;
+  }
+  function slideIn(dir) {
+    const a = outAnim; outAnim = null;
+    if (reduceMotion || !lyr.animate) { if (a) a.cancel(); return; }
+    lyr.animate([{ transform: 'translateX(' + (dir * 10) + '%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 280, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    if (a) a.cancel();
+  }
+  function drawDots() {
+    const L = SPECS.length;
+    dots.innerHTML = L <= 12 ? SPECS.map((_, i) => '<i' + (i === cur ? ' class="on"' : '') + '></i>').join('') : '<span class="tnum">' + (cur + 1) + ' / ' + L + '</span>';
+    prevBtn.setAttribute('aria-label', 'Previous specimen (' + ((cur - 1 + L) % L + 1) + ' of ' + L + ')');
+    nextBtn.setAttribute('aria-label', 'Next specimen (' + ((cur + 1) % L + 1) + ' of ' + L + ')');
+  }
+  function noteFor(sp) {
+    if (sp.note) return sp.note;
+    return 'This specimen uses ' + sp.slices.length + (sp.of ? ' of its ' + sp.of + ' slices, evenly spaced through the focused part of the stack' : ' slices') + ' and aligned for scale and shift.'
+      + (sp.fused ? ' Its composite was fused here from the aligned stack with a Laplacian pyramid, standing in for the Zerene PMax output.' : '')
+      + ' Fewer slices make confidence and agreement run higher than in the paper’s full-stack analysis'
+      + (sp.paper ? ' (' + sp.paper[0] + '% exact, ' + sp.paper[1] + '% within one slice).' : '.');
+  }
+  const src = (sp, f) => sp.base + f;
+  function showSpec(i, dir) {
+    const L = SPECS.length;
+    i = ((i % L) + L) % L;
+    if (i === cur) { snapBack(); return; }
+    const tok = ++loadTok, sp = SPECS[i];
+    cur = i; drawDots();
+    stopSweep(); stopRock(); cancelAnimationFrame(zAnim); zAnim = 0;
+    ready = false; pinned = null; pin.hidden = true; hpin.hidden = true; ov.hidden = true;
+    slideOut(dir, () => {
+      if (tok !== loadTok) return;
+      geometry(sp); stage.style.aspectRatio = SW + ' / ' + SH;
+      sliceImgs.forEach((im) => im.remove());
+      sliceImgs = sp.slices.map((f, k) => {
+        const im = new Image(); im.className = 'layer'; im.alt = ''; im.dataset.k = k + 1; im.width = SW; im.height = SH; im.src = src(sp, f); return im;
+      });
+      compImg.before(...sliceImgs);
+      compImg.width = SW; compImg.height = SH; compImg.src = src(sp, sp.comp); d3Img.src = compImg.src;
+      layers = [...sliceImgs, compImg]; N = sliceImgs.length; COLORS = palette(N);
+      zInput.max = N; setZ(1);
+      depthKey = ''; compRGBA = null; d3r.querySelectorAll('canvas').forEach((c) => c.remove());
+      nameEl.textContent = sp.name; vn.textContent = noteFor(sp);
+      stage.setAttribute('aria-label', 'Focal stack: ' + sp.name + '. Move through the slices, or inspect which slice is sharpest at each point of the all-in-focus image; use the arrow keys to move the probe.');
+      status.textContent = 'Loading slices…'; readout.textContent = PROMPT; xyOut.textContent = '';
+      buildPatches(); setMode(mode);
+      const first = mode === 'slices' ? sliceImgs[0] : compImg;
+      loaded(first).then(() => { if (tok === loadTok) slideIn(dir); }, () => { if (tok === loadTok) slideIn(dir); });
+      start(tok);
+    });
+  }
+  if (multi) {
+    prevBtn.hidden = false; nextBtn.hidden = false; dots.hidden = false; stage.classList.add('multi'); drawDots();
+    prevBtn.addEventListener('click', (ev) => { ev.stopPropagation(); userTouched = true; showSpec(cur - 1, -1); });
+    nextBtn.addEventListener('click', (ev) => { ev.stopPropagation(); userTouched = true; showSpec(cur + 1, 1); });
+  }
+  function prefetch() {
+    if (!multi) return;
+    const nx = SPECS[(cur + 1) % SPECS.length], pv = SPECS[(cur - 1 + SPECS.length) % SPECS.length];
+    [src(nx, nx.comp), ...nx.slices.map((f) => src(nx, f)), src(pv, pv.comp)].forEach((u) => { const im = new Image(); im.src = u; });
+  }
+
   let raf = 0;
   stage.addEventListener('pointermove', (ev) => {
+    if (drag && drag.on) return;
     if (mode === 'depth') {
       if (ev.pointerType === 'touch') return;
       stopRock();
@@ -1759,13 +2139,13 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
       tiltY = 1 - 2 * (ev.clientY - r.top) / r.height; setTilt(2 * (ev.clientX - r.left) / r.width - 1);
       return;
     }
-    if (!ready || ev.pointerType === 'touch') return;
+    if (!ready || ev.pointerType === 'touch' || ev.target.closest('.snav')) return;
     const p = toAnalysis(ev);
     cancelAnimationFrame(raf); raf = requestAnimationFrame(() => inspect(p.ax, p.ay, true));
   });
   stage.addEventListener('pointerleave', () => { if (mode === 'depth') { tiltY = 0; applyTilt(); return; } hpin.hidden = true; if (pinned) inspect(pinned.ax, pinned.ay, false); });
   stage.addEventListener('click', (ev) => {
-    if (!ready || mode === 'depth') return; userTouched = true;
+    if (!ready || mode === 'depth' || performance.now() < swallowUntil) return; userTouched = true;
     pinned = toAnalysis(ev); hpin.hidden = true; inspect(pinned.ax, pinned.ay, false);
   });
 
@@ -1780,29 +2160,47 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   });
 
   function defaultPin() {
-    let best = -1, bi = 0;
+    let best = -1, bi = -1;
     for (let y = Math.floor(AH * 0.3); y < AH * 0.55; y++) for (let x = Math.floor(AW * 0.4); x < AW * 0.75; x++) {
       const i = y * AW + x; if (V[i] && C[i] > 0.3) { const sc = S[F[i]][i]; if (sc > best) { best = sc; bi = i; } }
     }
-    return { ax: bi % AW, ay: Math.floor(bi / AW) };
+    return bi < 0 ? { ax: AW >> 1, ay: AH >> 1 } : { ax: bi % AW, ay: Math.floor(bi / AW) };
   }
 
   const loaded = (im) => (im.complete && im.naturalWidth ? Promise.resolve() : new Promise((res, rej) => { im.addEventListener('load', res, { once: true }); im.addEventListener('error', rej, { once: true }); }));
-  Promise.all(layers.map(loaded)).then(() => {
-    status.textContent = 'Analyzing ' + N + ' slices…';
-    setTimeout(() => {
-      try { analyze(); } catch (e) { status.textContent = 'Analysis unavailable in this browser'; return; }
-      status.textContent = N + ' slices · analyzed in ' + stats.ms + ' ms';
-      pinned = defaultPin(); inspect(pinned.ax, pinned.ay, false);
-      if (reduceMotion || userTouched) { if (mode === 'depth') setMode('depth'); else { drawOverlay(); drawLegend(); } return; }
-      // opening rack focus: glide through the slices once, then show the composite
-      setMode('slices'); setZ(1);
+  function start(tok) {
+    const sp = SPECS[cur], id = sp ? sp.id : '';
+    Promise.all(layers.map(loaded)).then(() => {
+      if (tok !== loadTok) return;
+      const hit = cache.get(id);
+      if (hit) { cache.delete(id); cache.set(id, hit); ({ S, F, FT, C, V, stats } = hit); ready = true; done(tok); return; }
+      status.textContent = 'Analyzing ' + N + ' slices…';
       setTimeout(() => {
-        if (userTouched) return;
-        animZ(N, 2600, () => setTimeout(() => { if (!userTouched) setMode('fused'); }, 650));
-      }, 450);
-    }, 30);
-  }).catch(() => { status.textContent = 'Could not load the slices'; });
+        if (tok !== loadTok) return;
+        analyze(tok).then((ok) => {
+          if (!ok) return;
+          cache.set(id, { S, F, FT, C, V, stats });
+          while (cache.size > 3) cache.delete(cache.keys().next().value);
+          done(tok);
+        }, () => { if (tok === loadTok) status.textContent = 'Analysis unavailable in this browser'; });
+      }, 30);
+    }).catch(() => { if (tok === loadTok) status.textContent = 'Could not load the slices'; });
+  }
+  function done(tok) {
+    status.textContent = N + ' slices · analyzed in ' + stats.ms + ' ms';
+    pinned = defaultPin(); inspect(pinned.ax, pinned.ay, false);
+    prefetch();
+    if (!firstRun) { setMode(mode); return; }
+    firstRun = false;
+    if (reduceMotion || userTouched) { setMode(mode); return; }
+    // opening rack focus: glide through the slices once, then show the composite
+    setMode('slices'); setZ(1);
+    setTimeout(() => {
+      if (userTouched || tok !== loadTok) return;
+      animZ(N, 2600, () => setTimeout(() => { if (!userTouched && tok === loadTok) setMode('fused'); }, 650));
+    }, 450);
+  }
+  start(loadTok);
   drawLegend();
 })();
 </script>
