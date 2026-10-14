@@ -465,7 +465,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         </figure>
         <figure class="fig" style="margin:0">
           <div class="fig-head">
-            <span class="fig-title">Why my SNR exponent came out above&nbsp;½</span>
+            <span class="fig-title">Temporal stacks: why my SNR exponent came out above&nbsp;½</span>
             <div class="seg" role="group" aria-label="SNR estimate" id="snr-k">
               <button type="button" aria-pressed="true" data-k="rep">As measured</button><button type="button" aria-pressed="false" data-k="adj">Finite-sample adjusted</button>
             </div>
@@ -1077,7 +1077,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     svg.append(lab);
     svg.append(el('line', { x1: L, x2: L, y1: T, y2: H - B, class: 'axis' }));
     document.getElementById('snr-cap').innerHTML = snrK === 'rep'
-      ? 'A fit over N = 1–64 frames of 192 high-ISO RAW captures gave SNR ∝ N<sup>0.536</sup>. Averaging independent noise can’t beat √N, so I suspected the estimator: noise at each N is a median of pixelwise standard deviations over 192/N averaged blocks, and at N = 64 only three blocks remain.'
+      ? 'Baseline for the temporal half: plain averaging of N frames, with no selection. A fit over N = 1–64 frames of 192 high-ISO RAW captures gave SNR ∝ N<sup>0.536</sup>. Averaging independent noise can’t beat √N, so I suspected the estimator: noise at each N is a median of pixelwise standard deviations over 192/N averaged blocks, and at N = 64 only three blocks remain.'
       : 'Adjusting that statistic for the number of blocks left at each N, under an illustrative Gaussian i.i.d. model, gives an exponent of 0.500, and a separate within-run variance statistic scales as N<sup>−0.999</sup> over N = 1–16. Nothing here requires better-than-√N averaging.';
   }
   segGroup('snr-k', (d) => { snrK = d.k; drawSNR(); });
