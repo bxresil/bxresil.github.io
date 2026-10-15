@@ -497,6 +497,85 @@ html.lb-open { overflow: hidden; }
 }
 @media (max-width: 400px) { .pl .w, .pl .off { display: none; } .when { white-space: normal; } }
 @media (max-width: 359px) { .navlinks a { font-size: 12px; } }
+/* optics tour: five tabs, each a short explanation, a few equations and one simulation */
+.otabs { display: none; gap: 8px; margin-top: 28px; padding: 2px; overflow-x: auto; scrollbar-width: none; }
+.js .otabs { display: flex; }
+.otabs::-webkit-scrollbar { display: none; }
+.otab { flex: 1 0 0; min-width: 0; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 8px; align-items: center; text-align: left; padding: 10px; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; transition: border-color .2s, background-color .2s, box-shadow .2s; }
+.otab svg { grid-row: 1 / span 2; width: 30px; height: 30px; color: var(--muted); fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; transition: color .2s; }
+.otab svg .f { fill: currentColor; stroke: none; }
+.otab .t { font-weight: 600; font-size: 13.5px; line-height: 1.25; white-space: nowrap; }
+.otab .n { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .04em; color: var(--muted); white-space: nowrap; }
+.otab:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.otab[aria-selected="true"] { background: var(--accent-soft); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.otab[aria-selected="true"] svg, .otab[aria-selected="true"] .n { color: var(--accent); }
+.opanels { margin-top: 24px; }
+.opanel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.opanel + .opanel { margin-top: 48px; }
+.js .opanel + .opanel { margin-top: 0; }
+.opanel:focus-visible { outline-offset: 6px; }
+.js .opanel { animation: rise .5s var(--ease) backwards; }
+.otxt { max-width: 44em; display: grid; gap: 12px; }
+.otxt h3 { font-family: var(--font-display); font-weight: 500; font-size: 26px; line-height: 1.2; }
+.eqs { display: flex; flex-wrap: wrap; gap: 10px; }
+.eq { display: grid; gap: 3px; align-content: start; padding: 9px 14px 10px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 6px; min-width: 0; max-width: 100%; }
+.eq .m { font-family: var(--font-display); font-size: 19px; line-height: 1.35; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.eq .m::-webkit-scrollbar { display: none; }
+.eq .d { font-size: 12.5px; color: var(--muted); }
+.fr { display: inline-grid; vertical-align: middle; text-align: center; font-size: .8em; line-height: 1.15; margin-inline: 1px; }
+.fr > span:first-child { border-bottom: 1px solid currentColor; padding-inline: 2px; }
+.omine { max-width: 44em; font-size: 15px; }
+.omine .lbl { display: block; margin-bottom: 4px; color: var(--accent); }
+.oref { max-width: 52em; font-size: 13px; color: var(--muted); }
+.ochips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ochips .lbl { margin-right: 4px; }
+.ochips button { font: 500 13px var(--font-body); color: var(--muted); background: var(--sunken); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; transition: color .2s, background-color .2s, border-color .2s; }
+.ochips button:hover { color: var(--ink); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.ochips button[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
+.ocv { display: block; width: 100%; height: auto; max-width: 100%; border-radius: 8px; touch-action: pan-y; }
+.oview { position: relative; border-radius: 8px; overflow: hidden; background: #000; min-width: 0; }
+.oview canvas { display: block; width: 100%; height: auto; }
+.oview canvas.ovl { position: absolute; inset: 0; height: 100%; pointer-events: none; }
+.otg { position: absolute; left: 8px; top: 8px; font-family: var(--font-mono); font-size: 11px; color: #fff; background: rgba(12,16,22,.62); padding: 2px 7px; border-radius: 4px; pointer-events: none; white-space: nowrap; max-width: calc(100% - 16px); overflow: hidden; text-overflow: ellipsis; }
+.orow3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.orow2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 560px; }
+.octl { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.oswatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 35%, transparent); }
+.ocount { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.opress { cursor: zoom-in; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.ab-s input:disabled { opacity: .4; cursor: not-allowed; }
+.ab-s:has(input:disabled) label, .ab-s:has(input:disabled) output { opacity: .5; }
+/* lens bench */
+.lens-out { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 14px; align-items: start; }
+.lens-sn { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #000; }
+.lens-sn canvas { display: block; width: 100%; height: 100%; }
+.lens-sn .otg { top: auto; bottom: 6px; left: 6px; font-size: 10px; }
+#lens-cv { cursor: default; }
+#lens-cv.grab { cursor: ew-resize; }
+/* coded aperture */
+.ap-prev { width: 44px; height: 44px; border-radius: 6px; background: #000; display: block; }
+.ap-row { display: flex; align-items: center; gap: 12px; }
+#ft-cv { cursor: crosshair; touch-action: none; }
+@media (max-width: 1180px) {
+  .otab { flex: 1 0 auto; grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; row-gap: 3px; padding: 9px 8px 8px; }
+  .otab svg { grid-row: auto; width: 26px; height: 26px; }
+  .otab .n { display: none; }
+}
+@media (max-width: 640px) {
+  .otabs { gap: 6px; margin-inline: -2px; }
+  .otab { padding: 8px 6px 7px; }
+  .otab svg { width: 24px; height: 24px; }
+  .otab .t { font-size: 11.5px; }
+  .otxt h3 { font-size: 22px; }
+  .eq .m { font-size: 17px; }
+  .orow3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .orow3 .o-orig { display: none; }
+  .orow3.ft3 .o-ft { grid-column: 1 / -1; order: -1; width: min(100%, 300px); justify-self: center; }
+  .orow2 { gap: 8px; }
+  .lens-out { grid-template-columns: 96px minmax(0, 1fr); gap: 10px; }
+  .lens-sn .otg { left: 4px; bottom: 4px; padding: 1px 4px; }
+  .lens-out .ab-v { font-size: 13.5px; }
+}
 </style>
 
 </head>
@@ -508,6 +587,7 @@ html.lb-open { overflow: hidden; }
       <a href="#research">Research</a>
       <a href="#publications">Publications</a>
       <a href="#projects">Projects</a>
+      <a href="#optics">Optics</a>
       <a href="#experience">Experience</a>
       <a href="#photography">Photography</a>
       <a href="#contact">Contact</a>
@@ -1070,7 +1150,7 @@ html.lb-open { overflow: hidden; }
             <p class="ti">FocusStack2XR: Provenance-Preserving Depth-Aware Visualization of Focal-Stacked Specimen Images</p>
             <p class="au"><b>Bingxi Li</b></p>
             <p class="meta">IEEE International Symposium on Mixed and Augmented Reality (ISMAR), 2026.</p>
-            <p class="links"><a href="assets/papers/Li_FocusStack2XR_ISMAR2026.pdf" target="_blank" rel="noopener">Paper (PDF)</a><a href="#focusstack2xr">Project summary</a><a href="#viewer">Simplified in-browser demo</a></p>
+            <p class="links"><a href="assets/papers/Li_FocusStack2XR_ISMAR2026.pdf" target="_blank" rel="noopener">Paper (PDF)</a><a href="#focusstack2xr">Project summary</a><a href="#viewer">Interactive viewer</a></p>
           </div>
         </li>
         <li class="pub">
@@ -1151,7 +1231,7 @@ html.lb-open { overflow: hidden; }
             <div class="txt">
               <p>An <span class="term" tabindex="0" data-def="One image fused from the sharpest regions of every slice in a focal stack.">all-in-focus composite</span> is good documentation but it erases provenance: you can no longer tell which slice supports a region, or whether that assignment is ambiguous. FocusStack2XR keeps that evidence. It computes a focus-index map, a confidence margin, a conservative validity mask and a relative focus-depth layer, and a browser viewer lets you switch overlays, browse slices and click a region to see its predicted source slice. Relative depth is treated as an inspection cue, not calibrated 3D geometry.</p>
               <p>The “XR” is the goal, not the current system: the prototype is a desktop browser viewer and hasn’t been tried in a headset or with users. The paper’s argument is that a plausible 2.5D view can imply geometry the data don’t support, so the evidence layers have to come first.</p>
-              <p>The <a href="#viewer">viewer at the top of this page</a> is a simplified version of the same pipeline. The paper evaluates seven stacks across four specimen categories and reports where the method breaks: transparent wings and cluttered scenes.</p>
+              <p>The <a href="#viewer">viewer at the top of this page</a> shows maps computed with this method from every slice of each stack. The paper evaluates seven stacks across four specimen categories and reports where the method breaks: transparent wings and cluttered scenes.</p>
             </div>
             <figure class="fig" style="margin:0">
               <div class="fig-head">
@@ -1319,6 +1399,200 @@ html.lb-open { overflow: hidden; }
     </div>
   </div>
 </section>
+
+<section class="sec" id="optics" aria-labelledby="optics-title">
+  <div class="wrap">
+    <p class="sec-label">Optics</p>
+    <div class="sec-body">
+      <h2 id="optics-title">Optics, from rays to photons</h2>
+      <p class="sec-intro">A short tour of the optics behind imaging, in five parts. Each part describes light in a different way and comes with a small simulation that runs in your browser.</p>
+      <div class="otabs" role="tablist" aria-label="Optics topics">
+        <button class="otab" type="button" role="tab" id="ot-geo" aria-controls="optics-geometric" aria-selected="true"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 16L15 7.5L29 16M3 16L15 24.5L29 16M3 16H29"/><path d="M15 5.5c2.2 3 2.2 18 0 21c-2.2-3-2.2-18 0-21z"/></svg><span class="t">Geometric</span><span class="n">light as rays</span></button>
+        <button class="otab" type="button" role="tab" id="ot-wave" aria-controls="optics-wave" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 4v9.5M4 18.5V28"/><path d="M9 12a5 5 0 0 1 0 8M13 9a9.5 9.5 0 0 1 0 14M17.5 6a14 14 0 0 1 0 20M22 3.5a18.5 18.5 0 0 1 0 25"/></svg><span class="t">Wave</span><span class="n">light as waves</span></button>
+        <button class="otab" type="button" role="tab" id="ot-fourier" aria-controls="optics-fourier" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10.5" stroke-dasharray="2.4 2.2"/><circle class="f" cx="16" cy="16" r="2.6"/><circle class="f" cx="16" cy="9" r="1.5"/><circle class="f" cx="16" cy="23" r="1.5"/><circle class="f" cx="9" cy="16" r="1.5"/><circle class="f" cx="23" cy="16" r="1.5"/><circle class="f" cx="10" cy="10" r=".9"/><circle class="f" cx="22" cy="22" r=".9"/><circle class="f" cx="22" cy="10" r=".9"/><circle class="f" cx="10" cy="22" r=".9"/></svg><span class="t">Fourier</span><span class="n">frequency space</span></button>
+        <button class="otab" type="button" role="tab" id="ot-comp" aria-controls="optics-computational" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5"/><rect class="f" x="9" y="9" width="4.6" height="4.6"/><rect class="f" x="18.4" y="9" width="4.6" height="4.6"/><rect class="f" x="13.7" y="13.7" width="4.6" height="4.6"/><rect class="f" x="9" y="18.4" width="4.6" height="4.6"/><rect class="f" x="18.4" y="18.4" width="4.6" height="4.6" opacity=".45"/></svg><span class="t">Computational</span><span class="n">optics + compute</span></button>
+        <button class="otab" type="button" role="tab" id="ot-quantum" aria-controls="optics-quantum" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><circle class="f" cx="16" cy="7" r="1.3"/><circle class="f" cx="15.5" cy="13" r="1.3"/><circle class="f" cx="16.4" cy="20" r="1.3"/><circle class="f" cx="15.8" cy="26" r="1.3"/><circle class="f" cx="9" cy="10" r="1.3"/><circle class="f" cx="9.6" cy="22" r="1.3"/><circle class="f" cx="23" cy="15" r="1.3"/><circle class="f" cx="22.5" cy="24" r="1.3"/><circle class="f" cx="3.5" cy="17" r="1"/><circle class="f" cx="28.5" cy="9" r="1"/><path d="M2 30h28" opacity=".5"/></svg><span class="t">Quantum</span><span class="n">light as photons</span></button>
+      </div>
+      <div class="opanels">
+
+        <div class="opanel" role="tabpanel" id="optics-geometric" aria-labelledby="ot-geo" tabindex="0">
+          <div class="otxt">
+            <h3>Rays, lenses and a thin zone of focus</h3>
+            <p>When everything in an optical system is much larger than the wavelength, light can be treated as rays: straight lines that bend where they pass from one material into another, following Snell’s law. A lens is shaped so that the rays leaving one object point meet again at one image point. How far behind the lens they meet depends on the focal length <i>f</i> and on how far away the object is.</p>
+            <p>Put the sensor anywhere else and each point spreads into a small disk, the <span class="term" tabindex="0" data-def="The disk that a single object point makes on a sensor that is not exactly at the image plane." data-name="Blur circle">blur circle</span>. Its size scales with the aperture diameter <i>D</i>, so a smaller aperture, a larger <span class="term" tabindex="0" data-def="Focal length divided by aperture diameter, N = f/D. Each full stop, such as f/4 to f/5.6, halves the light." data-name="f-number">f-number</span>, deepens the zone that looks sharp. Close up, that zone gets very thin: at life size and f/8 it is about a millimetre deep, which is why insect specimens are photographed as focal stacks.</p>
+          </div>
+          <div class="eqs">
+            <div class="eq"><span class="m"><i>n</i><sub>1</sub> sin <i>θ</i><sub>1</sub> = <i>n</i><sub>2</sub> sin <i>θ</i><sub>2</sub></span><span class="d">Snell’s law</span></div>
+            <div class="eq"><span class="m"><span class="fr"><span>1</span><span><i>s</i><sub>o</sub></span></span> + <span class="fr"><span>1</span><span><i>s</i><sub>i</sub></span></span> = <span class="fr"><span>1</span><span><i>f</i></span></span></span><span class="d">thin lens</span></div>
+            <div class="eq"><span class="m"><i>m</i> = −<i>s</i><sub>i</sub> / <i>s</i><sub>o</sub></span><span class="d">magnification</span></div>
+            <div class="eq"><span class="m"><i>b</i> = <i>D</i> |1 − <i>d</i> / <i>s</i><sub>i</sub>|</span><span class="d">blur with the sensor at distance <i>d</i></span></div>
+          </div>
+          <figure class="fig" id="lens-fig" style="margin:0">
+            <div class="fig-head">
+              <span class="fig-title">Try it: focus a thin lens</span>
+              <button type="button" class="iconbtn" id="lens-focus">Focus on the object</button>
+            </div>
+            <canvas class="ocv" id="lens-cv" width="1240" height="570" role="img" aria-label="Ray diagram of a thin lens with an object arrow on the left, a sensor on the right and the rays between them"></canvas>
+            <div class="ab-ctl">
+              <div class="ab-s"><label for="lens-o">Object distance <i>s</i><sub>o</sub></label><output id="lens-o-o" for="lens-o"></output><input type="range" id="lens-o" min="30" max="300" step="1" value="150"></div>
+              <div class="ab-s"><label for="lens-d">Sensor distance <i>d</i></label><output id="lens-d-o" for="lens-d"></output><input type="range" id="lens-d" min="20" max="300" step="0.1" value="90"></div>
+              <div class="ab-s"><label for="lens-f">Focal length <i>f</i></label><output id="lens-f-o" for="lens-f"></output><input type="range" id="lens-f" min="20" max="100" step="1" value="50"></div>
+              <div class="ab-s"><label for="lens-n">Aperture</label><output id="lens-n-o" for="lens-n"></output><input type="range" id="lens-n" min="0" max="7" step="1" value="2"></div>
+            </div>
+            <div class="ab-opt"><label><input type="checkbox" id="lens-rays"> Show the three textbook construction rays</label></div>
+            <div class="lens-out">
+              <div class="lens-sn"><canvas id="lens-sensor" width="240" height="240" role="img" aria-label="The object arrow as the sensor records it"></canvas><span class="otg">On the sensor</span></div>
+              <p class="ab-v" id="lens-v" aria-live="polite"></p>
+            </div>
+            <figcaption class="fig-cap">Paraxial thin-lens model with distances in millimetres; heights are drawn at three times the horizontal scale. Drag the object or the sensor, or use the sliders. The shaded band marks the object distances that stay sharp to within <i>c</i> = 0.03 mm on the sensor, a common limit for full-frame cameras.</figcaption>
+          </figure>
+          <p class="omine"><span class="lbl">Where it meets my work</span>Depth of field is why the <a href="#essig">Essig specimens</a> on this site were photographed as focal stacks, and why the <a href="#viewer">viewer at the top</a> asks which slice is sharpest where.</p>
+          <p class="oref">Further reading: E. Hecht, <i>Optics</i>, 5th ed. (Pearson, 2017).</p>
+        </div>
+
+        <div class="opanel" role="tabpanel" id="optics-wave" aria-labelledby="ot-wave" tabindex="0">
+          <div class="otxt">
+            <h3>Interference, diffraction and the resolution limit</h3>
+            <p>Light is an electromagnetic wave; visible wavelengths run from about 400 to 700 nm. By Huygens’ principle, every point on a wavefront acts as a source of new wavelets. Behind two narrow slits the wavelets from each slit overlap: where they arrive in step they add, and where they arrive half a wavelength apart they cancel. Thomas Young’s interference experiments in the early 1800s used fringes like these as evidence that light is a wave.</p>
+            <p>The same spreading limits every lens. Even a perfect lens images a point as a small <span class="term" tabindex="0" data-def="The image of a point through a perfect circular lens: a bright central disk ringed by faint circles, set by diffraction." data-name="Airy pattern">Airy pattern</span>, and two points closer than about 0.61 λ/NA (the Rayleigh criterion) blur together until they are hard to tell apart, where NA is the lens’s <span class="term" tabindex="0" data-def="NA = n sin θ, where θ is the half-angle of the cone of light the lens accepts and n is the refractive index in front of it. Oil-immersion microscope objectives reach about 1.4." data-name="Numerical aperture">numerical aperture</span>. Better glass cannot remove this limit. Shorter wavelengths and wider apertures shrink it, and super-resolution microscopy gets around it by changing what is measured.</p>
+          </div>
+          <div class="eqs">
+            <div class="eq"><span class="m"><i>d</i> sin <i>θ</i> = <i>m</i><i>λ</i></span><span class="d">bright fringes, slit spacing <i>d</i></span></div>
+            <div class="eq"><span class="m"><i>a</i> sin <i>θ</i> = <i>m</i><i>λ</i>, <i>m</i> ≠ 0</span><span class="d">dark fringes, one slit of width <i>a</i></span></div>
+            <div class="eq"><span class="m"><i>r</i> = 0.61 <i>λ</i> / NA</span><span class="d">Rayleigh resolution</span></div>
+          </div>
+          <figure class="fig" id="wave-fig" style="margin:0">
+            <div class="fig-head">
+              <span class="fig-title">Try it: send a wave through slits</span>
+              <button type="button" class="iconbtn" id="wave-play" aria-pressed="false">Play</button>
+            </div>
+            <div class="octl">
+              <div class="seg" role="group" aria-label="Number of slits" id="wave-n"><button type="button" aria-pressed="false" data-n="1">1 slit</button><button type="button" aria-pressed="true" data-n="2">2 slits</button><button type="button" aria-pressed="false" data-n="5">5 slits</button></div>
+              <div class="seg" role="group" aria-label="View" id="wave-view"><button type="button" aria-pressed="true" data-v="w">Waves</button><button type="button" aria-pressed="false" data-v="i">Brightness</button></div>
+            </div>
+            <div class="oview"><canvas id="wave-cv" width="320" height="214" role="img" aria-label="Top view of a wave passing through slits in a barrier and spreading out behind it"></canvas><canvas class="ovl" id="wave-ov" width="640" height="428" aria-hidden="true"></canvas></div>
+            <canvas class="ocv" id="wave-ff" width="1240" height="300" role="img" aria-label="Far-field intensity against angle"></canvas>
+            <div class="ab-ctl">
+              <div class="ab-s"><label for="wave-l">Wavelength <i>λ</i></label><output id="wave-l-o" for="wave-l"></output><input type="range" id="wave-l" min="400" max="700" step="5" value="550"></div>
+              <div class="ab-s"><label for="wave-d">Slit spacing <i>d</i></label><output id="wave-d-o" for="wave-d"></output><input type="range" id="wave-d" min="1.5" max="5" step="0.1" value="2.5"></div>
+              <div class="ab-s"><label for="wave-a">Slit width <i>a</i></label><output id="wave-a-o" for="wave-a"></output><input type="range" id="wave-a" min="0.2" max="3" step="0.05" value="0.4"></div>
+            </div>
+            <p class="ab-v" id="wave-v" aria-live="polite"></p>
+            <figcaption class="fig-cap">Each slit is a row of point sources of circular waves (the Huygens–Fresnel picture), summed in your browser over a region about 24 × 16 µm. Brightness is boosted with distance so the far waves stay visible. The lower plot is the far-field (Fraunhofer) intensity of the same slits against angle; the dashed lines on the field mark the same angles.</figcaption>
+          </figure>
+          <p class="omine"><span class="lbl">Where it meets my work</span>The point-spread function in my <a href="#ab">aberration playground</a> is this calculation for a circular lens: an Airy pattern, distorted by aberrations.</p>
+          <p class="oref">Further reading: M. Born and E. Wolf, <i>Principles of Optics</i>, 7th ed. (Cambridge University Press, 1999).</p>
+        </div>
+
+        <div class="opanel" role="tabpanel" id="optics-fourier" aria-labelledby="ot-fourier" tabindex="0">
+          <div class="otxt">
+            <h3>A lens as a Fourier transformer</h3>
+            <p>Any image can be built from sinusoidal stripes of different spacings and directions, its <span class="term" tabindex="0" data-def="How many stripes fit in a unit of length, for example cycles per millimetre. Fine detail means high spatial frequency." data-name="Spatial frequency">spatial frequencies</span>. In coherent light, a lens forms in its back focal plane the Fourier transform of the field in its front focal plane: coarse features land near the axis and fine detail farther out. A second lens transforms back. This arrangement, the 4f system, lets you edit an image by blocking or phase-shifting parts of its spectrum.</p>
+            <p>Ernst Abbe explained microscope resolution this way in 1873: to image a fine grating, the objective must collect at least one of the grating’s diffracted orders as well as the undiffracted light. Frits Zernike’s phase contrast, recognized with the 1953 Nobel Prize in Physics, shifts the phase of the undiffracted light by a quarter wave so that transparent cells become visible.</p>
+          </div>
+          <div class="eqs">
+            <div class="eq"><span class="m"><i>U</i>(<i>f</i><sub><i>x</i></sub>, <i>f</i><sub><i>y</i></sub>) = ∬ <i>u</i>(<i>x</i>, <i>y</i>) e<sup>−i2π(<i>f</i><sub><i>x</i></sub><i>x</i> + <i>f</i><sub><i>y</i></sub><i>y</i>)</sup> d<i>x</i> d<i>y</i></span><span class="d">Fourier transform of the field <i>u</i></span></div>
+            <div class="eq"><span class="m"><i>x</i> = <i>λ</i><i>f</i> · <i>f</i><sub><i>x</i></sub></span><span class="d">where frequency <i>f</i><sub><i>x</i></sub> lands behind a lens of focal length <i>f</i></span></div>
+            <div class="eq"><span class="m"><i>G</i> = <i>H</i> · <i>U</i></span><span class="d">a mask <i>H</i> in that plane filters the spectrum</span></div>
+          </div>
+          <figure class="fig" id="ft-fig" style="margin:0">
+            <div class="fig-head"><span class="fig-title">Try it: filter an image in the Fourier plane</span></div>
+            <div class="ochips" role="group" aria-label="Input" id="ft-in"><span class="lbl">Input</span><button type="button" aria-pressed="true" data-k="mesh">Wire mesh</button><button type="button" aria-pressed="false" data-k="star">Siemens star</button><button type="button" aria-pressed="false" data-k="bee">Bee</button><button type="button" aria-pressed="false" data-k="cells">Transparent cells</button></div>
+            <div class="ochips" role="group" aria-label="Mask" id="ft-mask"><span class="lbl">Mask</span><button type="button" aria-pressed="false" data-k="open">Open</button><button type="button" aria-pressed="false" data-k="low">Low-pass</button><button type="button" aria-pressed="false" data-k="high">High-pass</button><button type="button" aria-pressed="true" data-k="hslit">Horizontal slit</button><button type="button" aria-pressed="false" data-k="vslit">Vertical slit</button><button type="button" aria-pressed="false" data-k="phase">Phase dot</button></div>
+            <div class="orow3 ft3">
+              <div class="oview"><canvas id="ft-a" width="256" height="256" role="img" aria-label="Input intensity"></canvas><span class="otg">Input</span></div>
+              <div class="oview o-ft"><canvas id="ft-cv" width="256" height="256" role="img" aria-label="Fourier plane on a log scale with the mask"></canvas><canvas class="ovl" id="ft-ov" width="512" height="512" aria-hidden="true"></canvas><span class="otg">Fourier plane</span></div>
+              <div class="oview"><canvas id="ft-b" width="256" height="256" role="img" aria-label="Output intensity"></canvas><span class="otg">Output</span></div>
+            </div>
+            <div class="ab-ctl" id="ft-size-row">
+              <div class="ab-s"><label for="ft-size" id="ft-size-l">Mask size</label><output id="ft-size-o" for="ft-size"></output><input type="range" id="ft-size" min="0" max="60" step="1" value="2"></div>
+            </div>
+            <p class="ab-v" id="ft-v" aria-live="polite"></p>
+            <figcaption class="fig-cap">A coherent 4f system computed with a 256 × 256 FFT in your browser. Panels show intensity. The Fourier plane is on a log scale, with bright points slightly enlarged so they show and blocked areas dimmed; drag on it to resize the mask. Output brightness is scaled automatically, and the readout gives the share of light that gets through. A real 4f system also turns the image upside down; it is shown upright here.</figcaption>
+          </figure>
+          <p class="omine"><span class="lbl">Where it meets my work</span>The focus measures in <a href="#focusstack2xr">FocusStack2XR</a> are high-pass filters: a slice scores high where its fine detail survives. The <a href="#ab">aberration playground</a> computes each point-spread function as the Fourier transform of the lens pupil.</p>
+          <p class="oref">Further reading: J. W. Goodman, <i>Introduction to Fourier Optics</i>, 4th ed. (W. H. Freeman, 2017).</p>
+        </div>
+
+        <div class="opanel" role="tabpanel" id="optics-computational" aria-labelledby="ot-comp" tabindex="0">
+          <div class="otxt">
+            <h3>Designing the optics and the algorithm together</h3>
+            <p>A conventional camera tries to form the finished picture on the sensor. Computational imaging treats the sensor data as a measurement to be decoded, and designs the optics so that the decoding works well, even if the raw image looks worse.</p>
+            <p>Defocus is a simple example. A defocused photo is the sharp scene blurred by the shape of the aperture. The blur from a round aperture all but erases some spatial frequencies, and no algorithm can recover those from noisy data. A <span class="term" tabindex="0" data-def="A patterned mask in the lens aperture. It makes the blur stranger to look at but easier to undo." data-name="Coded aperture">coded aperture</span> blocks some light but keeps every frequency above the noise, so the same reconstruction recovers more detail. Two papers from 2007, by Levin and colleagues and by Veeraraghavan and colleagues, put patterned masks inside ordinary camera lenses to recover sharp images, and in Levin’s case depth, from defocused photos.</p>
+            <p>The same idea drives current research: lensless cameras that replace the lens with a diffuser and a reconstruction (DiffuserCam); Fourier ptychography, which combines many low-resolution microscope images taken under tilted illumination into one wide, high-resolution image; single-molecule localization microscopy, which locates each fluorescent molecule far more precisely than the diffraction limit and was part of the 2014 Nobel Prize in Chemistry; and lenses designed end to end together with neural networks.</p>
+          </div>
+          <div class="eqs">
+            <div class="eq"><span class="m"><i>y</i> = <i>h</i> ∗ <i>x</i> + <i>n</i></span><span class="d">captured image: scene <i>x</i> blurred by kernel <i>h</i>, plus noise <i>n</i></span></div>
+            <div class="eq"><span class="m"><i>X̂</i> = <span class="fr"><span><i>H</i><sup>∗</sup> <i>Y</i></span><span>|<i>H</i>|<sup>2</sup> + <i>S</i><sub><i>n</i></sub> / <i>S</i><sub><i>x</i></sub></span></span></span><span class="d">Wiener filter, with noise and image power spectra <i>S</i><sub><i>n</i></sub> and <i>S</i><sub><i>x</i></sub></span></div>
+          </div>
+          <figure class="fig" id="cd-fig" style="margin:0">
+            <div class="fig-head"><span class="fig-title">Try it: deblur a round or a coded aperture</span></div>
+            <div class="octl">
+              <div class="ap-row"><canvas class="ap-prev" id="cd-ap" width="88" height="88" role="img" aria-label="Aperture shape"></canvas><div class="seg" role="group" aria-label="Aperture" id="cd-k"><button type="button" aria-pressed="true" data-k="disk">Round</button><button type="button" aria-pressed="false" data-k="coded">Coded</button></div></div>
+            </div>
+            <div class="orow3 cdemo">
+              <div class="oview o-orig"><canvas id="cd-x" width="256" height="256" role="img" aria-label="Original image"></canvas><span class="otg">Original</span></div>
+              <div class="oview opress"><canvas id="cd-y" width="256" height="256" role="img" aria-label="Captured blurred and noisy image"></canvas><span class="otg" id="cd-yt">Captured</span></div>
+              <div class="oview opress"><canvas id="cd-r" width="256" height="256" role="img" aria-label="Recovered image"></canvas><span class="otg" id="cd-rt">Recovered</span></div>
+            </div>
+            <div class="ab-ctl">
+              <div class="ab-s"><label for="cd-b">Blur width</label><output id="cd-b-o" for="cd-b"></output><input type="range" id="cd-b" min="5" max="41" step="2" value="21"></div>
+              <div class="ab-s"><label for="cd-s">Noise</label><output id="cd-s-o" for="cd-s"></output><input type="range" id="cd-s" min="0.1" max="5" step="0.1" value="0.5"></div>
+            </div>
+            <canvas class="ocv" id="cd-mtf" width="1240" height="420" role="img" aria-label="Transfer function of the round and coded apertures against spatial frequency, with the noise level"></canvas>
+            <p class="ab-v" id="cd-v" aria-live="polite"></p>
+            <figcaption class="fig-cap">Simulated in your browser on a 256 × 256 crop of one of the bee composites, with periodic boundaries. Each aperture blurs the image by the same width, Gaussian noise is added, and the same Wiener filter, given the noise level and the image’s average power spectrum, recovers it. Noise is scaled for the light each aperture passes, as for shot noise. The coded pattern is a 7 × 7 binary mask chosen here for low error, not a copy of either paper’s mask. Press and hold an image to compare it with the original.</figcaption>
+          </figure>
+          <p class="omine"><span class="lbl">Where it meets my work</span>My projects sit on the reconstruction side: <a href="#uibs">UIBS</a> chooses which frames are worth keeping, <a href="#focusstack2xr">FocusStack2XR</a> shows which measurements support each pixel, and in the <a href="#ji-lab">Na Ji Lab</a> I work with a pipeline that estimates a specimen and the microscope’s aberrations together.</p>
+          <p class="oref">Further reading: A. Levin, R. Fergus, F. Durand and W. T. Freeman, “Image and depth from a conventional camera with a coded aperture,” SIGGRAPH 2007 · A. Veeraraghavan, R. Raskar, A. Agrawal, A. Mohan and J. Tumblin, “Dappled photography: mask enhanced cameras for heterodyned light fields and coded aperture refocusing,” SIGGRAPH 2007 · N. Antipa et al., “DiffuserCam: lensless single-exposure 3D imaging,” <i>Optica</i> 5, 2018 · G. Zheng, R. Horstmeyer and C. Yang, “Wide-field, high-resolution Fourier ptychographic microscopy,” <i>Nature Photonics</i> 7, 2013.</p>
+        </div>
+
+        <div class="opanel" role="tabpanel" id="optics-quantum" aria-labelledby="ot-quantum" tabindex="0">
+          <div class="otxt">
+            <h3>One photon at a time</h3>
+            <p>Light is detected in discrete packets, photons, each carrying energy <i>hν</i>. Make the light in a two-slit experiment so faint that photons pass one at a time, and each lands at a single random spot, yet the fringes still build up in the statistics. If the experiment records which slit each photon went through, the fringes disappear.</p>
+            <p>Counting photons also sets the basic noise floor of imaging. Laser light gives Poisson-distributed counts, and ordinary camera light nearly so, so a pixel that collects <i>N</i> photons on average has a signal-to-noise ratio of √<i>N</i>: a hundred times the light buys only ten times the SNR. This is the <span class="term" tabindex="0" data-def="The randomness in when photons arrive. With N photons expected, the count typically varies by about √N." data-name="Shot noise">shot-noise</span> limit. Specially prepared quantum states of light can beat it: since 2019 the LIGO and Virgo gravitational-wave detectors have injected squeezed vacuum, a quantum state of light, to lower their noise.</p>
+            <p>Other quantum effects are becoming imaging tools: two-photon interference (the Hong–Ou–Mandel effect, 1987), ghost imaging with entangled photon pairs (1995), imaging an object with photons that never interacted with it (2014), and single-photon avalanche diode (SPAD) cameras that time individual photons.</p>
+          </div>
+          <div class="eqs">
+            <div class="eq"><span class="m"><i>E</i> = <i>hν</i> = <i>hc</i> / <i>λ</i></span><span class="d">photon energy</span></div>
+            <div class="eq"><span class="m"><i>P</i>(<i>n</i>) = <i>N</i><sup><i>n</i></sup> e<sup>−<i>N</i></sup> / <i>n</i>!</span><span class="d">Poisson counts with mean <i>N</i></span></div>
+            <div class="eq"><span class="m">SNR = √<i>N</i></span><span class="d">shot-noise limit</span></div>
+          </div>
+          <figure class="fig" id="qs-fig" style="margin:0">
+            <div class="fig-head">
+              <span class="fig-title">Try it: build the fringes one photon at a time</span>
+              <span class="ocount" id="qs-n">0 photons</span>
+            </div>
+            <div class="oview"><canvas id="qs-cv" width="1240" height="520" role="img" aria-label="Detector screen where single photons appear as dots, with a histogram of their positions below"></canvas></div>
+            <div class="octl">
+              <div class="row"><button type="button" class="iconbtn" id="qs-play" aria-pressed="false">Play</button><button type="button" class="iconbtn" id="qs-add">Add 1,000</button><button type="button" class="iconbtn" id="qs-reset">Reset</button></div>
+              <div class="ab-opt"><label><input type="checkbox" id="qs-path"> Record which slit each photon goes through</label></div>
+            </div>
+            <p class="ab-v" id="qs-v" aria-live="polite"></p>
+            <figcaption class="fig-cap">Each detection is drawn at random from the far-field two-slit probability |ψ<sub>1</sub> + ψ<sub>2</sub>|<sup>2</sup>, with the slit spacing five times the slit width. With the path recorded, the probability becomes |ψ<sub>1</sub>|<sup>2</sup> + |ψ<sub>2</sub>|<sup>2</sup>, the sum of two single-slit patterns. Bars count detections; the dashed line is the expected count.</figcaption>
+          </figure>
+          <figure class="fig" id="pn-fig" style="margin:0">
+            <div class="fig-head"><span class="fig-title">Try it: an image from a handful of photons</span><button type="button" class="iconbtn" id="pn-new">New exposure</button></div>
+            <div class="orow2">
+              <div class="oview"><canvas id="pn-x" width="256" height="256" role="img" aria-label="Original image"></canvas><span class="otg">Original</span></div>
+              <div class="oview"><canvas id="pn-y" width="256" height="256" role="img" aria-label="Image built from detected photons"></canvas><span class="otg" id="pn-t">Detected photons</span></div>
+            </div>
+            <div class="ab-ctl">
+              <div class="ab-s"><label for="pn-l">Photons per frame, brightest pixels</label><output id="pn-l-o" for="pn-l"></output><input type="range" id="pn-l" min="0" max="12" step="1" value="6"></div>
+              <div class="ab-s"><span class="lbl" style="align-self:center">Frames averaged</span><span></span><div class="seg" role="group" aria-label="Frames averaged" id="pn-k" style="grid-column:1/-1;justify-self:start;margin-top:4px"><button type="button" aria-pressed="true" data-k="1">1</button><button type="button" aria-pressed="false" data-k="4">4</button><button type="button" aria-pressed="false" data-k="16">16</button><button type="button" aria-pressed="false" data-k="64">64</button></div></div>
+            </div>
+            <p class="ab-v" id="pn-v" aria-live="polite"></p>
+            <figcaption class="fig-cap">Each pixel’s count is drawn from a Poisson distribution whose mean follows the brightness of the bee photo. Averaging <i>k</i> frames gives the same statistics as one frame with <i>k</i> times the light.</figcaption>
+          </figure>
+          <p class="omine"><span class="lbl">Where it meets my work</span>Shot noise is independent from frame to frame, so averaging <i>N</i> frames improves SNR by √<i>N</i> and no more. When a first fit of my <a href="#uibs">UIBS</a> temporal baseline came out slightly faster than √<i>N</i>, that limit is what told me to check the estimator.</p>
+          <p class="oref">Further reading: M. Fox, <i>Quantum Optics: An Introduction</i> (Oxford University Press, 2006) · C. K. Hong, Z. Y. Ou and L. Mandel, <i>Phys. Rev. Lett.</i> 59, 2044 (1987) · G. B. Lemos et al., “Quantum imaging with undetected photons,” <i>Nature</i> 512, 409 (2014) · M. Tse et al., “Quantum-enhanced Advanced LIGO detectors in the era of gravitational-wave astronomy,” <i>Phys. Rev. Lett.</i> 123, 231107 (2019) · F. Acernese et al. (Virgo Collaboration), “Increasing the astrophysical reach of the Advanced Virgo detector via the application of squeezed vacuum states of light,” <i>Phys. Rev. Lett.</i> 123, 231108 (2019).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="experience" aria-labelledby="exp-title">
   <div class="wrap">
     <p class="sec-label">Experience</p>
@@ -2477,6 +2751,902 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
   if (mq.addEventListener) mq.addEventListener('change', redraw);
   new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+
+<script>
+/* Optics tour: five tabs, each with a small simulation that starts the first time its tab is shown near the
+   viewport. The physics helpers are exposed on window.__optics so their numbers can be checked outside the page. */
+(() => {
+  const root = document.getElementById('optics'); if (!root) return;
+  const $ = (id) => document.getElementById(id);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const intf = (v) => Math.round(v).toLocaleString('en-US');
+  const MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace';
+  const O = window.__optics = {};
+  const DPR = () => Math.min(2, window.devicePixelRatio || 1);
+  // match a canvas's backing store to its CSS width; returns null while the canvas is hidden
+  function fit(cv, aspect) {
+    const w = cv.clientWidth; if (!w) return null;
+    const s = DPR(), W = Math.round(w * s), H = Math.round(w * aspect * s);
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    return { W, H, s };
+  }
+  function setVal(inp, v) {
+    const mn = +inp.min, mx = +inp.max, st = +inp.step || 1;
+    v = Math.min(mx, Math.max(mn, mn + Math.round((v - mn) / st) * st));
+    inp.value = String(+v.toFixed(6)); if (window.__fillRange) window.__fillRange(inp);
+  }
+  function segGroup(g, onPick) {
+    g.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+      g.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      onPick(b.dataset);
+    }));
+  }
+
+  /* ---------- shared maths: radix-2 FFT, seeded random numbers, sRGB ---------- */
+  function plan(n) {
+    const lev = Math.log2(n), rev = new Uint32Array(n), cs = new Float64Array(n / 2), sn = new Float64Array(n / 2);
+    for (let i = 0; i < n; i++) { let r = 0; for (let b = 0; b < lev; b++) r = (r << 1) | ((i >>> b) & 1); rev[i] = r; }
+    for (let i = 0; i < n / 2; i++) { cs[i] = Math.cos(2 * Math.PI * i / n); sn[i] = Math.sin(2 * Math.PI * i / n); }
+    return { n, rev, cs, sn, tr: new Float64Array(n), ti: new Float64Array(n) };
+  }
+  function fft1(re, im, p, inv) {
+    const n = p.n, rev = p.rev, cs = p.cs, sn = p.sn;
+    for (let i = 0; i < n; i++) { const j = rev[i]; if (j > i) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; } }
+    for (let size = 2; size <= n; size <<= 1) {
+      const half = size >> 1, step = n / size;
+      for (let i = 0; i < n; i += size) for (let j = 0, k = 0; j < half; j++, k += step) {
+        const a = i + j, b = a + half, wr = cs[k], wi = inv ? sn[k] : -sn[k];
+        const xr = re[b] * wr - im[b] * wi, xi = re[b] * wi + im[b] * wr;
+        re[b] = re[a] - xr; im[b] = im[a] - xi; re[a] += xr; im[a] += xi;
+      }
+    }
+  }
+  function fft2(re, im, p, inv) {
+    const n = p.n, tr = p.tr, ti = p.ti;
+    for (let y = 0; y < n; y++) fft1(re.subarray(y * n, y * n + n), im.subarray(y * n, y * n + n), p, inv);
+    for (let x = 0; x < n; x++) {
+      for (let y = 0; y < n; y++) { tr[y] = re[y * n + x]; ti[y] = im[y * n + x]; }
+      fft1(tr, ti, p, inv);
+      for (let y = 0; y < n; y++) { re[y * n + x] = tr[y]; im[y * n + x] = ti[y]; }
+    }
+    if (inv) { const s = 1 / (n * n); for (let i = 0; i < n * n; i++) { re[i] *= s; im[i] *= s; } }
+  }
+  const fidx = (i, n) => (i < n / 2 ? i : i - n);
+  function mulberry(seed) {
+    let s = seed >>> 0;
+    return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  function gauss(r) { let u = r(); while (u < 1e-300) u = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r()); }
+  function poisson(lam, r) {
+    if (lam <= 0) return 0;
+    if (lam < 30) { const L = Math.exp(-lam); let k = 0, p = r(); while (p > L) { k++; p *= r(); } return k; }
+    const v = Math.round(lam + Math.sqrt(lam) * gauss(r)); return v < 0 ? 0 : v;
+  }
+  Object.assign(O, { plan, fft2, mulberry, gauss, poisson });
+  const toLin = (g) => (g <= 0.04045 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4));
+  const ENC = new Uint8ClampedArray(4097);
+  for (let i = 0; i <= 4096; i++) { const v = i / 4096; ENC[i] = Math.round(255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055)); }
+  const enc = (v) => ENC[v <= 0 ? 0 : v >= 1 ? 4096 : (v * 4096) | 0];
+  const byte = (v) => (v <= 0 ? 0 : v >= 1 ? 255 : (v * 255 + 0.5) | 0);
+  function paintGrey(cv, arr, map) {
+    const ctx = cv.getContext('2d'), im = ctx.createImageData(256, 256), d = im.data;
+    for (let i = 0, j = 0; i < 65536; i++, j += 4) { const v = map(arr[i]); d[j] = v; d[j + 1] = v; d[j + 2] = v; d[j + 3] = 255; }
+    ctx.putImageData(im, 0, 0); return im;
+  }
+  // the 256 x 256 bee crop: display grey values, and linear-light values scaled so the brightest pixel is 1
+  let beeP = null;
+  function bee() {
+    if (!beeP) beeP = new Promise((res, rej) => {
+      const im = new Image();
+      im.onload = () => {
+        const c = document.createElement('canvas'); c.width = c.height = 256;
+        const x = c.getContext('2d'); x.drawImage(im, 0, 0, 256, 256);
+        const d = x.getImageData(0, 0, 256, 256).data, g = new Float64Array(65536), lin = new Float64Array(65536);
+        let mx = 0;
+        for (let i = 0; i < 65536; i++) { g[i] = d[4 * i] / 255; lin[i] = toLin(g[i]); if (lin[i] > mx) mx = lin[i]; }
+        for (let i = 0; i < 65536; i++) lin[i] /= mx;
+        res({ g, lin });
+      };
+      im.onerror = () => { beeP = null; rej(new Error('optics-bee.png did not load')); };
+      im.src = 'assets/optics-bee.png';
+    });
+    return beeP;
+  }
+  O.bee = bee;
+  // approximate colour of a visible wavelength (after Dan Bruton's table), for display only
+  function wl2rgb(nm) {
+    let r = 0, g = 0, b = 0;
+    if (nm < 440) { r = (440 - nm) / 60; b = 1; } else if (nm < 490) { g = (nm - 440) / 50; b = 1; } else if (nm < 510) { g = 1; b = (510 - nm) / 20; }
+    else if (nm < 580) { r = (nm - 510) / 70; g = 1; } else if (nm < 645) { r = 1; g = (645 - nm) / 65; } else r = 1;
+    const f = nm < 420 ? 0.3 + 0.7 * (nm - 380) / 40 : nm > 700 ? 0.3 + 0.7 * (780 - nm) / 80 : 1;
+    return [r, g, b].map((c) => Math.round(255 * Math.pow(c * f, 0.8)));
+  }
+
+  /* ---------- tabs and lifecycle ---------- */
+  const tabs = [...root.querySelectorAll('[role="tab"]')];
+  const panels = tabs.map((t) => $(t.getAttribute('aria-controls')));
+  const demos = {}, ready = new Set(), redraws = [];
+  let cur = 0, near = false, seen = false;
+  function update() {
+    const id = panels[cur].id;
+    if (near && demos[id] && !ready.has(id)) { ready.add(id); demos[id].init(); }
+    Object.keys(demos).forEach((k) => { if (ready.has(k) && demos[k].run) demos[k].run(seen && k === id && !document.hidden); });
+  }
+  function select(i, focus) {
+    cur = i;
+    tabs.forEach((t, k) => { const on = k === i; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; panels[k].hidden = !on; });
+    if (focus) tabs[i].focus();
+    const tl = tabs[i].parentElement;
+    if (tl.scrollWidth > tl.clientWidth) {
+      const a = tl.getBoundingClientRect(), b = tabs[i].getBoundingClientRect();
+      tl.scrollTo({ left: Math.max(0, tl.scrollLeft + b.left - a.left - a.width / 2 + b.width / 2), behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
+    const id = panels[i].id;
+    if (ready.has(id) && demos[id].draw) demos[id].draw();
+    update();
+  }
+  tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
+  root.querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
+    const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    const i = d ? (cur + d + tabs.length) % tabs.length : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : null;
+    if (i === null) return;
+    e.preventDefault(); select(i, true);
+  });
+  // a link to one part (#optics-wave) opens that tab before the browser scrolls to it
+  const panelFor = (h) => panels.findIndex((p) => '#' + p.id === h);
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a[href^="#optics-"]');
+    if (a) { const i = panelFor(a.getAttribute('href')); if (i >= 0) select(i); }
+  }, true);
+  function fromHash() { const i = panelFor(location.hash); if (i < 0) return false; select(i); requestAnimationFrame(() => panels[i].scrollIntoView()); return true; }
+  if (!fromHash()) select(0);
+  window.addEventListener('hashchange', fromHash);
+  const box = root.querySelector('.opanels');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((es) => { near = es[es.length - 1].isIntersecting; update(); }, { rootMargin: '400px 0px' }).observe(box);
+    new IntersectionObserver((es) => { seen = es[es.length - 1].isIntersecting; update(); }).observe(box);
+  } else { near = seen = true; update(); }
+  document.addEventListener('visibilitychange', update);
+  const redrawAll = () => redraws.forEach((f) => f());
+  let lastW = window.innerWidth, rz = 0;
+  window.addEventListener('resize', () => { if (window.innerWidth === lastW) return; lastW = window.innerWidth; clearTimeout(rz); rz = setTimeout(redrawAll, 120); });
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  if (mq.addEventListener) mq.addEventListener('change', redrawAll);
+  new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  /* ---------- geometric optics: a paraxial thin lens ---------- */
+  const LENS = O.lens = {
+    image: (f, so) => { const v = 1 / f - 1 / so; return Math.abs(v) < 1e-12 ? Infinity : 1 / v; },
+    blur: (D, d, si) => (isFinite(si) ? D * Math.abs(1 - d / si) : D),
+    // a ray from the object tip (-so, h) that crosses the lens at height y leaves with this slope
+    slope: (f, so, h, y) => (y - h) / so - y / f,
+    // object distances whose blur on a sensor at d stays within c
+    sharpZone: (f, D, d, c) => {
+      const a = 1 / f - (1 - c / D) / d, b = 1 / f - (1 + c / D) / d;
+      return a <= 0 ? null : { near: 1 / a, far: b > 0 ? 1 / b : Infinity };
+    }
+  };
+  demos['optics-geometric'] = (() => {
+    const cv = $('lens-cv'), sn = $('lens-sensor'), out = $('lens-v'), btn = $('lens-focus'), rays = $('lens-rays');
+    const sO = $('lens-o'), sD = $('lens-d'), sF = $('lens-f'), sN = $('lens-n');
+    const STOPS = [2, 2.8, 4, 5.6, 8, 11, 16, 22], HO = 20, C = 0.03, XM = 310, VX = 3, GL = 60, SH = 24;
+    let geo = null, drag = null, tw = 0, said = '';
+    const st = () => { const f = +sF.value, N = STOPS[+sN.value]; return { f, N, D: f / N, so: +sO.value, d: +sD.value }; };
+    const src = document.createElement('canvas');
+    function drawSensor(s, b) {
+      const n = Math.round((sn.clientWidth || 120) * DPR());
+      if (sn.width !== n) { sn.width = n; sn.height = n; }
+      src.width = n; src.height = n;
+      const q = src.getContext('2d'), L = n * 0.56, cx = n / 2, top = n / 2 - L / 2, bot = n / 2 + L / 2, w = n * 0.05;
+      q.fillStyle = '#ffcf87';
+      q.fillRect(cx - w / 2, top, w, L - n * 0.12);
+      q.beginPath(); q.moveTo(cx, bot); q.lineTo(cx - n * 0.1, bot - n * 0.15); q.lineTo(cx + n * 0.1, bot - n * 0.15); q.closePath(); q.fill();
+      const o = sn.getContext('2d');
+      o.globalCompositeOperation = 'source-over'; o.globalAlpha = 1; o.fillStyle = '#000'; o.fillRect(0, 0, n, n);
+      // the chief ray sets where each point lands; the blur disk has the same diameter for every point
+      const hs = HO * s.d / s.so, r = Math.min(n * 0.9, (b / 2) / hs * L);
+      if (r < 0.5) { o.drawImage(src, 0, 0); return; }
+      const m = Math.max(24, Math.min(120, Math.round(r * r)));
+      o.globalCompositeOperation = 'lighter'; o.globalAlpha = 1 / m;
+      for (let i = 0; i < m; i++) { const rr = r * Math.sqrt((i + 0.5) / m), a = i * 2.399963; o.drawImage(src, rr * Math.cos(a), rr * Math.sin(a)); }
+      o.globalCompositeOperation = 'source-over'; o.globalAlpha = 1;
+    }
+    function draw() {
+      const g = fit(cv, cv.clientWidth < 560 ? 0.56 : 0.36); if (!g) return;
+      const s = st(), { W, H, s: dp } = g, k = W / (2 * XM), ky = k * VX;
+      const X = (x) => W / 2 + x * k, Y = (y) => H / 2 - y * ky;
+      geo = { X, k, W };
+      const si = LENS.image(s.f, s.so), b = LENS.blur(s.D, s.d, si), z = LENS.sharpZone(s.f, s.D, s.d, C);
+      $('lens-o-o').textContent = s.so + ' mm'; $('lens-d-o').textContent = s.d.toFixed(1) + ' mm';
+      $('lens-f-o').textContent = s.f + ' mm'; $('lens-n-o').textContent = 'f/' + s.N + ' · D = ' + s.D.toFixed(1) + ' mm';
+      sN.setAttribute('aria-valuetext', 'f/' + s.N);
+      const o = cv.getContext('2d');
+      const ink = css('--ink'), muted = css('--muted'), line = css('--line'), acc = css('--accent'), warm = css('--warm'), surf = css('--surface'), soft = css('--accent-soft');
+      o.clearRect(0, 0, W, H); o.lineCap = 'round'; o.lineJoin = 'round'; o.font = 11 * dp + 'px ' + MONO;
+      // sharp zone on the object side
+      if (z) {
+        let x1 = X(-Math.min(z.far, 1e6)), x2 = X(-z.near);
+        o.fillStyle = acc;
+        if (x2 > 0) {
+          x1 = Math.max(0, x1);
+          if (x2 - x1 < 2 * dp) { const m = (x1 + x2) / 2; x1 = m - dp; x2 = m + dp; }
+          o.globalAlpha = 0.14; o.fillRect(x1, 0, x2 - x1, H); o.globalAlpha = 1;
+          const left = x1 > 96 * dp; o.textAlign = left ? 'right' : 'left';
+          o.fillText('sharp zone', left ? x1 - 6 * dp : x2 + 6 * dp, H - 8 * dp);
+        } else { o.textAlign = 'left'; o.fillText('← sharp zone beyond ' + XM + ' mm', 6 * dp, H - 8 * dp); }
+      }
+      // optical axis and focal points
+      o.strokeStyle = line; o.lineWidth = dp; o.setLineDash([5 * dp, 4 * dp]);
+      o.beginPath(); o.moveTo(0, Y(0)); o.lineTo(W, Y(0)); o.stroke(); o.setLineDash([]);
+      o.fillStyle = muted; o.textAlign = 'center';
+      [[-s.f, 'F'], [s.f, 'F′']].forEach(([x, t]) => { o.beginPath(); o.arc(X(x), Y(0), 2.6 * dp, 0, 7); o.fill(); o.fillText(t, X(x), Y(0) + 16 * dp); });
+      // lens and iris
+      const lx = X(0), gt = Y(GL / 2), gb = Y(-GL / 2), bu = 7 * dp;
+      o.beginPath(); o.moveTo(lx, gt); o.quadraticCurveTo(lx + 2 * bu, (gt + gb) / 2, lx, gb); o.quadraticCurveTo(lx - 2 * bu, (gt + gb) / 2, lx, gt);
+      o.fillStyle = soft; o.fill(); o.strokeStyle = acc; o.lineWidth = 1.2 * dp; o.stroke();
+      o.strokeStyle = ink; o.lineWidth = 3.5 * dp; o.lineCap = 'butt';
+      o.beginPath(); o.moveTo(lx, Y(s.D / 2)); o.lineTo(lx, gt - 4 * dp); o.moveTo(lx, Y(-s.D / 2)); o.lineTo(lx, gb + 4 * dp); o.stroke();
+      o.lineCap = 'round';
+      // the cone of rays from the object tip through the aperture, stopped by the sensor
+      const yT = s.D / 2, yB = -s.D / 2, yAt = (y, x) => y + LENS.slope(s.f, s.so, HO, y) * x;
+      o.fillStyle = acc; o.globalAlpha = 0.12;
+      o.beginPath(); o.moveTo(X(-s.so), Y(HO)); o.lineTo(lx, Y(yT)); o.lineTo(lx, Y(yB)); o.closePath(); o.fill();
+      o.beginPath(); o.moveTo(lx, Y(yT)); o.lineTo(X(s.d), Y(yAt(yT, s.d))); o.lineTo(X(s.d), Y(yAt(yB, s.d))); o.lineTo(lx, Y(yB)); o.closePath(); o.fill();
+      o.globalAlpha = 0.8; o.strokeStyle = acc; o.lineWidth = 1.1 * dp;
+      for (let j = 0; j < 7; j++) {
+        const y = yB + (yT - yB) * j / 6;
+        o.beginPath(); o.moveTo(X(-s.so), Y(HO)); o.lineTo(lx, Y(y)); o.lineTo(X(s.d), Y(yAt(y, s.d))); o.stroke();
+      }
+      o.globalAlpha = 1;
+      const arrow = (x, h, col, dash, alpha) => {
+        const x0 = X(x), y0 = Y(0), y1 = Y(h), dir = Math.sign(y1 - y0) || -1, hl = Math.min(10 * dp, Math.abs(y1 - y0) * 0.6);
+        o.save(); o.globalAlpha = alpha; o.strokeStyle = col; o.fillStyle = col; o.lineWidth = 2.4 * dp;
+        if (dash) o.setLineDash([4 * dp, 3 * dp]);
+        o.beginPath(); o.moveTo(x0, y0); o.lineTo(x0, y1 - dir * hl * 0.7); o.stroke(); o.setLineDash([]);
+        o.beginPath(); o.moveTo(x0, y1); o.lineTo(x0 - 5 * dp, y1 - dir * hl); o.lineTo(x0 + 5 * dp, y1 - dir * hl); o.closePath(); o.fill();
+        o.restore();
+      };
+      if (isFinite(si) && si > 0) {
+        if (si <= XM) arrow(si, -HO * si / s.so, warm, si > s.d, si > s.d ? 0.5 : 1);
+        else { o.fillStyle = warm; o.textAlign = 'right'; o.fillText('image at ' + Math.round(si) + ' mm →', W - 6 * dp, Y(0) - 8 * dp); }
+      } else if (isFinite(si)) {
+        const hi = -HO * si / s.so;
+        o.save(); o.strokeStyle = muted; o.lineWidth = dp; o.setLineDash([3 * dp, 3 * dp]);
+        [yT, yB].forEach((y) => { o.beginPath(); o.moveTo(lx, Y(y)); o.lineTo(X(si), Y(hi)); o.stroke(); });
+        o.restore();
+        if (X(si) > 0) {
+          arrow(si, hi, warm, true, 0.8);
+          if (Y(hi) < 24 * dp) { const t = '↑ virtual image, off the top', tw = o.measureText(t).width; o.fillStyle = warm; o.textAlign = 'left'; o.fillText(t, Math.max(4 * dp, Math.min(X(si) + 8 * dp, W - tw - 4 * dp)), 16 * dp); }
+        } else { o.fillStyle = warm; o.textAlign = 'left'; o.fillText('← virtual image at ' + Math.round(-si) + ' mm', 6 * dp, 16 * dp); }
+      }
+      if (rays.checked) {
+        o.save(); o.strokeStyle = muted; o.lineWidth = dp; o.setLineDash([6 * dp, 4 * dp]);
+        const seg = (pts) => { o.beginPath(); pts.forEach(([x, y], i) => (i ? o.lineTo(X(x), Y(y)) : o.moveTo(X(x), Y(y)))); o.stroke(); };
+        seg([[-s.so, HO], [0, HO], [s.d, HO - HO / s.f * s.d]]);
+        seg([[-s.so, HO], [0, 0], [s.d, -HO / s.so * s.d]]);
+        if (Math.abs(s.so - s.f) > 0.5) { const yc = -HO * s.f / (s.so - s.f); seg([[-s.so, HO], [0, yc], [s.d, yc]]); }
+        o.restore();
+      }
+      arrow(-s.so, HO, warm, false, 1);
+      // sensor and the blur it records
+      const sx = X(s.d), e1 = yAt(yT, s.d), e2 = yAt(yB, s.d);
+      o.fillStyle = ink; o.fillRect(sx - 2.5 * dp, Y(SH), 5 * dp, Y(-SH) - Y(SH));
+      if (Math.abs(e1 - e2) * ky > 1.5 * dp) { o.strokeStyle = warm; o.lineWidth = 3 * dp; o.beginPath(); o.moveTo(sx + 7 * dp, Y(e1)); o.lineTo(sx + 7 * dp, Y(e2)); o.stroke(); }
+      const right = sx < W - 110 * dp;
+      o.fillStyle = warm; o.textAlign = right ? 'left' : 'right';
+      o.fillText('blur ' + b.toFixed(2) + ' mm', sx + (right ? 9 : -9) * dp, Y(SH) - 6 * dp);
+      o.fillStyle = muted; o.textAlign = 'center'; o.fillText('sensor', sx, Y(-SH) + 22 * dp);
+      // drag handles
+      [[X(-s.so), Y(0), warm], [sx, Y(-SH), ink]].forEach(([x, y, c]) => { o.beginPath(); o.arc(x, y, 5.5 * dp, 0, 7); o.fillStyle = surf; o.fill(); o.strokeStyle = c; o.lineWidth = 2 * dp; o.stroke(); });
+      drawSensor(s, b);
+      const ok = isFinite(si) && si >= 20 && si <= 300;
+      btn.disabled = !ok;
+      btn.title = ok ? '' : 'No real image within reach of the sensor';
+      let t1, t2;
+      if (!isFinite(si)) t1 = 'The object sits at the focal point, so the rays leave the lens parallel and the image is at infinity. On the sensor each point is a ' + b.toFixed(2) + ' mm disk.';
+      else if (si < 0) t1 = 'The object is inside the focal length, so the rays leave the lens spreading apart. They seem to come from an upright virtual image ' + Math.round(-si) + ' mm in front of the lens, ' + (-si / s.so).toFixed(2) + '× larger, as with a magnifying glass. No sensor position brings them to a point; here each point is a ' + b.toFixed(2) + ' mm disk.';
+      else t1 = 'A sharp image forms ' + si.toFixed(1) + ' mm behind the lens, inverted and ' + (si / s.so).toFixed(2) + '× the object’s size (m = −' + (si / s.so).toFixed(2) + '). ' + (b <= C ? 'The sensor is at that plane, so every point stays within 0.03 mm.' : 'With the sensor at ' + s.d.toFixed(1) + ' mm, each point spreads into a ' + b.toFixed(2) + ' mm disk.');
+      if (!z) t2 = 'With the sensor this close to the lens, nothing comes into focus.';
+      else if (!isFinite(z.far)) t2 = 'Everything from ' + Math.round(z.near) + ' mm to infinity stays sharp to within 0.03 mm.';
+      else { const dz = z.far - z.near, p = dz < 5 ? 2 : dz < 50 ? 1 : 0; t2 = 'Objects from ' + z.near.toFixed(p) + ' to ' + z.far.toFixed(p) + ' mm stay sharp to within 0.03 mm (shaded), a zone ' + (dz < 10 ? dz.toFixed(2) : Math.round(dz)) + ' mm deep.'; }
+      const t = t1 + ' ' + t2; if (t !== said) { out.textContent = t; said = t; }
+    }
+    const evX = (e) => { const r = cv.getBoundingClientRect(); return (e.clientX - r.left) * (cv.width / r.width); };
+    function pick(x) {
+      if (!geo) return null;
+      const s = st(), a = Math.abs(x - geo.X(-s.so)), b = Math.abs(x - geo.X(s.d));
+      return Math.min(a, b) > 20 * DPR() ? null : a <= b ? 'o' : 'd';
+    }
+    function init() {
+      cv.addEventListener('pointerdown', (e) => { const p = pick(evX(e)); if (!p) return; drag = p; cancelAnimationFrame(tw); cv.setPointerCapture(e.pointerId); });
+      cv.addEventListener('pointermove', (e) => {
+        const x = evX(e);
+        if (!drag) { cv.classList.toggle('grab', !!pick(x)); return; }
+        const mm = (x - geo.W / 2) / geo.k;
+        if (drag === 'o') setVal(sO, -mm); else setVal(sD, mm);
+        draw();
+      });
+      const end = () => { drag = null; };
+      cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+      [sO, sD, sF, sN].forEach((i) => i.addEventListener('input', () => { cancelAnimationFrame(tw); draw(); }));
+      rays.addEventListener('change', draw);
+      btn.addEventListener('click', () => {
+        const s = st(), si = LENS.image(s.f, s.so); if (!(si >= 20 && si <= 300)) return;
+        cancelAnimationFrame(tw);
+        if (reduceMotion) { setVal(sD, si); draw(); return; }
+        const from = s.d, t0 = performance.now();
+        const step = (t) => { const p = Math.min(1, (t - t0) / 450), e = 1 - Math.pow(1 - p, 3); setVal(sD, from + (si - from) * e); draw(); if (p < 1) tw = requestAnimationFrame(step); };
+        tw = requestAnimationFrame(step);
+      });
+      redraws.push(draw);
+      draw();
+    }
+    return { init, draw };
+  })();
+
+  /* ---------- wave optics: Huygens wavelets behind slits, and the far field ---------- */
+  O.farField = (th, n, d, a, lam) => {
+    const s = Math.sin(th), be = Math.PI * a * s / lam, al = Math.PI * d * s / lam;
+    const env = Math.abs(be) < 1e-9 ? 1 : (Math.sin(be) / be) ** 2;
+    if (n < 2) return env;
+    const den = n * Math.sin(al);
+    return env * (Math.abs(den) < 1e-9 ? 1 : (Math.sin(n * al) / den) ** 2);
+  };
+  demos['optics-wave'] = (() => {
+    const GW = 320, GH = 214, PX = 0.075, XB = 2, YC = GH * PX / 2; // grid cells of 75 nm: about 24 x 16 um
+    const cv = $('wave-cv'), ov = $('wave-ov'), ff = $('wave-ff'), out = $('wave-v'), btn = $('wave-play');
+    const sL = $('wave-l'), sD = $('wave-d'), sA = $('wave-a');
+    let n = 2, view = 'w', Ur = null, Ui = null, nrm = null, wall = null, playing = !reduceMotion, active = false, raf = 0, ph = 0, last = 0, queued = false, img = null;
+    const par = () => ({ lam: +sL.value / 1000, d: +sD.value, a: +sA.value });
+    const centres = (p) => Array.from({ length: n }, (_, j) => YC + (j - (n - 1) / 2) * p.d);
+    O.waveSources = (nn, d, a) => { const M = Math.max(1, Math.min(8, Math.ceil(a / 0.375))), ys = []; for (let j = 0; j < nn; j++) { const y0 = YC + (j - (nn - 1) / 2) * d; for (let m = 0; m < M; m++) ys.push(y0 + a * ((m + 0.5) / M - 0.5)); } return ys; };
+    O.waveGrid = { GW, GH, PX, XB, YC };
+    O.waveField = () => ({ Ur, Ui, nrm, n, p: par() });
+    function compute() {
+      const p = par(), k = 2 * Math.PI / p.lam, ys = O.waveSources(n, p.d, p.a), open = centres(p);
+      Ur = new Float32Array(GW * GH); Ui = new Float32Array(GW * GH); nrm = new Float32Array(GW); wall = new Uint8Array(GW * GH);
+      for (let i = 0; i < GW; i++) {
+        const x = (i + 0.5) * PX;
+        if (x <= XB) {
+          const c = Math.cos(k * (x - XB)), s = Math.sin(k * (x - XB));
+          for (let j = 0; j < GH; j++) { Ur[j * GW + i] = c; Ui[j * GW + i] = s; }
+          nrm[i] = 1;
+        } else {
+          let mx = 0; const dx = x - XB;
+          for (let j = 0; j < GH; j++) {
+            const y = (j + 0.5) * PX; let re = 0, im = 0;
+            for (let q = 0; q < ys.length; q++) {
+              const dy = y - ys[q], r = Math.max(Math.sqrt(dx * dx + dy * dy), p.lam / 4), w = 1 / Math.sqrt(r);
+              re += w * Math.cos(k * r); im += w * Math.sin(k * r);
+            }
+            Ur[j * GW + i] = re; Ui[j * GW + i] = im; const m2 = re * re + im * im; if (m2 > mx) mx = m2;
+          }
+          nrm[i] = mx > 0 ? 1 / Math.sqrt(mx) : 1;
+        }
+        if (Math.abs(x - XB) < 0.17) for (let j = 0; j < GH; j++) { const y = (j + 0.5) * PX; if (!open.some((y0) => Math.abs(y - y0) <= p.a / 2)) wall[j * GW + i] = 1; }
+      }
+    }
+    function render() {
+      if (!Ur) return;
+      const ctx = cv.getContext('2d'); if (!img) img = ctx.createImageData(GW, GH);
+      const [cr, cg, cb] = wl2rgb(+sL.value), c = Math.cos(ph), s = Math.sin(ph), d = img.data;
+      for (let j = 0, p = 0, q = 0; j < GH; j++) for (let i = 0; i < GW; i++, p++, q += 4) {
+        if (wall[p]) { d[q] = 74; d[q + 1] = 79; d[q + 2] = 90; d[q + 3] = 255; continue; }
+        // waves: the real part of U e^(-i wt); brightness: |U|, both scaled per column so far waves stay visible
+        const v = view === 'w' ? 0.5 + 0.5 * (Ur[p] * c + Ui[p] * s) * nrm[i] : Math.sqrt(Ur[p] * Ur[p] + Ui[p] * Ui[p]) * nrm[i];
+        d[q] = cr * v; d[q + 1] = cg * v; d[q + 2] = cb * v; d[q + 3] = 255;
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+    function overlay() {
+      const g = fit(ov, GH / GW); if (!g) return;
+      const { W, H, s: dp } = g, o = ov.getContext('2d'), p = par(), sc = W / (GW * PX);
+      o.clearRect(0, 0, W, H); o.font = 11 * dp + 'px ' + MONO;
+      const x0 = XB * sc, y0 = YC * sc, lines = [];
+      if (n === 1) { for (let m = 1; m <= 3 && m * p.lam / p.a < 1; m++) lines.push([Math.asin(m * p.lam / p.a), m === 1 ? 'first dark fringe' : '']); }
+      else { lines.push([0, 'm = 0']); for (let m = 1; m <= 4 && m * p.lam / p.d < 1; m++) lines.push([Math.asin(m * p.lam / p.d), 'm = ' + m]); }
+      o.lineWidth = dp;
+      lines.forEach(([th, lab]) => [1, -1].forEach((sg) => {
+        if (th === 0 && sg < 0) return;
+        const dx = Math.cos(th), dy = sg * Math.sin(th);
+        const t = Math.min((W - x0) / dx, dy > 0 ? (H - y0) / dy : dy < 0 ? -y0 / dy : Infinity);
+        o.strokeStyle = 'rgba(255,255,255,.6)'; o.setLineDash([5 * dp, 5 * dp]);
+        o.beginPath(); o.moveTo(x0, y0); o.lineTo(x0 + dx * t, y0 + dy * t); o.stroke(); o.setLineDash([]);
+        if (sg > 0 && lab) {
+          // labels sit 90% of the way along their line, or further back if that would cover the scale bar
+          const w = o.measureText(lab).width, at = (f) => [Math.max(x0 + dx * t * f, w + 8 * dp), Math.min(y0 + dy * t * f + (th === 0 ? -6 : 14) * dp, H - 8 * dp)];
+          let [tx, ty] = at(0.9);
+          if (th !== 0 && tx > W - 5 * sc - 24 * dp && ty > H - 40 * dp) [tx, ty] = at(0.62);
+          o.textAlign = 'right'; o.fillStyle = 'rgba(5,7,10,.55)';
+          o.fillRect(tx - w - 4 * dp, ty - 11 * dp, w + 8 * dp, 15 * dp);
+          o.fillStyle = '#fff'; o.fillText(lab, tx, ty);
+        }
+      }));
+      o.fillStyle = 'rgba(255,255,255,.9)'; o.fillRect(W - 12 * dp - 5 * sc, H - 12 * dp, 5 * sc, 2 * dp);
+      o.textAlign = 'right'; o.fillText('5 µm', W - 12 * dp, H - 18 * dp);
+    }
+    function farPlot() {
+      const g = fit(ff, 0.24); if (!g) return;
+      const { W, H, s: dp } = g, o = ff.getContext('2d'), p = par(), TH = Math.PI / 3;
+      const L = 10 * dp, R = W - 10 * dp, T = 22 * dp, B = H - 44 * dp, SB = B + 8 * dp, SHh = 12 * dp;
+      const xOf = (th) => L + (th + TH) / (2 * TH) * (R - L);
+      const ink = css('--ink'), muted = css('--muted'), line = css('--line'), [cr, cg, cb] = wl2rgb(+sL.value);
+      o.clearRect(0, 0, W, H); o.font = 11 * dp + 'px ' + MONO;
+      const NS = Math.max(2, Math.round(R - L)), v = new Float64Array(NS + 1);
+      for (let i = 0; i <= NS; i++) v[i] = O.farField(-TH + 2 * TH * i / NS, n, p.d, p.a, p.lam);
+      const yv = (x) => B - x * (B - T), xi = (i) => L + (R - L) * i / NS;
+      o.beginPath(); o.moveTo(L, B); for (let i = 0; i <= NS; i++) o.lineTo(xi(i), yv(v[i])); o.lineTo(R, B); o.closePath();
+      o.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',.38)'; o.fill();
+      o.beginPath(); for (let i = 0; i <= NS; i++) (i ? o.lineTo(xi(i), yv(v[i])) : o.moveTo(xi(i), yv(v[i]))); o.strokeStyle = ink; o.lineWidth = 1.2 * dp; o.stroke();
+      // the screen, as you would see it
+      o.fillStyle = '#05070a'; o.fillRect(L, SB, R - L, SHh);
+      for (let i = 0; i <= NS; i++) { const a = Math.sqrt(v[i]); o.fillStyle = 'rgb(' + (cr * a | 0) + ',' + (cg * a | 0) + ',' + (cb * a | 0) + ')'; o.fillRect(xi(i), SB, (R - L) / NS + 0.6, SHh); }
+      o.strokeStyle = line; o.lineWidth = dp; o.beginPath(); o.moveTo(L, B + 0.5); o.lineTo(R, B + 0.5); o.stroke();
+      o.fillStyle = muted; o.textAlign = 'center';
+      [-60, -30, 0, 30, 60].forEach((deg) => { const x = xOf(deg * Math.PI / 180); o.fillText((deg < 0 ? '−' : '') + Math.abs(deg) + '°', Math.min(R - 16 * dp, Math.max(L + 16 * dp, x)), H - 10 * dp); });
+      // where the formulas put the fringes
+      o.strokeStyle = muted; o.fillStyle = muted;
+      const marks = [];
+      if (n === 1) { for (let m = 1; m * p.lam / p.a < Math.sin(TH); m++) marks.push([Math.asin(m * p.lam / p.a), m <= 2 ? 'dark' : '']); }
+      else for (let m = 0; m * p.lam / p.d < Math.sin(TH); m++) marks.push([Math.asin(m * p.lam / p.d), m <= 3 ? 'm=' + m : '']);
+      marks.forEach(([th, lab]) => [1, -1].forEach((sg) => {
+        if (th === 0 && sg < 0) return;
+        const x = xOf(sg * th); o.beginPath(); o.moveTo(x, T - 8 * dp); o.lineTo(x, T - 2 * dp); o.stroke();
+        if (lab && (sg > 0 || n === 1)) o.fillText(lab.replace('m=', sg < 0 ? 'm=−' : 'm='), x, T - 11 * dp);
+      }));
+    }
+    function outputs() {
+      const p = par(), [cr, cg, cb] = wl2rgb(+sL.value);
+      $('wave-l-o').innerHTML = '<i class="oswatch" style="background:rgb(' + cr + ',' + cg + ',' + cb + ')"></i>' + sL.value + ' nm';
+      $('wave-d-o').textContent = n === 1 ? '—' : p.d.toFixed(1) + ' µm';
+      $('wave-a-o').textContent = p.a.toFixed(2) + ' µm';
+    }
+    function readout() {
+      const p = par(), deg = (x) => (Math.asin(x) * 180 / Math.PI).toFixed(1) + '°';
+      let t;
+      if (n === 1) {
+        t = p.a <= p.lam
+          ? 'The slit (' + p.a.toFixed(2) + ' µm) is no wider than the wavelength (' + sL.value + ' nm), so the light spreads over a wide range of angles with no dark fringe.'
+          : 'One slit: dark fringes where a sin θ = mλ. The first is at ±' + deg(p.lam / p.a) + (2 * p.lam / p.a < 1 ? ', the second at ±' + deg(2 * p.lam / p.a) : '') + '. A narrower slit spreads the light wider.';
+      } else {
+        const o = []; for (let m = 1; m <= 3 && m * p.lam / p.d < 1; m++) o.push('m = ' + m + ' at ' + deg(m * p.lam / p.d));
+        t = 'Bright fringes fall close to where d sin θ = mλ: ' + o.join(', ') + '. ' + (n === 2
+          ? 'A longer wavelength or closer slits spread them farther apart.'
+          : 'Five slits put the bright fringes at the same angles as two but make them much narrower, with three faint peaks between each pair. That is how a diffraction grating separates colours.');
+      }
+      out.textContent = t;
+    }
+    function syncA() {
+      const mx = n === 1 ? 3 : Math.min(3, Math.floor(0.8 * +sD.value / 0.05 + 1e-9) * 0.05);
+      sA.max = String(+mx.toFixed(2)); if (+sA.value > mx) sA.value = String(+mx.toFixed(2));
+      sD.disabled = n === 1; window.__fillRange(sA); window.__fillRange(sD);
+    }
+    function refresh() {
+      if (queued) return; queued = true;
+      requestAnimationFrame(() => { queued = false; compute(); render(); overlay(); farPlot(); outputs(); readout(); });
+    }
+    function loop(t) {
+      raf = 0; if (!(active && playing && view === 'w')) return;
+      const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t;
+      ph = (ph + dt * 2 * Math.PI * 0.8) % (2 * Math.PI); render();
+      raf = requestAnimationFrame(loop);
+    }
+    function kick() { if (!raf && active && playing && view === 'w') { last = 0; raf = requestAnimationFrame(loop); } }
+    function setPlay(on) { playing = on; btn.textContent = on ? 'Pause' : 'Play'; btn.setAttribute('aria-pressed', String(on)); kick(); }
+    function init() {
+      segGroup($('wave-n'), (ds) => { n = +ds.n; setVal(sA, n === 1 ? 1.5 : 0.4); syncA(); refresh(); });
+      segGroup($('wave-view'), (ds) => { view = ds.v; btn.disabled = view !== 'w'; render(); kick(); });
+      [sL, sA].forEach((i) => i.addEventListener('input', refresh));
+      sD.addEventListener('input', () => { syncA(); refresh(); });
+      btn.addEventListener('click', () => setPlay(!playing));
+      setPlay(playing); syncA(); compute(); render(); overlay(); farPlot(); outputs(); readout();
+      redraws.push(() => { overlay(); farPlot(); });
+    }
+    return { init, draw: () => { overlay(); farPlot(); }, run(on) { active = on; if (on) kick(); else if (raf) { cancelAnimationFrame(raf); raf = 0; } } };
+  })();
+
+  /* ---------- Fourier optics: a coherent 4f system ---------- */
+  demos['optics-fourier'] = (() => {
+    const N = 256, NN = N * N, P = plan(N);
+    const cA = $('ft-a'), cF = $('ft-cv'), cB = $('ft-b'), ov = $('ft-ov'), out = $('ft-v');
+    const sz = $('ft-size'), row = $('ft-size-row'), lab = $('ft-size-l'), szo = $('ft-size-o');
+    const SIZE = { low: 20, high: 3, hslit: 2, vslit: 2 };
+    const CELLS = [[70, 78, 34, 24, 0.4], [172, 66, 28, 31, -0.2], [118, 160, 40, 26, 1.1], [204, 182, 24, 20, 0.3], [52, 196, 22, 28, -0.6]];
+    let inp = 'mesh', mask = 'hslit', Tr = null, Ti = null, lin = null, queued = false;
+    function field(kind) {
+      const re = new Float64Array(NN), im = new Float64Array(NN);
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+        const i = y * N + x;
+        if (kind === 'mesh') re[i] = (x + 6) % 16 < 4 || (y + 6) % 16 < 4 ? 0 : 1;
+        else if (kind === 'star') { const u = x - 127.5, v = y - 127.5, r = Math.hypot(u, v); re[i] = r > 118 ? 1 : r < 2.5 ? 0.5 : Math.sin(18 * Math.atan2(v, u)) > 0 ? 0 : 1; }
+        else if (kind === 'bee') re[i] = Math.sqrt(lin[i]);
+        else {
+          // transparent cells: a pure phase delay, thicker in the middle and at the nucleus
+          let phi = 0;
+          CELLS.forEach(([cx, cy, rx, ry, a]) => {
+            const dx = x - cx, dy = y - cy, ca = Math.cos(a), sa = Math.sin(a), u = (dx * ca + dy * sa) / rx, v = (-dx * sa + dy * ca) / ry, q = u * u + v * v;
+            if (q < 1) phi += 0.6 * Math.sqrt(1 - q);
+            if (q < 0.12) phi += 0.35 * Math.sqrt(1 - q / 0.12);
+          });
+          re[i] = Math.cos(phi); im[i] = Math.sin(phi);
+        }
+      }
+      return [re, im];
+    }
+    O.ftField = field;
+    const passes = (u, v, w) => (mask === 'low' ? u * u + v * v <= w * w : mask === 'high' ? u * u + v * v > w * w : mask === 'hslit' ? Math.abs(v) <= w : mask === 'vslit' ? Math.abs(u) <= w : true);
+    // the filtered field for a given input spectrum, mask and size; exposed for tests
+    function filter(Fr, Fi, m, w) {
+      const keep = mask; mask = m;
+      const Gr = new Float64Array(NN), Gi = new Float64Array(NN);
+      let pin = 0, pout = 0;
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+        const i = y * N + x, u = fidx(x, N), v = fidx(y, N), a = Fr[i], b = Fi[i];
+        pin += a * a + b * b;
+        if (m === 'phase' && u === 0 && v === 0) { Gr[i] = -b; Gi[i] = a; } // times i: a quarter-wave delay
+        else if (passes(u, v, w)) { Gr[i] = a; Gi[i] = b; }
+        pout += Gr[i] * Gr[i] + Gi[i] * Gi[i];
+      }
+      mask = keep;
+      fft2(Gr, Gi, P, true);
+      const I = new Float64Array(NN); for (let i = 0; i < NN; i++) I[i] = Gr[i] * Gr[i] + Gi[i] * Gi[i];
+      return { I, frac: pout / pin };
+    }
+    O.ftFilter = (kind, m, w) => { const [re, im] = field(kind); fft2(re, im, P, false); return filter(re, im, m, w); };
+    function spectrum() {
+      const ctx = cF.getContext('2d'), im = ctx.createImageData(N, N), d = im.data, w = SIZE[mask] ?? 0;
+      let mx = 0; for (let i = 0; i < NN; i++) { const p = Tr[i] * Tr[i] + Ti[i] * Ti[i]; if (p > mx) mx = p; }
+      const lv = new Float32Array(NN);
+      for (let Y = 0; Y < N; Y++) for (let X = 0; X < N; X++) {
+        const i = ((Y + N / 2) % N) * N + ((X + N / 2) % N), p = Tr[i] * Tr[i] + Ti[i] * Ti[i], t = 1 + Math.log10(p / mx + 1e-30) / 7;
+        lv[Y * N + X] = t < 0 ? 0 : t;
+      }
+      for (let Y = 0; Y < N; Y++) for (let X = 0; X < N; X++) {
+        // each point is drawn as the brightest of its 3 x 3 neighbourhood, so isolated peaks stay visible
+        let t = 0;
+        for (let b = Math.max(0, Y - 1); b <= Math.min(N - 1, Y + 1); b++) for (let a = Math.max(0, X - 1); a <= Math.min(N - 1, X + 1); a++) if (lv[b * N + a] > t) t = lv[b * N + a];
+        const u = X - N / 2, v = Y - N / 2, q = 4 * (Y * N + X), gr = 255 * t;
+        if (passes(u, v, w)) { d[q] = gr; d[q + 1] = gr; d[q + 2] = gr; } else { d[q] = gr * 0.2; d[q + 1] = gr * 0.22; d[q + 2] = gr * 0.3 + 26; }
+        d[q + 3] = 255;
+      }
+      ctx.putImageData(im, 0, 0);
+    }
+    function overlay() {
+      const g = fit(ov, 1); if (!g) return;
+      const { W, s: dp } = g, o = ov.getContext('2d'), sc = W / N, c = (N / 2 + 0.5) * sc, w = SIZE[mask] ?? 0;
+      o.clearRect(0, 0, W, W); o.strokeStyle = '#a7b4ff'; o.fillStyle = '#a7b4ff'; o.lineWidth = 1.3 * dp; o.setLineDash([4 * dp, 3 * dp]);
+      if (mask === 'low' || mask === 'high') { o.beginPath(); o.arc(c, c, (w + 0.5) * sc, 0, 7); o.stroke(); }
+      else if (mask === 'hslit' || mask === 'vslit') {
+        [-1, 1].forEach((sg) => { const e = c + sg * (w + 0.5) * sc; o.beginPath(); if (mask === 'hslit') { o.moveTo(0, e); o.lineTo(W, e); } else { o.moveTo(e, 0); o.lineTo(e, W); } o.stroke(); });
+      } else if (mask === 'phase') {
+        o.setLineDash([]); o.beginPath(); o.arc(c, c, 5 * dp, 0, 7); o.stroke();
+        o.font = 11 * dp + 'px ' + MONO; o.textAlign = 'left'; o.fillText('λ/4 shift', c + 9 * dp, c - 8 * dp);
+      }
+    }
+    function readout(frac) {
+      const w = SIZE[mask] ?? 0, cells = inp === 'cells', mesh = inp === 'mesh';
+      let t;
+      if (mask === 'open') t = 'Nothing is blocked, so the output matches the input.' + (cells ? ' The cells only delay the light and absorb none of it, so in plain brightfield they are invisible.' : '');
+      else if (mask === 'low') t = 'Only spatial frequencies within ' + w + ' cycles per image pass. Fine detail and sharp edges blur, as with a smaller lens aperture.' + (mesh && w < 16 ? ' The mesh repeats every 16 pixels, 16 cycles per image, so this cutoff erases it.' : '');
+      else if (mask === 'high') t = (w <= 1 ? 'Only the light at the very centre of the spectrum is blocked, so the even background goes dark and the structure that scatters light remains.' : 'The centre of the spectrum is blocked, so the background and coarse features go dark and edges and fine detail remain.') + (cells && w <= 3 ? ' This is dark-field microscopy: the transparent cells shine on a dark background.' : '');
+      else if (mask === 'hslit') t = 'Only frequencies along the horizontal axis pass, so only features that vary from left to right survive.' + (mesh ? ' The mesh keeps its vertical wires and loses the horizontal ones, as in the Abbe–Porter experiment (1906).' : '');
+      else if (mask === 'vslit') t = 'Only frequencies along the vertical axis pass, so only features that vary from top to bottom survive.' + (mesh ? ' The mesh keeps its horizontal wires and loses the vertical ones.' : '');
+      else t = 'The phase of the undiffracted light at the centre of the spectrum is shifted by a quarter wave.' + (cells ? ' The small phase delays in the cells now show up as brightness: Zernike phase contrast.' : ' On an object that absorbs light, this changes the contrast but reveals nothing new.');
+      const pc = frac > 0.995 ? '100%' : frac < 0.1 ? (100 * frac).toFixed(1) + '%' : Math.round(100 * frac) + '%';
+      out.textContent = t + ' Light reaching the output: ' + pc + ' of the input.';
+    }
+    function apply() {
+      if (!Tr) return;
+      const { I, frac } = filter(Tr, Ti, mask, SIZE[mask] ?? 0);
+      const smp = []; for (let i = 0; i < NN; i += 7) smp.push(I[i]); smp.sort((a, b) => a - b);
+      const ref = Math.max(smp[Math.floor(smp.length * 0.995)], 1e-12);
+      paintGrey(cB, I, (v) => enc(v / ref));
+      spectrum(); overlay(); readout(frac);
+    }
+    const schedule = () => { if (queued) return; queued = true; requestAnimationFrame(() => { queued = false; apply(); }); };
+    function load() {
+      if (inp === 'bee' && !lin) { out.textContent = 'Loading the bee image…'; bee().then((b) => { lin = b.lin; load(); }, () => { out.textContent = 'The bee image could not be loaded.'; }); return; }
+      const [re, im] = field(inp), I = new Float64Array(NN);
+      for (let i = 0; i < NN; i++) I[i] = re[i] * re[i] + im[i] * im[i];
+      paintGrey(cA, I, enc);
+      cA.nextElementSibling.textContent = inp === 'cells' ? 'Input · phase' : 'Input';
+      fft2(re, im, P, false); Tr = re; Ti = im; apply();
+    }
+    function syncSize() {
+      const has = mask in SIZE; row.hidden = !has; if (!has) return;
+      lab.textContent = mask === 'low' || mask === 'high' ? 'Radius' : 'Slit half-width';
+      sz.max = mask === 'low' ? '100' : '60'; setVal(sz, SIZE[mask]); szo.textContent = SIZE[mask] + ' cycles per image';
+    }
+    function fromPointer(e) {
+      if (!(mask in SIZE)) return;
+      const r = cF.getBoundingClientRect(), u = (e.clientX - r.left) / r.width * N - N / 2 - 0.5, v = (e.clientY - r.top) / r.height * N - N / 2 - 0.5;
+      setVal(sz, Math.round(mask === 'hslit' ? Math.abs(v) : mask === 'vslit' ? Math.abs(u) : Math.hypot(u, v)));
+      SIZE[mask] = +sz.value; szo.textContent = SIZE[mask] + ' cycles per image'; schedule();
+    }
+    function init() {
+      segGroup($('ft-in'), (ds) => { inp = ds.k; load(); });
+      segGroup($('ft-mask'), (ds) => { mask = ds.k; syncSize(); schedule(); });
+      sz.addEventListener('input', () => { if (!(mask in SIZE)) return; SIZE[mask] = +sz.value; szo.textContent = SIZE[mask] + ' cycles per image'; schedule(); });
+      let drag = false;
+      cF.addEventListener('pointerdown', (e) => { if (!(mask in SIZE)) return; drag = true; cF.setPointerCapture(e.pointerId); fromPointer(e); });
+      cF.addEventListener('pointermove', (e) => { if (drag) fromPointer(e); });
+      ['pointerup', 'pointercancel'].forEach((t) => cF.addEventListener(t, () => { drag = false; }));
+      syncSize(); load();
+      redraws.push(overlay);
+    }
+    return { init, draw: overlay };
+  })();
+
+  /* ---------- computational imaging: round vs coded aperture, Wiener deconvolution ---------- */
+  demos['optics-computational'] = (() => {
+    const N = 256, NN = N * N, P = plan(N), SS = 4;
+    const CODE = '1011011100000110000101100100010111101110001000100', OPEN = 22; // 7 x 7, row by row
+    const cX = $('cd-x'), cY = $('cd-y'), cR = $('cd-r'), cM = $('cd-mtf'), ap = $('cd-ap'), out = $('cd-v');
+    const sB = $('cd-b'), sS = $('cd-s');
+    let kind = 'disk', X = null, Xr = null, Xi = null, prior = null, N0r = null, N0i = null, last = null, queued = false, holding = null;
+    const cache = {}, imgs = {};
+    function kernel(k, D) {
+      // blur kernel of width D px centred on pixel 0 (with wrap-around), 4 x 4 supersampled, summing to 1
+      const h = new Float64Array(NN), R = D / 2, half = Math.ceil(R) + 1; let sum = 0;
+      for (let y = -half; y <= half; y++) for (let x = -half; x <= half; x++) {
+        let c = 0;
+        for (let a = 0; a < SS; a++) for (let b = 0; b < SS; b++) {
+          const px = x + (a + 0.5) / SS - 0.5, py = y + (b + 0.5) / SS - 0.5;
+          if (k === 'disk') { if (px * px + py * py <= R * R) c++; }
+          else { const cx = Math.floor((px + R) / D * 7), cy = Math.floor((py + R) / D * 7); if (cx >= 0 && cx < 7 && cy >= 0 && cy < 7 && CODE[cy * 7 + cx] === '1') c++; }
+        }
+        if (c) { h[((y + N) % N) * N + ((x + N) % N)] = c; sum += c; }
+      }
+      for (let i = 0; i < NN; i++) h[i] /= sum;
+      return h;
+    }
+    const area = (k, D) => (k === 'disk' ? Math.PI * D * D / 4 : OPEN / 49 * D * D);
+    function Hf(k, D) {
+      const key = k + D;
+      if (!cache[key]) { const r = kernel(k, D), i = new Float64Array(NN); fft2(r, i, P, false); cache[key] = { r, i }; }
+      return cache[key];
+    }
+    function sim(k, D, sigma, wantCap) {
+      const h = Hf(k, D), seff = sigma * Math.sqrt(area('disk', D) / area(k, D));
+      const Yr = new Float64Array(NN), Yi = new Float64Array(NN), Rr = new Float64Array(NN), Ri = new Float64Array(NN);
+      for (let i = 0; i < NN; i++) {
+        const hr = h.r[i], hi = h.i[i];
+        const yr = hr * Xr[i] - hi * Xi[i] + seff * N0r[i], yi = hr * Xi[i] + hi * Xr[i] + seff * N0i[i];
+        Yr[i] = yr; Yi[i] = yi;
+        const den = hr * hr + hi * hi + NN * seff * seff / prior[i];
+        Rr[i] = (hr * yr + hi * yi) / den; Ri[i] = (hr * yi - hi * yr) / den;
+      }
+      fft2(Rr, Ri, P, true);
+      let e = 0; for (let i = 0; i < NN; i++) { const v = Rr[i] < 0 ? 0 : Rr[i] > 1 ? 1 : Rr[i], q = v - X[i]; e += q * q; }
+      const res = { rec: Rr, rmse: Math.sqrt(e / NN), seff, h };
+      if (wantCap) { fft2(Yr, Yi, P, true); res.cap = Yr; }
+      return res;
+    }
+    O.coded = { kernel, sim: (k, D, s) => sim(k, D, s, true), CODE, area, prior: () => prior, noise: () => [N0r, N0i] };
+    function mtf(a, b) {
+      const g = fit(cM, cM.clientWidth < 560 ? 0.5 : 0.3); if (!g) return;
+      const { W, H, s: dp } = g, o = cM.getContext('2d');
+      const ink = css('--ink'), muted = css('--muted'), line = css('--line'), acc = css('--accent'), warm = css('--warm');
+      const narrow = W / dp < 480, L = 44 * dp, R = W - 10 * dp, T = 12 * dp, B = H - 44 * dp;
+      const xOf = (f) => L + f / 0.5 * (R - L), yOf = (m) => T + Math.min(3, -Math.log10(Math.max(m, 1e-3))) / 3 * (B - T);
+      o.clearRect(0, 0, W, H); o.font = 11 * dp + 'px ' + MONO; o.lineWidth = dp;
+      o.fillStyle = muted; o.strokeStyle = line; o.textAlign = 'right';
+      [[1, '1'], [0.1, '0.1'], [0.01, '0.01'], [0.001, '0.001']].forEach(([m, t]) => { const y = yOf(m); o.beginPath(); o.moveTo(L, y); o.lineTo(R, y); o.stroke(); o.fillText(t, L - 6 * dp, y + 4 * dp); });
+      o.textAlign = 'center';
+      [0, 0.1, 0.2, 0.3, 0.4, 0.5].forEach((f) => { if (narrow && (f === 0.1 || f === 0.3)) return; o.fillText(String(f), xOf(f), B + 16 * dp); });
+      o.textAlign = 'right'; o.fillText('spatial frequency, cycles per pixel', R, H - 6 * dp);
+      const curve = (fn, col, wd, dash) => {
+        o.strokeStyle = col; o.lineWidth = wd * dp; o.setLineDash(dash ? [2 * dp, 3 * dp] : []);
+        o.beginPath(); for (let i = 0; i <= N / 2; i++) { const x = xOf(i / N), y = yOf(fn(i)); i ? o.lineTo(x, y) : o.moveTo(x, y); } o.stroke(); o.setLineDash([]);
+      };
+      const mag = (r) => (i) => Math.hypot(r.h.r[i], r.h.i[i]), c = kind === 'disk' ? a : b;
+      curve((i) => Math.sqrt(NN) * c.seff / Math.sqrt(prior[i]), muted, 1.6, true);
+      curve(mag(a), warm, kind === 'disk' ? 2.4 : 1.2);
+      curve(mag(b), acc, kind === 'coded' ? 2.4 : 1.2);
+      // legend
+      const items = [['round', warm, false], ['coded', acc, false], ['noise level', muted, true]];
+      o.textAlign = 'left'; let x = R - (narrow ? 236 : 262) * dp; const y = T + 12 * dp;
+      o.fillStyle = css('--surface'); o.globalAlpha = 0.85; o.fillRect(x - 6 * dp, T + 1 * dp, R - x + 4 * dp, 18 * dp); o.globalAlpha = 1;
+      items.forEach(([t, col, dash]) => {
+        o.strokeStyle = col; o.lineWidth = 2 * dp; o.setLineDash(dash ? [2 * dp, 3 * dp] : []);
+        o.beginPath(); o.moveTo(x, y - 4 * dp); o.lineTo(x + 16 * dp, y - 4 * dp); o.stroke(); o.setLineDash([]);
+        o.fillStyle = ink; o.fillText(t, x + 21 * dp, y); x += (21 + o.measureText(t).width / dp + 14) * dp;
+      });
+    }
+    function drawAp() {
+      const o = ap.getContext('2d'), n = ap.width;
+      o.fillStyle = '#000'; o.fillRect(0, 0, n, n); o.fillStyle = '#eef1f6';
+      if (kind === 'disk') { o.beginPath(); o.arc(n / 2, n / 2, n * 0.4, 0, 7); o.fill(); }
+      else { const s = n * 0.8 / 7, x0 = n * 0.1; for (let i = 0; i < 49; i++) if (CODE[i] === '1') o.fillRect(x0 + (i % 7) * s, x0 + Math.floor(i / 7) * s, s + 0.5, s + 0.5); }
+    }
+    function update() {
+      if (!X) return;
+      const D = +sB.value, sg = +sS.value / 100;
+      $('cd-b-o').textContent = D + ' px'; $('cd-s-o').textContent = sS.value + '%';
+      const a = sim('disk', D, sg, kind === 'disk'), b = sim('coded', D, sg, kind === 'coded'), c = kind === 'disk' ? a : b;
+      last = [a, b];
+      imgs.y = paintGrey(cY, c.cap, byte); imgs.r = paintGrey(cR, c.rec, byte);
+      $('cd-yt').textContent = 'Captured · ' + (kind === 'disk' ? 'round' : 'coded'); $('cd-rt').textContent = 'Recovered';
+      drawAp(); mtf(a, b);
+      const pct = Math.round(100 * area('coded', 1) / area('disk', 1)), ratio = Math.sqrt(area('disk', 1) / area('coded', 1));
+      const v = b.rmse < 0.97 * a.rmse ? 'The coded aperture still wins: its spectrum stays above the noise at more frequencies.'
+        : a.rmse < 0.97 * b.rmse ? 'Here the round aperture does better: with little blur and strong noise, the light the mask blocks costs more than the gaps in the round aperture’s spectrum.'
+        : 'Here the two come out about even.';
+      out.textContent = 'Error after recovery (RMS, on a 0–1 scale): round ' + a.rmse.toFixed(3) + ', coded ' + b.rmse.toFixed(3) + '. The coded mask passes ' + pct + '% as much light as the round aperture, so its noise is ' + ratio.toFixed(2) + '× higher. ' + v;
+    }
+    const schedule = () => { if (queued) return; queued = true; requestAnimationFrame(() => { queued = false; update(); }); };
+    function init() {
+      out.textContent = 'Loading the bee image…';
+      bee().then((bi) => {
+        X = bi.g; Xr = Float64Array.from(X); Xi = new Float64Array(NN); fft2(Xr, Xi, P, false);
+        // a radially averaged power spectrum of the image, smoothed in log space, as the Wiener filter's prior
+        const NB = 182, sum = new Float64Array(NB), cnt = new Float64Array(NB), rb = new Uint8Array(NN);
+        for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { const u = fidx(x, N), v = fidx(y, N), i = y * N + x, q = Math.round(Math.sqrt(u * u + v * v)); rb[i] = q; sum[q] += Xr[i] * Xr[i] + Xi[i] * Xi[i]; cnt[q]++; }
+        const lp = new Float64Array(NB); for (let q = 0; q < NB; q++) lp[q] = Math.log(sum[q] / Math.max(cnt[q], 1) + 1e-30);
+        const sm = Float64Array.from(lp);
+        for (let q = 1; q < NB; q++) { const lo = Math.max(1, q - 2), hi = Math.min(NB, q + 3); let s = 0; for (let j = lo; j < hi; j++) s += lp[j]; sm[q] = s / (hi - lo); }
+        prior = new Float64Array(NN); for (let i = 0; i < NN; i++) prior[i] = Math.exp(sm[rb[i]]);
+        const r = mulberry(20261015); N0r = new Float64Array(NN); N0i = new Float64Array(NN);
+        for (let i = 0; i < NN; i++) N0r[i] = gauss(r);
+        O.coded.n0 = Float64Array.from(N0r);
+        fft2(N0r, N0i, P, false);
+        imgs.x = paintGrey(cX, X, byte);
+        update();
+      }, () => { out.textContent = 'The bee image could not be loaded.'; });
+      segGroup($('cd-k'), (ds) => { kind = ds.k; schedule(); });
+      [sB, sS].forEach((i) => i.addEventListener('input', schedule));
+      [[cY, 'y'], [cR, 'r']].forEach(([c, k]) => {
+        const boxEl = c.parentElement, tag = boxEl.querySelector('.otg');
+        const show = (on) => { if (!imgs.x || !imgs[k]) return; c.getContext('2d').putImageData(on ? imgs.x : imgs[k], 0, 0); tag.textContent = on ? 'Original' : k === 'y' ? 'Captured · ' + (kind === 'disk' ? 'round' : 'coded') : 'Recovered'; };
+        boxEl.addEventListener('pointerdown', (e) => { if (e.button) return; holding = k; show(true); });
+        ['pointerup', 'pointerleave', 'pointercancel'].forEach((t) => boxEl.addEventListener(t, () => { if (holding === k) { holding = null; show(false); } }));
+        boxEl.addEventListener('contextmenu', (e) => e.preventDefault());
+      });
+      redraws.push(() => { if (last) mtf(last[0], last[1]); });
+    }
+    return { init, draw: () => { if (last) mtf(last[0], last[1]); } };
+  })();
+
+  /* ---------- quantum optics: photons one at a time, and shot noise ---------- */
+  const RATIO = 5, U0 = 7; // slit spacing = 5 x slit width; the screen spans +-7 fringe spacings
+  O.twoSlit = (u, path) => { const b = Math.PI * u / RATIO, env = Math.abs(b) < 1e-12 ? 1 : (Math.sin(b) / b) ** 2; return path ? env : env * Math.cos(Math.PI * u) ** 2; };
+  demos['optics-quantum'] = (() => {
+    const cv = $('qs-cv'), cnt = $('qs-n'), out = $('qs-v'), bPlay = $('qs-play'), bAdd = $('qs-add'), bReset = $('qs-reset'), chk = $('qs-path');
+    const G = 4001, NB = 140, MAX = 60000, SCR = 0.6;
+    const cdfs = [false, true].map((path) => {
+      const c = new Float64Array(G); let s = 0, prev = O.twoSlit(-U0, path);
+      for (let k = 1; k < G; k++) { const p = O.twoSlit(-U0 + 2 * U0 * k / (G - 1), path); s += (p + prev) / 2; c[k] = s; prev = p; }
+      for (let k = 0; k < G; k++) c[k] /= s;
+      return c;
+    });
+    function sampleU(r, path) {
+      const c = cdfs[path ? 1 : 0], t = r(); let lo = 0, hi = G - 1;
+      while (hi - lo > 1) { const m = (lo + hi) >> 1; if (c[m] < t) lo = m; else hi = m; }
+      const f = (t - c[lo]) / Math.max(c[hi] - c[lo], 1e-300);
+      return -U0 + 2 * U0 * (lo + f) / (G - 1);
+    }
+    const cdfAt = (c, u) => { const t = (u + U0) / (2 * U0) * (G - 1), i = Math.min(G - 2, Math.max(0, Math.floor(t))); return c[i] + (c[i + 1] - c[i]) * (t - i); };
+    Object.assign(O, { sampleU, cdfAt: (u, path) => cdfAt(cdfs[path ? 1 : 0], u), U0 });
+    const xs = new Float32Array(MAX), ys = new Float32Array(MAX), hist = new Uint32Array(NB), dots = document.createElement('canvas');
+    let n = 0, seed = 1, rnd = mulberry(seed), playing = false, userPaused = false, active = false, raf = 0, lastT = 0, acc = 0, stage = '', gg = null;
+    const DOT = 'rgba(170,255,150,.9)';
+    function plot(o, g, k) { o.fillRect(xs[k] * g.W - 0.9 * g.s, ys[k] * g.H * SCR - 0.9 * g.s, 1.8 * g.s, 1.8 * g.s); }
+    function geom() {
+      const g = fit(cv, 0.42); if (!g) return null;
+      if (dots.width !== g.W || dots.height !== g.H) { dots.width = g.W; dots.height = g.H; const o = dots.getContext('2d'); o.fillStyle = DOT; for (let k = 0; k < n; k++) plot(o, g, k); }
+      gg = g; return g;
+    }
+    function compose() {
+      const g = geom(); if (!g) return;
+      const { W, H, s } = g, o = cv.getContext('2d'), c = cdfs[chk.checked ? 1 : 0];
+      o.fillStyle = '#05070a'; o.fillRect(0, 0, W, H); o.drawImage(dots, 0, 0);
+      const top = H * 0.65, bot = H - 6 * s, hh = bot - top - 16 * s, bw = W / NB, exp = new Float64Array(NB);
+      let mx = 1;
+      for (let b = 0; b < NB; b++) { exp[b] = n * (cdfAt(c, -U0 + 2 * U0 * (b + 1) / NB) - cdfAt(c, -U0 + 2 * U0 * b / NB)); mx = Math.max(mx, exp[b], hist[b]); }
+      o.fillStyle = 'rgba(150,240,130,.55)';
+      for (let b = 0; b < NB; b++) if (hist[b]) { const h = hist[b] / mx * hh; o.fillRect(b * bw + 0.5, bot - h, Math.max(1, bw - 1), h); }
+      if (n) {
+        o.strokeStyle = 'rgba(255,255,255,.85)'; o.lineWidth = 1.2 * s; o.setLineDash([4 * s, 3 * s]); o.beginPath();
+        for (let b = 0; b < NB; b++) { const x = (b + 0.5) * bw, y = bot - exp[b] / mx * hh; b ? o.lineTo(x, y) : o.moveTo(x, y); }
+        o.stroke(); o.setLineDash([]);
+      }
+      o.fillStyle = 'rgba(255,255,255,.14)'; o.fillRect(0, H * 0.62, W, s);
+      o.fillStyle = '#a9b3c1'; o.font = 11 * s + 'px ' + MONO; o.textAlign = 'left';
+      [['detector screen', 16 * s], ['count at each position', top + 8 * s]].forEach(([t, y]) => {
+        o.fillStyle = 'rgba(5,7,10,.78)'; o.fillRect(4 * s, y - 12 * s, o.measureText(t).width + 8 * s, 16 * s);
+        o.fillStyle = '#a9b3c1'; o.fillText(t, 8 * s, y);
+      });
+      if (!n) { o.textAlign = 'center'; o.fillStyle = '#e6ebf1'; o.fillText('Press Play to send photons one at a time', W / 2, H * SCR / 2 + 4 * s); }
+    }
+    function say() {
+      const path = chk.checked, s = n === 0 ? 0 : n < 60 ? 1 : n < 3000 ? 2 : 3, key = s + (path ? 'p' : '');
+      if (key === stage) return; stage = key;
+      out.textContent = [
+        'Nothing detected yet. Press Play, or add a thousand photons at once.',
+        'Each dot is one photon, landing at a single random spot. So far the hits look scattered.',
+        path ? 'With the path recorded, the hits are filling in one broad hump, without fringes.' : 'Each photon still lands at one random spot, but the fringes are starting to show in where they land.',
+        path ? 'With the path recorded there are no fringes: the hits follow |ψ₁|² + |ψ₂|², two overlapping single-slit patterns.' : 'The fringes are clear, even though the photons came one at a time: the chance of landing at each point follows |ψ₁ + ψ₂|².'
+      ][s];
+    }
+    function emit(k) {
+      const g = gg || geom(), o = dots.getContext('2d'), path = chk.checked;
+      o.fillStyle = DOT;
+      for (let j = 0; j < k && n < MAX; j++, n++) {
+        const u = sampleU(rnd, path), b = Math.min(NB - 1, Math.floor((u + U0) / (2 * U0) * NB));
+        hist[b]++; xs[n] = (u + U0) / (2 * U0); ys[n] = 0.05 + 0.9 * rnd();
+        if (g) plot(o, g, n);
+      }
+      cnt.textContent = intf(n) + (n === 1 ? ' photon' : ' photons');
+      if (n >= MAX) { bAdd.disabled = true; bPlay.disabled = true; }
+      say();
+    }
+    function loop(t) {
+      raf = 0; if (!(active && playing)) return;
+      const dt = lastT ? Math.min(0.1, (t - lastT) / 1000) : 0; lastT = t;
+      acc += dt * (3 + 0.9 * n); const k = Math.min(4000, Math.floor(acc)); acc -= k;
+      if (k) { emit(k); compose(); }
+      if (n >= MAX) { setPlay(false); return; }
+      raf = requestAnimationFrame(loop);
+    }
+    function setPlay(on) {
+      playing = on; bPlay.textContent = on ? 'Pause' : 'Play'; bPlay.setAttribute('aria-pressed', String(on));
+      if (on && active && !raf) { lastT = 0; raf = requestAnimationFrame(loop); }
+      compose();
+    }
+    function reset() {
+      n = 0; hist.fill(0); acc = 0; rnd = mulberry(++seed); stage = '';
+      dots.getContext('2d').clearRect(0, 0, dots.width, dots.height);
+      bAdd.disabled = false; bPlay.disabled = false; emit(0); compose();
+    }
+
+    // shot noise: an image built from Poisson photon counts
+    const pX = $('pn-x'), pY = $('pn-y'), pOut = $('pn-v'), sl = $('pn-l'), bNew = $('pn-new'), pTag = $('pn-t');
+    const LV = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
+    let lin = null, kF = 1, seed2 = 7;
+    const fmt = (v) => (v < 1 ? v.toFixed(1) : intf(v));
+    function expose() {
+      const lam = LV[+sl.value], tot = lam * kF;
+      $('pn-l-o').textContent = fmt(lam);
+      sl.setAttribute('aria-valuetext', fmt(lam) + ' photons');
+      if (!lin) return;
+      const r = mulberry(seed2), arr = new Float64Array(65536);
+      for (let i = 0; i < 65536; i++) arr[i] = poisson(tot * lin[i], r) / tot;
+      paintGrey(pY, arr, enc);
+      pTag.textContent = kF > 1 ? 'Average of ' + kF + ' frames' : 'Detected photons';
+      const snr = Math.sqrt(tot);
+      pOut.textContent = 'The brightest pixels collect ' + fmt(lam) + ' photon' + (lam === 1 ? '' : 's') + ' per frame on average' + (kF > 1 ? ', ' + fmt(tot) + ' over ' + kF + ' frames' : '') +
+        ', so their signal-to-noise ratio is √' + fmt(tot) + ' ≈ ' + (snr < 10 ? snr.toFixed(1) : Math.round(snr)) + '. Darker pixels collect fewer photons and are noisier still.' +
+        (kF > 1 ? ' Averaging ' + kF + ' frames improves the SNR ' + Math.sqrt(kF) + '×, exactly as ' + kF + ' times the light would.' : '');
+    }
+    O.photonImage = { LV };
+
+    function init() {
+      bPlay.addEventListener('click', () => { userPaused = playing; setPlay(!playing); });
+      bAdd.addEventListener('click', () => { emit(1000); compose(); });
+      bReset.addEventListener('click', reset);
+      chk.addEventListener('change', reset);
+      emit(0); compose();
+      sl.addEventListener('input', expose);
+      segGroup($('pn-k'), (ds) => { kF = +ds.k; expose(); });
+      bNew.addEventListener('click', () => { seed2++; expose(); });
+      expose();
+      pOut.textContent = 'Loading the bee image…';
+      bee().then((b) => { lin = b.lin; paintGrey(pX, lin, enc); expose(); }, () => { pOut.textContent = 'The bee image could not be loaded.'; });
+      redraws.push(compose);
+    }
+    return {
+      init, draw: compose,
+      run(on) {
+        active = on;
+        if (on) { if (!playing && !userPaused && !reduceMotion && n < MAX) setPlay(true); else if (playing && !raf) { lastT = 0; raf = requestAnimationFrame(loop); } }
+        else if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      }
+    };
+  })();
+  update();
 })();
 </script>
 </body>
