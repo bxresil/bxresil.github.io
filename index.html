@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<script>document.documentElement.classList.add("js")</script>
+<script>document.documentElement.classList.add("js");(function(){var h=location.hash;if(h.length>1&&h!=="#about"&&h!=="#top"){var r=document.documentElement;r.classList.add("pre-route");setTimeout(function(){r.classList.remove("pre-route")},2500)}})()</script>
 <style>
 /* Layout: a lab notebook. A sticky top bar, a hero that pairs a short statement with a live focal-stack viewer,
    then sections with a narrow mono label column and a wide content column; stacks to one column on phones. */
@@ -564,11 +564,10 @@ html.lb-open { overflow: hidden; }
 .pol-st canvas { width: 64px; height: 64px; margin-bottom: 4px; }
 .pol-st .k { font-size: 12.5px; color: var(--muted); }
 .pol-st .v { font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
-@media (max-width: 1180px) {
-  .otab { flex: 1 0 auto; grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; row-gap: 3px; padding: 9px 8px 8px; }
-  .otab svg { grid-row: auto; width: 26px; height: 26px; }
-  .otab .n { display: none; }
-}
+/* six tabs share one row, so each shows its icon above its name */
+.otab { flex: 1 0 auto; grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; row-gap: 3px; padding: 9px 8px 8px; }
+.otab svg { grid-row: auto; width: 26px; height: 26px; }
+.otab .n { display: none; }
 @media (max-width: 640px) {
   .otabs { gap: 6px; margin-inline: -2px; }
   .otab { padding: 8px 6px 7px; }
@@ -586,21 +585,53 @@ html.lb-open { overflow: hidden; }
   .lens-sn .otg { left: 4px; bottom: 4px; padding: 1px 4px; }
   .lens-out .ab-v { font-size: 13.5px; }
 }
+/* lens design */
+#ld-fig .ab-ctl { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.ld-plots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ld-plot { display: grid; gap: 6px; min-width: 0; }
+.ld-plot canvas { background: var(--sunken); border-radius: 8px; }
+#ld-v { min-height: 4.6em; }
+@media (max-width: 640px) {
+  .ld-plots { gap: 8px; }
+  #ld-v { min-height: 0; }
+}
+@media (max-width: 640px) {
+  .ld-plots { grid-template-columns: minmax(0, 1fr); }
+}
+/* pages: the top bar shows one page at a time; each page ends with links to the others */
+.pre-route main { visibility: hidden; }
+.pager .pgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pager.explore .pgrid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); }
+.pcard { display: grid; align-content: start; gap: 4px; padding: 16px 18px 17px; color: var(--ink); text-decoration: none; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; transition: border-color .2s, box-shadow .2s, transform .2s; }
+.pcard:hover { border-color: var(--accent); box-shadow: 0 6px 18px -12px color-mix(in srgb, var(--accent) 60%, transparent); transform: translateY(-1px); }
+.pcard .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pcard .t { font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.2; }
+.pcard .d { font-size: 13.5px; color: var(--muted); }
+.pcard.pc-next { text-align: right; }
+.pcard.pc-prev:only-child { grid-column: 1; }
+@media (max-width: 640px) {
+  .pager .pgrid, .pager.explore .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pcard { padding: 12px 13px 13px; }
+  .pcard .t { font-size: 18px; }
+  .pcard .d { font-size: 12.5px; }
+}
+.pg-in { animation: rise .45s var(--ease) backwards; }
+.pcontact { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; }
+.pcontact .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 </style>
 
 </head>
 <body>
 <header class="bar">
   <div class="wrap">
-    <a class="brand" href="#top"><svg class="iris" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.2"/><path d="M15.98 9.70L5.86 3.86M15.98 14.30L15.98 2.61M12.00 16.60L22.12 10.76M8.02 14.30L18.14 20.14M8.02 9.70L8.02 21.39M12.00 7.40L1.88 13.24"/></svg>Bingxi Li</a>
-    <nav class="navlinks" aria-label="Sections">
-      <a href="#research">Research</a>
-      <a href="#publications">Publications</a>
-      <a href="#projects">Projects</a>
-      <a href="#optics">Optics</a>
-      <a href="#experience">Experience</a>
-      <a href="#photography">Photography</a>
-      <a href="#contact">Contact</a>
+    <a class="brand" href="#about"><svg class="iris" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.2"/><path d="M15.98 9.70L5.86 3.86M15.98 14.30L15.98 2.61M12.00 16.60L22.12 10.76M8.02 14.30L18.14 20.14M8.02 9.70L8.02 21.39M12.00 7.40L1.88 13.24"/></svg>Bingxi Li</a>
+    <nav class="navlinks" aria-label="Pages">
+      <a href="#about" data-nav="about">About</a>
+      <a href="#projects" data-nav="projects">Projects</a>
+      <a href="#publications" data-nav="publications">Publications</a>
+      <a href="#optics" data-nav="optics">Optics</a>
+      <a href="#experience" data-nav="experience">Experience</a>
+      <a href="#photography" data-nav="photography">Photography</a>
     </nav>
     <a class="cvbtn" href="assets/Bingxi_Li_CV.pdf" target="_blank" rel="noopener" aria-label="CV (PDF)">CV</a>
   </div>
@@ -608,7 +639,7 @@ html.lb-open { overflow: hidden; }
 <div class="bench" aria-hidden="true"></div>
 
 <main id="top">
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" aria-labelledby="hero-title" data-page="about">
   <div class="wrap">
     <div>
       <p class="eyebrow">Physics undergraduate · EECS minor · UC Berkeley</p>
@@ -1097,7 +1128,7 @@ html.lb-open { overflow: hidden; }
     </script>
   </div>
 </section>
-<section class="sec" id="research" aria-labelledby="research-title">
+<section class="sec" id="research" data-page="about" aria-labelledby="research-title">
   <div class="wrap">
     <p class="sec-label">Research</p>
     <div class="sec-body">
@@ -1139,7 +1170,7 @@ html.lb-open { overflow: hidden; }
   </div>
 </section>
 
-<section class="sec" id="publications" aria-labelledby="pub-title">
+<section class="sec" id="publications" data-page="publications" aria-labelledby="pub-title">
   <div class="wrap">
     <p class="sec-label">Publications</p>
     <div class="sec-body">
@@ -1178,7 +1209,7 @@ html.lb-open { overflow: hidden; }
   </div>
 </section>
 
-<section class="sec" id="projects" aria-labelledby="proj-title">
+<section class="sec" id="projects" data-page="projects" aria-labelledby="proj-title">
   <div class="wrap">
     <p class="sec-label">Projects</p>
     <div class="sec-body">
@@ -1241,7 +1272,7 @@ html.lb-open { overflow: hidden; }
             <div class="txt">
               <p>An <span class="term" tabindex="0" data-def="One image fused from the sharpest regions of every slice in a focal stack.">all-in-focus composite</span> is good documentation but it erases provenance: you can no longer tell which slice supports a region, or whether that assignment is ambiguous. FocusStack2XR keeps that evidence. It computes a focus-index map, a confidence margin, a conservative validity mask and a relative focus-depth layer, and a browser viewer lets you switch overlays, browse slices and click a region to see its predicted source slice. Relative depth is treated as an inspection cue, not calibrated 3D geometry.</p>
               <p>The “XR” is the goal, not the current system: the prototype is a desktop browser viewer and hasn’t been tried in a headset or with users. The paper’s argument is that a plausible 2.5D view can imply geometry the data don’t support, so the evidence layers have to come first.</p>
-              <p>The <a href="#viewer">viewer at the top of this page</a> shows maps computed with this method from every slice of each stack. The paper evaluates seven stacks across four specimen categories and reports where the method breaks: transparent wings and cluttered scenes.</p>
+              <p>The <a href="#viewer">viewer on the About page</a> shows maps computed with this method from every slice of each stack. The paper evaluates seven stacks across four specimen categories and reports where the method breaks: transparent wings and cluttered scenes.</p>
             </div>
             <figure class="fig" style="margin:0">
               <div class="fig-head">
@@ -1410,14 +1441,15 @@ html.lb-open { overflow: hidden; }
   </div>
 </section>
 
-<section class="sec" id="optics" aria-labelledby="optics-title">
+<section class="sec" id="optics" data-page="optics" aria-labelledby="optics-title">
   <div class="wrap">
     <p class="sec-label">Optics</p>
     <div class="sec-body">
       <h2 id="optics-title">Optics, from rays to photons</h2>
-      <p class="sec-intro">A short tour of the optics behind imaging, in five parts. Each part describes light in a different way and comes with a small simulation that runs in your browser.</p>
+      <p class="sec-intro">A short tour of the optics behind imaging, in six parts: four ways of describing light, from rays to photons, plus how real lenses are designed and how computation joins in. Each part comes with a small simulation that runs in your browser.</p>
       <div class="otabs" role="tablist" aria-label="Optics topics">
         <button class="otab" type="button" role="tab" id="ot-geo" aria-controls="optics-geometric" aria-selected="true"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 16L15 7.5L29 16M3 16L15 24.5L29 16M3 16H29"/><path d="M15 5.5c2.2 3 2.2 18 0 21c-2.2-3-2.2-18 0-21z"/></svg><span class="t">Geometric</span><span class="n">light as rays</span></button>
+        <button class="otab" type="button" role="tab" id="ot-design" aria-controls="optics-design" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 5c2.6 3.4 2.6 18.6 0 22c-2.3-3.4-2.3-18.6 0-22z"/><path d="M11 5c3 1 4.6 3 4.6 3v16s-1.6 2-4.6 3"/><path d="M2 10.5h9.6M2 21.5h9.6M15.6 10.8L29 16M15.6 21.2L29 16" opacity=".55"/></svg><span class="t">Lens design</span><span class="n">trace and optimize</span></button>
         <button class="otab" type="button" role="tab" id="ot-wave" aria-controls="optics-wave" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 4v9.5M4 18.5V28"/><path d="M9 12a5 5 0 0 1 0 8M13 9a9.5 9.5 0 0 1 0 14M17.5 6a14 14 0 0 1 0 20M22 3.5a18.5 18.5 0 0 1 0 25"/></svg><span class="t">Wave</span><span class="n">light as waves</span></button>
         <button class="otab" type="button" role="tab" id="ot-fourier" aria-controls="optics-fourier" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10.5" stroke-dasharray="2.4 2.2"/><circle class="f" cx="16" cy="16" r="2.6"/><circle class="f" cx="16" cy="9" r="1.5"/><circle class="f" cx="16" cy="23" r="1.5"/><circle class="f" cx="9" cy="16" r="1.5"/><circle class="f" cx="23" cy="16" r="1.5"/><circle class="f" cx="10" cy="10" r=".9"/><circle class="f" cx="22" cy="22" r=".9"/><circle class="f" cx="22" cy="10" r=".9"/><circle class="f" cx="10" cy="22" r=".9"/></svg><span class="t">Fourier</span><span class="n">frequency space</span></button>
         <button class="otab" type="button" role="tab" id="ot-comp" aria-controls="optics-computational" aria-selected="false" tabindex="-1"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5"/><rect class="f" x="9" y="9" width="4.6" height="4.6"/><rect class="f" x="18.4" y="9" width="4.6" height="4.6"/><rect class="f" x="13.7" y="13.7" width="4.6" height="4.6"/><rect class="f" x="9" y="18.4" width="4.6" height="4.6"/><rect class="f" x="18.4" y="18.4" width="4.6" height="4.6" opacity=".45"/></svg><span class="t">Computational</span><span class="n">optics + compute</span></button>
@@ -1456,10 +1488,48 @@ html.lb-open { overflow: hidden; }
             </div>
             <figcaption class="fig-cap">Paraxial thin-lens model with distances in millimetres; heights are drawn at three times the horizontal scale. Drag the object or the sensor, or use the sliders. The shaded band marks the object distances that stay sharp to within <i>c</i> = 0.03 mm on the sensor, a common limit for full-frame cameras.</figcaption>
           </figure>
-          <p class="omine"><span class="lbl">Where it meets my work</span>Depth of field is why the <a href="#essig">Essig specimens</a> on this site were photographed as focal stacks, and why the <a href="#viewer">viewer at the top</a> asks which slice is sharpest where.</p>
+          <p class="omine"><span class="lbl">Where it meets my work</span>Depth of field is why the <a href="#essig">Essig specimens</a> on this site were photographed as focal stacks, and why the <a href="#viewer">focal-stack viewer</a> asks which slice is sharpest where.</p>
           <p class="oref">Further reading: E. Hecht, <i>Optics</i>, 5th ed. (Pearson, 2017).</p>
         </div>
 
+        <div class="opanel" role="tabpanel" id="optics-design" aria-labelledby="ot-design" tabindex="0">
+          <div class="otxt">
+            <h3>Designing a real lens: trace, measure, optimize</h3>
+            <p>The thin-lens equation assumes small angles and a lens of no thickness. Lens-design programs such as Zemax OpticStudio and CODE V instead describe a lens as a list of surfaces, each with a curvature, a thickness and a glass, and trace many real rays through them with the exact form of Snell’s law at every surface. Where those rays land, compared with where they should, measures the lens’s <span class="term" tabindex="0" data-def="Departures from perfect imaging that come from the lens itself rather than from diffraction: rays from one object point do not meet at one image point." data-name="Aberrations">aberrations</span>.</p>
+            <p>A single lens has two that matter even on axis. Spherical aberration: rays through the edge of the lens focus closer than rays near the centre. Chromatic aberration: glass bends blue light more than red, so colours focus at different distances; the <span class="term" tabindex="0" data-def="V = (n_d − 1)/(n_F − n_C), from the refractive index at three standard wavelengths (486, 588 and 656 nm). A low Abbe number means strong dispersion." data-name="Abbe number">Abbe number</span> measures how strongly a glass does this. The designer picks the variables, such as curvatures, spacings and glasses, and a merit function, often the RMS spot size, and the optimizer, typically damped least squares, adjusts the variables to make it as small as possible.</p>
+            <p>A classic first exercise is the cemented achromatic doublet: a positive lens of crown glass joined to a weaker negative lens of more dispersive flint glass. The flint undoes the crown’s colour error but only part of its focusing power, and bending the pair also reduces spherical aberration.</p>
+          </div>
+          <div class="eqs">
+            <div class="eq"><span class="m"><i>n</i> sin <i>θ</i> = <i>n</i>′ sin <i>θ</i>′</span><span class="d">exact Snell’s law at every surface</span></div>
+            <div class="eq"><span class="m"><i>V</i> = <span class="fr"><span><i>n</i><sub>d</sub> − 1</span><span><i>n</i><sub>F</sub> − <i>n</i><sub>C</sub></span></span></span><span class="d">Abbe number of a glass</span></div>
+            <div class="eq"><span class="m"><span class="fr"><span><i>φ</i><sub>1</sub></span><span><i>V</i><sub>1</sub></span></span> + <span class="fr"><span><i>φ</i><sub>2</sub></span><span><i>V</i><sub>2</sub></span></span> = 0</span><span class="d">thin achromat: powers <i>φ</i> = 1/<i>f</i></span></div>
+            <div class="eq"><span class="m">MF = Σ <i>w</i><sub><i>i</i></sub> (<i>v</i><sub><i>i</i></sub> − <i>t</i><sub><i>i</i></sub>)<sup>2</sup></span><span class="d">merit function the optimizer minimizes</span></div>
+          </div>
+          <figure class="fig" id="ld-fig" style="margin:0">
+            <div class="fig-head">
+              <span class="fig-title">Try it: design a 100 mm lens</span>
+              <div class="row"><button type="button" class="iconbtn" id="ld-opt">Optimize</button><button type="button" class="iconbtn" id="ld-reset">Reset</button></div>
+            </div>
+            <div class="octl">
+              <div class="seg" role="group" aria-label="Lens type" id="ld-kind"><button type="button" aria-pressed="true" data-k="single">Singlet · N-BK7</button><button type="button" aria-pressed="false" data-k="doublet">Doublet · N-BK7 + F2</button></div>
+              <div class="seg" role="group" aria-label="Field" id="ld-field"><button type="button" aria-pressed="true" data-f="0">On axis</button><button type="button" aria-pressed="false" data-f="2">2° off axis</button></div>
+            </div>
+            <canvas class="ocv" id="ld-lay" width="1240" height="400" role="img" aria-label="Cross-section of the lens with traced rays in blue, yellow and red light converging to the image"></canvas>
+            <div class="ld-plots">
+              <div class="ld-plot"><span class="lbl">Spot diagram</span><canvas class="ocv" id="ld-spot" width="600" height="600" role="img" aria-label="Spot diagram: where rays from one point land on the image plane, by colour"></canvas></div>
+              <div class="ld-plot"><span class="lbl">Longitudinal aberration</span><canvas class="ocv" id="ld-long" width="600" height="600" role="img" aria-label="Focus shift against height in the aperture, for three colours"></canvas></div>
+            </div>
+            <div class="ab-ctl">
+              <div class="ab-s"><label for="ld-b">Bending</label><output id="ld-b-o" for="ld-b"></output><input type="range" id="ld-b" min="-2" max="2" step="0.01" value="0"></div>
+              <div class="ab-s" id="ld-p-row"><label for="ld-p">Flint lens power</label><output id="ld-p-o" for="ld-p"></output><input type="range" id="ld-p" min="-2" max="0" step="0.01" value="-0.6"></div>
+              <div class="ab-s"><label for="ld-n">Aperture</label><output id="ld-n-o" for="ld-n"></output><input type="range" id="ld-n" min="4" max="10" step="0.5" value="5"></div>
+            </div>
+            <p class="ab-v" id="ld-v" aria-live="polite"></p>
+            <figcaption class="fig-cap">A real ray trace in your browser: about 200 rays per colour through spherical surfaces, with glass indices from Schott’s published dispersion formulas, at 486, 588 and 656 nm. The focal length is held at 100 mm by rescaling the curvatures, and an element gets thicker when its edge would drop below 2 mm. The image plane sits at the best focus for all three colours and both field angles together, and the spot size is the RMS radius about the centroid. Optimize runs damped least squares on the sliders, as lens-design programs do, with both field angles in the merit function. The longitudinal plot shows where each ray crosses the axis compared with the paraxial focus, against its height in the aperture.</figcaption>
+          </figure>
+          <p class="omine"><span class="lbl">Where it meets my work</span>Zemax OpticStudio is one of the tools I use. This demo runs the same trace, measure and optimize loop on one or two lenses, small enough for a browser.</p>
+          <p class="oref">Further reading: W. J. Smith, <i>Modern Optical Engineering</i>, 4th ed. (McGraw-Hill, 2008) · R. Kingslake and R. B. Johnson, <i>Lens Design Fundamentals</i>, 2nd ed. (Academic Press, 2010).</p>
+        </div>
         <div class="opanel" role="tabpanel" id="optics-wave" aria-labelledby="ot-wave" tabindex="0">
           <div class="otxt">
             <h3>Interference, diffraction and the resolution limit</h3>
@@ -1635,7 +1705,7 @@ html.lb-open { overflow: hidden; }
   </div>
 </section>
 
-<section class="sec" id="experience" aria-labelledby="exp-title">
+<section class="sec" id="experience" data-page="experience" aria-labelledby="exp-title">
   <div class="wrap">
     <p class="sec-label">Experience</p>
     <div class="sec-body">
@@ -1690,7 +1760,7 @@ html.lb-open { overflow: hidden; }
   </div>
 </section>
 
-<section class="sec" id="photography" aria-labelledby="photo-title">
+<section class="sec" id="photography" data-page="photography" aria-labelledby="photo-title">
   <div class="wrap">
     <p class="sec-label">Photography</p>
     <div class="sec-body">
@@ -1724,12 +1794,19 @@ html.lb-open { overflow: hidden; }
   <button type="button" class="lb-btn lb-close" id="lb-close" aria-label="Close">×</button>
 </dialog>
 
-<section class="sec" id="contact" aria-labelledby="contact-title">
+<section class="sec pager" id="pager" data-page="all" aria-label="Other pages">
+  <div class="wrap">
+    <p class="sec-label">More</p>
+    <div class="sec-body"><nav class="pgrid" aria-label="Other pages"></nav><p class="pcontact" id="pcontact"><span class="k">Get in touch</span><a href="mailto:bingxi.li@berkeley.edu">bingxi.li@berkeley.edu</a><a href="https://github.com/bxresil" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/bingxi-l-a7383a294/" target="_blank" rel="noopener">LinkedIn</a><a href="assets/Bingxi_Li_CV.pdf" target="_blank" rel="noopener">CV (PDF)</a></p></div>
+  </div>
+</section>
+
+<section class="sec" id="contact" data-page="about" aria-labelledby="contact-title">
   <div class="wrap">
     <p class="sec-label">Contact</p>
     <div class="sec-body">
       <h2 id="contact-title">Get in touch</h2>
-      <p class="sec-intro">I’m happy to talk about computational imaging, microscopy or any of the projects above.</p>
+      <p class="sec-intro">I’m happy to talk about computational imaging, microscopy or any of the projects on this site.</p>
       <div class="contact">
         <div><span class="k">Email</span><a class="v mono" id="email-v" href="mailto:bingxi.li@berkeley.edu">bingxi.li@berkeley.edu</a><button class="iconbtn" type="button" data-copy="bingxi.li@berkeley.edu" aria-label="Copy email address">Copy</button></div>
         <div><span class="k">GitHub</span><span class="v"><a href="https://github.com/bxresil" target="_blank" rel="noopener">github.com/bxresil</a></span><span></span></div>
@@ -1949,22 +2026,11 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     });
   });
 
-  /* ---------- section highlight in the top bar ---------- */
+  /* ---------- the section in the middle of the screen gets its label marked ---------- */
   const navLinks = [...document.querySelectorAll('.navlinks a')];
   if ('IntersectionObserver' in window) {
-    const inBand = new Set();
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((en) => { if (en.isIntersecting) inBand.add(en.target.id); else inBand.delete(en.target.id); });
-      const cur = navLinks.find((a) => inBand.has(a.getAttribute('href').slice(1)));
-      navLinks.forEach((a) => a.classList.toggle('on', a === cur));
-      const nav = cur && cur.parentElement;
-      if (nav && nav.scrollWidth > nav.clientWidth) {
-        const nr = nav.getBoundingClientRect(), cr = cur.getBoundingClientRect();
-        nav.scrollTo({ left: Math.max(0, nav.scrollLeft + cr.left - nr.left - nr.width / 2 + cr.width / 2), behavior: reduceMotion ? 'auto' : 'smooth' });
-      }
-      document.querySelectorAll('section.sec').forEach((s) => s.classList.toggle('cur', !!cur && cur.getAttribute('href') === '#' + s.id));
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    navLinks.forEach((a) => { const s = document.querySelector(a.getAttribute('href')); if (s) io.observe(s); });
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => en.target.classList.toggle('cur', en.isIntersecting)), { rootMargin: '-45% 0px -50% 0px' });
+    document.querySelectorAll('section.sec').forEach((s) => io.observe(s));
   }
 
   /* ---------- visual layer: scroll progress, hero light, card highlight, rack-focus reveal ---------- */
@@ -2069,7 +2135,83 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     const a = e.target.closest && e.target.closest('a[href^="#"]');
     if (a && a.getAttribute('href').length > 1) openFor(document.getElementById(a.getAttribute('href').slice(1)));
   });
-  if (location.hash.length > 1) { const t = document.getElementById(location.hash.slice(1)); if (t) { openFor(t); requestAnimationFrame(() => t.scrollIntoView()); } }
+  /* ---------- pages: the top bar switches pages; a link to anything on another page opens that page first ---------- */
+  const PAGES = [
+    { id: 'about', label: 'About', d: 'Research questions and the focal-stack viewer' },
+    { id: 'projects', label: 'Projects', d: 'UIBS, FocusStack2XR, microscopy and more' },
+    { id: 'publications', label: 'Publications', d: 'Papers and talks' },
+    { id: 'optics', label: 'Optics', d: 'Interactive notes, from rays and lens design to photons' },
+    { id: 'experience', label: 'Experience', d: 'Research positions and education' },
+    { id: 'photography', label: 'Photography', d: 'Away from the bench' }
+  ];
+  const pgSecs = [...document.querySelectorAll('[data-page]')], pgPager = $('pager'), pgTitle = document.title;
+  let pgCur = null, pgLast = null;
+  const pgOf = (el) => { const s = el.closest('[data-page]'); return s ? s.dataset.page : null; };
+  function pgJump(fn) { const h = document.documentElement, b = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; fn(); h.style.scrollBehavior = b; }
+  function pgFill() {
+    if (!pgPager) return;
+    const i = PAGES.findIndex((p) => p.id === pgCur), card = (p, cls, k) => '<a class="pcard ' + cls + '" href="#' + p.id + '"><span class="k">' + k + '</span><span class="t">' + p.label + '</span><span class="d">' + p.d + '</span></a>';
+    const explore = pgCur === 'about';
+    pgPager.classList.toggle('explore', explore);
+    const pc = $('pcontact'); if (pc) pc.hidden = explore;
+    pgPager.querySelector('.sec-label').textContent = explore ? 'Explore' : 'More';
+    pgPager.querySelector('.pgrid').innerHTML = explore
+      ? PAGES.filter((p) => p.id !== 'about').map((p) => card(p, '', 'Page')).join('')
+      : card(PAGES[i - 1], 'pc-prev', '← Previous') + (PAGES[i + 1] ? card(PAGES[i + 1], 'pc-next', 'Next →') : card(PAGES[0], 'pc-next', 'Back to start →'));
+  }
+  function pgShow(p, animate) {
+    const changed = p !== pgCur; pgCur = p;
+    pgSecs.forEach((s) => { const on = s.dataset.page === p || s.dataset.page === 'all'; s.hidden = !on; if (on && changed && animate && !reduceMotion) { s.classList.remove('pg-in'); void s.offsetWidth; s.classList.add('pg-in'); } });
+    navLinks.forEach((a) => a.classList.toggle('on', a.dataset.nav === p));
+    const cur = navLinks.find((a) => a.dataset.nav === p), nav = cur && cur.parentElement;
+    if (nav && nav.scrollWidth > nav.clientWidth) {
+      const nr = nav.getBoundingClientRect(), cr = cur.getBoundingClientRect();
+      nav.scrollTo({ left: Math.max(0, nav.scrollLeft + cr.left - nr.left - nr.width / 2 + cr.width / 2), behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
+    const meta = PAGES.find((x) => x.id === p);
+    document.title = p === 'about' ? pgTitle : pgTitle + ' · ' + meta.label;
+    if (changed) { pgFill(); window.dispatchEvent(new Event('pagechange')); }
+    return changed;
+  }
+  // entrance animations move the target while the browser scrolls to it, so check the landing once they end,
+  // unless the reader has started scrolling on their own
+  function pgSettle(el, wait) {
+    let touched = false; const stop = () => { touched = true; }, evs = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+    evs.forEach((t) => window.addEventListener(t, stop, { passive: true }));
+    setTimeout(() => {
+      evs.forEach((t) => window.removeEventListener(t, stop));
+      const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0, top = el.getBoundingClientRect().top;
+      if (!touched && el.getClientRects().length && Math.abs(top - pad) > 6) pgJump(() => el.scrollIntoView());
+    }, wait);
+  }
+  function pgRoute(hash, how) {
+    pgLast = hash;
+    const id = decodeURIComponent((hash || '').slice(1));
+    let p = null, target = null;
+    if (!id || id === 'top' || id === 'about') p = 'about';
+    else if (PAGES.some((x) => x.id === id)) p = id;
+    else { const el = document.getElementById(id); if (el) { target = el; p = pgOf(el); if (p === 'all') p = pgCur || 'about'; } }
+    if (!p) p = pgCur || 'about';
+    const changed = pgShow(p, how !== 'load');
+    document.documentElement.classList.remove('pre-route');
+    if (target) { openFor(target); if (changed || how === 'load') { pgJump(() => target.scrollIntoView()); pgSettle(target, 700); } else { target.scrollIntoView(); pgSettle(target, 1300); } }
+    else if (changed || how === 'click') pgJump(() => window.scrollTo(0, 0));
+  }
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+    const h = a.getAttribute('href'); if (h.length < 2) return;
+    e.preventDefault();
+    if (h !== location.hash) history.pushState(null, '', h);
+    pgRoute(h, 'click');
+  });
+  const onNav = () => { if (location.hash !== pgLast) pgRoute(location.hash, 'nav'); };
+  window.addEventListener('popstate', onNav);
+  window.addEventListener('hashchange', onNav);
+  // the first route waits until every script has drawn its widgets at full width
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => pgRoute(location.hash, 'load'));
+  else pgRoute(location.hash, 'load');
+  window.__route = pgRoute;
 
   /* ---------- glossary: hover, focus or tap a dotted term for a short definition ---------- */
   const tip = $('tip');
@@ -2793,6 +2935,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
   if (mq.addEventListener) mq.addEventListener('change', redraw);
   new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  window.addEventListener('pagechange', redraw);
 })();
 </script>
 
@@ -2969,6 +3112,7 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
   if (mq.addEventListener) mq.addEventListener('change', redrawAll);
   new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  window.addEventListener('pagechange', redrawAll);
 
   /* ---------- geometric optics: a paraxial thin lens ---------- */
   const LENS = O.lens = {
@@ -3134,6 +3278,398 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
         const step = (t) => { const p = Math.min(1, (t - t0) / 450), e = 1 - Math.pow(1 - p, 3); setVal(sD, from + (si - from) * e); draw(); if (p < 1) tw = requestAnimationFrame(step); };
         tw = requestAnimationFrame(step);
       });
+      redraws.push(draw);
+      draw();
+    }
+    return { init, draw };
+  })();
+
+  /* ---------- lens design: real rays through spherical surfaces, optimized by damped least squares ---------- */
+  const LD = O.ld = (() => {
+    const SELL = {
+      'N-BK7': [[1.03961212, 0.231792344, 1.01046945], [0.00600069867, 0.0200179144, 103.560653]],
+      F2: [[1.34533359, 0.209073176, 0.937357162], [0.00997743871, 0.0470450767, 111.886764]]
+    };
+    const WL = { F: 0.4861327, d: 0.5875618, C: 0.6562725 }, LAMS = ['F', 'd', 'C'], EFL = 100;
+    const LO = [-2, -2], HI = [2, 0];
+    // Schott's Sellmeier formula, wavelength in micrometres
+    const nidx = (g, l) => { const B = SELL[g][0], C = SELL[g][1], l2 = l * l; let s = 1; for (let i = 0; i < 3; i++) s += B[i] * l2 / (l2 - C[i]); return Math.sqrt(s); };
+    const abbe = (g) => (nidx(g, WL.d) - 1) / (nidx(g, WL.F) - nidx(g, WL.C));
+    const sag = (c, h) => c * h * h / (1 + Math.sqrt(1 - c * c * h * h));
+    // paraxial y-nu trace of a ray parallel to the axis gives the effective and back focal lengths
+    function paraxial(cs, ts, ns) {
+      let y = 1, nu = 0, n = 1;
+      for (let k = 0; k < cs.length; k++) { nu -= y * cs[k] * (ns[k] - n); n = ns[k]; if (k < ts.length) y += ts[k] * nu / n; }
+      const u = nu / n; return { efl: -1 / u, bfl: -y / u };
+    }
+    const indices = (rx, lam) => rx.glasses.map((g) => (g ? nidx(g, WL[lam]) : 1));
+    // centre thicknesses that keep at least 2 mm of glass at the edge
+    function thick(kind, cs, sd) {
+      if (kind === 'single') return [Math.max(3, 2 + sag(cs[0], sd) - sag(cs[1], sd))];
+      return [Math.max(4, 2 + sag(cs[0], sd) - sag(cs[1], sd)), Math.max(2, 2 + sag(cs[1], sd) - sag(cs[2], sd))];
+    }
+    // X is the shape factor (c1 + c2)/(c1 − c2) of the first element; p is the flint's share of the total power
+    function build(kind, X, p, N) {
+      const D = EFL / N, sd = 1.05 * D / 2 + 0.5, na = nidx('N-BK7', WL.d), nb = nidx('F2', WL.d);
+      let c0, glasses;
+      if (kind === 'single') { const dc = 1 / ((na - 1) * EFL); c0 = [(X + 1) / 2 * dc, (X - 1) / 2 * dc]; glasses = ['N-BK7', null]; }
+      else {
+        const dc = (1 - p) / EFL / (na - 1), c2 = (X - 1) / 2 * dc;
+        c0 = [(X + 1) / 2 * dc, c2, c2 - p / EFL / (nb - 1)]; glasses = ['N-BK7', 'F2', null];
+      }
+      const ns = glasses.map((g) => (g ? nidx(g, WL.d) : 1)), steep = (cs) => cs.some((c) => Math.abs(c) * sd >= 1);
+      let s = 1, ts = null;
+      for (let it = 0; it < 6; it++) {
+        if (steep(c0.map((c) => s * c))) return null;
+        ts = thick(kind, c0.map((c) => s * c), sd);
+        // scale every curvature until the effective focal length is 100 mm (secant method on 1/EFL)
+        const g = (sc) => 1 / paraxial(c0.map((c) => sc * c), ts, ns).efl - 1 / EFL;
+        let a = s, b = s * 1.01, fa = g(a), fb = g(b);
+        for (let j = 0; j < 40 && fb !== fa && Math.abs(fb) > 1e-15; j++) { const nb2 = b - fb * (b - a) / (fb - fa); a = b; fa = fb; b = nb2; fb = g(b); }
+        s = b;
+      }
+      const cs = c0.map((c) => s * c);
+      return steep(cs) ? null : { kind, cs, ts, glasses, D, sd, N };
+    }
+    function hexapolar(rings) {
+      const p = [0, 0];
+      for (let k = 1; k <= rings; k++) for (let j = 0; j < 6 * k; j++) { const a = 2 * Math.PI * j / (6 * k); p.push(k / rings * Math.cos(a), k / rings * Math.sin(a)); }
+      return p;
+    }
+    const PUP = hexapolar(8);
+    // one real ray, entering at pupil point (px, py) of the stop at the first vertex; returns [x, y, z, L, M, N] after
+    // the last surface, or null if it misses a surface or is totally reflected. pts collects (z, y) for drawing.
+    function trace(rx, ns, sT, cT, px, py, pts) {
+      const cs = rx.cs, ts = rx.ts, sd2 = rx.sd * rx.sd;
+      let x = px * rx.D / 2, y = py * rx.D / 2, z = 0, L = 0, M = sT, N = cT, n0 = 1, zv = 0;
+      if (pts) pts.push(-14, y - 14 * M / N);
+      for (let k = 0; k < cs.length; k++) {
+        const c = cs[k], t0 = (zv - z) / N; x += t0 * L; y += t0 * M; z = zv;
+        const F = c * (x * x + y * y), G = N - c * (L * x + M * y), disc = G * G - c * F;
+        if (disc < 0) return null;
+        const dl = F / (G + Math.sqrt(disc)); x += dl * L; y += dl * M; z += dl * N;
+        if (x * x + y * y > sd2) return null;
+        const nx = -c * x, ny = -c * y, nz = 1 - c * (z - zv), n1 = ns[k], mu = n0 / n1, cI = L * nx + M * ny + N * nz;
+        const rad = 1 - mu * mu * (1 - cI * cI); if (rad < 0) return null;
+        const g = Math.sqrt(rad) - mu * cI; L = mu * L + g * nx; M = mu * M + g * ny; N = mu * N + g * nz;
+        const m = Math.hypot(L, M, N); L /= m; M /= m; N /= m; n0 = n1;
+        if (pts) pts.push(z, y);
+        if (k < ts.length) zv += ts[k];
+      }
+      return [x, y, z, L, M, N];
+    }
+    const field = (deg) => [Math.sin(deg * Math.PI / 180), Math.cos(deg * Math.PI / 180)];
+    // every ray at three wavelengths and two field angles; the image plane is the one that minimizes the summed
+    // mean-square spot radius (about each field's centroid) over both fields
+    function evaluate(rx) {
+      const nsd = indices(rx, 'd'), par = paraxial(rx.cs, rx.ts, nsd), zl = rx.ts.reduce((a, b) => a + b, 0), zpar = zl + par.bfl;
+      const nr = PUP.length / 2, n = 3 * nr, fields = [], nsl = LAMS.map((l) => indices(rx, l));
+      let SB = 0, SC = 0;
+      for (const deg of [0, 2]) {
+        const [sT, cT] = field(deg), x = new Float64Array(n), y = new Float64Array(n), sx = new Float64Array(n), sy = new Float64Array(n);
+        for (let w = 0, i = 0; w < 3; w++) for (let r = 0; r < nr; r++, i++) {
+          const t = trace(rx, nsl[w], sT, cT, PUP[2 * r], PUP[2 * r + 1]); if (!t) return null;
+          const u = (zpar - t[2]) / t[5]; x[i] = t[0] + u * t[3]; y[i] = t[1] + u * t[4]; sx[i] = t[3] / t[5]; sy[i] = t[4] / t[5];
+        }
+        const q = quad(x, y, sx, sy, 0, n);
+        fields.push({ deg, x, y, sx, sy, q }); SB += q[1]; SC += q[2];
+      }
+      const dz = -SB / SC, rms = (q, d) => Math.sqrt(Math.max(0, q[0] + 2 * q[1] * d + q[2] * d * d));
+      fields.forEach((f) => { f.rms = rms(f.q, dz); });
+      // yellow light alone, on axis, at its own best focus
+      const f0 = fields[0], qm = quad(f0.x, f0.y, f0.sx, f0.sy, nr, 2 * nr), mono = rms(qm, -qm[1] / qm[2]);
+      const bF = paraxial(rx.cs, rx.ts, nsl[0]).bfl, bC = paraxial(rx.cs, rx.ts, nsl[2]).bfl;
+      return { efl: par.efl, bfl: par.bfl, zl, zpar, dz, zimg: zpar + dz, fields, rms0: fields[0].rms, rms2: fields[1].rms,
+        merit: Math.sqrt((fields[0].rms ** 2 + fields[1].rms ** 2) / 2), lca: bC - bF, mono, nr };
+    }
+    // mean square distance from the centroid at a plane dz beyond the reference is A + 2 B dz + C dz²
+    function quad(x, y, sx, sy, i0, i1) {
+      const n = i1 - i0; let mx = 0, my = 0, msx = 0, msy = 0;
+      for (let k = i0; k < i1; k++) { mx += x[k]; my += y[k]; msx += sx[k]; msy += sy[k]; }
+      mx /= n; my /= n; msx /= n; msy /= n;
+      let a = 0, b = 0, c = 0;
+      for (let k = i0; k < i1; k++) { const dx = x[k] - mx, dy = y[k] - my, ex = sx[k] - msx, ey = sy[k] - msy; a += dx * dx + dy * dy; b += dx * ex + dy * ey; c += ex * ex + ey * ey; }
+      return [a / n, b / n, c / n];
+    }
+    // where a meridional ray from the axial point crosses the axis, relative to the paraxial focus in yellow light
+    function longitudinal(rx, lam, rho) {
+      const zpar = rx.ts.reduce((a, b) => a + b, 0) + paraxial(rx.cs, rx.ts, indices(rx, 'd')).bfl, ns = indices(rx, lam);
+      return rho.map((r) => {
+        if (r === 0) return rx.ts.reduce((a, b) => a + b, 0) + paraxial(rx.cs, rx.ts, ns).bfl - zpar;
+        const t = trace(rx, ns, 0, 1, 0, r); return t ? t[2] - t[1] / t[4] * t[5] - zpar : null;
+      });
+    }
+    // spot positions at the image plane, each field about its centroid, scaled so their sum of squares is the merit squared
+    function residuals(kind, v, N) {
+      const rx = build(kind, v[0], kind === 'single' ? 0 : v[1], N), e = rx && evaluate(rx); if (!e) return null;
+      const out = [];
+      e.fields.forEach((f) => {
+        const n = f.x.length, w = 1 / Math.sqrt(2 * n); let cx = 0, cy = 0;
+        for (let k = 0; k < n; k++) { cx += f.x[k] + e.dz * f.sx[k]; cy += f.y[k] + e.dz * f.sy[k]; }
+        cx /= n; cy /= n;
+        for (let k = 0; k < n; k++) out.push((f.x[k] + e.dz * f.sx[k] - cx) * w, (f.y[k] + e.dz * f.sy[k] - cy) * w);
+      });
+      return out;
+    }
+    const sumsq = (r) => r.reduce((s, x) => s + x * x, 0);
+    // damped least squares (Levenberg–Marquardt) on the bending and, for the doublet, the flint's power
+    function optimize(kind, v0, N) {
+      let v = v0.slice(0, kind === 'single' ? 1 : 2), r = residuals(kind, v, N); if (!r) return null;
+      let f = sumsq(r), lam = 1e-3;
+      const n = v.length, path = [{ v: v.slice(), merit: Math.sqrt(f) }];
+      for (let it = 0; it < 60; it++) {
+        const J = [];
+        for (let j = 0; j < n; j++) {
+          const w = v.slice(), h = w[j] + 1e-5 > HI[j] ? -1e-5 : 1e-5; w[j] += h;
+          const rj = residuals(kind, w, N); if (!rj) return path;
+          J.push(rj.map((x, i) => (x - r[i]) / h));
+        }
+        const A = [], g = [];
+        for (let a = 0; a < n; a++) { A.push([]); g.push(J[a].reduce((s, x, i) => s + x * r[i], 0)); for (let b = 0; b < n; b++) A[a].push(J[a].reduce((s, x, i) => s + x * J[b][i], 0)); }
+        let moved = false, step = 0;
+        while (lam < 1e12) {
+          const M = A.map((row, a) => row.map((x, b) => (a === b ? x * (1 + lam) + 1e-15 : x)));
+          let d;
+          if (n === 1) d = [-g[0] / M[0][0]];
+          else { const det = M[0][0] * M[1][1] - M[0][1] * M[1][0]; d = [-(M[1][1] * g[0] - M[0][1] * g[1]) / det, -(M[0][0] * g[1] - M[1][0] * g[0]) / det]; }
+          const w = v.map((x, j) => Math.min(HI[j], Math.max(LO[j], x + d[j]))), rw = residuals(kind, w, N), fw = rw ? sumsq(rw) : Infinity;
+          if (fw < f) { step = Math.max(...w.map((x, j) => Math.abs(x - v[j]))); const prev = f; v = w; r = rw; f = fw; lam = Math.max(1e-9, lam / 4); moved = (prev - f) / prev > 1e-6 && step > 1e-6; break; }
+          lam *= 4;
+        }
+        if (step) path.push({ v: v.slice(), merit: Math.sqrt(f) });
+        if (!moved) break;
+      }
+      return path;
+    }
+    return { WL, LAMS, LO, HI, nidx, abbe, sag, paraxial, indices, build, trace, evaluate, longitudinal, residuals, optimize, field, hexapolar };
+  })();
+
+  demos['optics-design'] = (() => {
+    const cvL = $('ld-lay'), cvS = $('ld-spot'), cvA = $('ld-long'), out = $('ld-v'), bOpt = $('ld-opt'), bRes = $('ld-reset');
+    const sB = $('ld-b'), sP = $('ld-p'), sN = $('ld-n'), pRow = $('ld-p-row');
+    const COL = { F: '#2f7bf5', d: '#d19a0b', C: '#e0453a' };
+    const DEF = { single: { X: 0, p: 0 }, doublet: { X: 0, p: -0.6 } };
+    const st = { kind: 'single', deg: 0, N: 5, single: { ...DEF.single }, doublet: { ...DEF.doublet } };
+    let anim = 0, note = '', said = '';
+    const cur = () => st[st.kind];
+    const um = (mm) => mm * 1000;
+    const sgn = (v, d) => { const t = Math.abs(v).toFixed(d); return (v < 0 && +t !== 0 ? '−' : '') + t; };
+    const niceUp = (v) => { const e = Math.pow(10, Math.floor(Math.log10(v))), m = v / e; return ([1, 1.5, 2, 3, 4, 5, 6, 8, 10].find((s) => m <= s + 1e-9)) * e; };
+    function shape(X) { const r = Math.round(X * 100) / 100; return r === 0 ? 'equiconvex' : Math.abs(r) === 1 ? 'plano-convex' : Math.abs(r) < 1 ? 'biconvex' : 'meniscus'; }
+    function syncOutputs() {
+      const c = cur();
+      $('ld-b-o').textContent = sgn(c.X, 2) + ' · ' + shape(c.X);
+      $('ld-p-o').textContent = sgn(c.p, 2) + ' × total';
+      $('ld-n-o').textContent = 'f/' + st.N + ' · ' + (100 / st.N).toFixed(1).replace(/\.0$/, '') + ' mm';
+      sB.setAttribute('aria-valuetext', sgn(c.X, 2) + ', ' + shape(c.X));
+      sP.setAttribute('aria-valuetext', sgn(c.p, 2) + ' times the total power');
+      sN.setAttribute('aria-valuetext', 'f/' + st.N);
+    }
+    function syncSliders() { const c = cur(); setVal(sB, c.X); setVal(sP, c.p); setVal(sN, st.N); pRow.hidden = st.kind === 'single'; syncOutputs(); }
+    let model = null;
+    function compute() {
+      const c = cur(), rx = LD.build(st.kind, c.X, c.p, st.N), e = rx && LD.evaluate(rx);
+      model = { rx, e, why: !rx ? 'steep' : !e ? 'miss' : '' };
+      return model;
+    }
+    function frame(o, W, H, dp) { o.clearRect(0, 0, W, H); o.lineCap = 'round'; o.lineJoin = 'round'; o.font = 11 * dp + 'px ' + MONO; }
+    function nothing(cv, aspect, msg) {
+      const g = fit(cv, aspect); if (!g) return;
+      const o = cv.getContext('2d'); frame(o, g.W, g.H, g.s); o.fillStyle = css('--muted'); o.textAlign = 'center'; o.fillText(msg, g.W / 2, g.H / 2);
+    }
+    // cross-section with traced rays, and a stretched close-up of the focus
+    function drawLayout() {
+      const narrow = cvL.clientWidth < 560, g = fit(cvL, narrow ? 0.98 : 0.36); if (!g) return;
+      const { W, H, s: dp } = g, o = cvL.getContext('2d'); frame(o, W, H, dp);
+      const { rx, e } = model;
+      if (!rx) { o.fillStyle = css('--muted'); o.textAlign = 'center'; o.fillText('this lens can’t be built at f/' + st.N, W / 2, H / 2); return; }
+      const ink = css('--ink'), muted = css('--muted'), line = css('--line'), acc = css('--accent');
+      const main = narrow ? { x: 8 * dp, y: 6 * dp, w: W - 16 * dp, h: H * 0.46 } : { x: 8 * dp, y: 8 * dp, w: W * 0.64, h: H - 16 * dp };
+      const ins = narrow ? { x: 8 * dp, y: H * 0.46 + 34 * dp, w: W - 16 * dp, h: H * 0.54 - 58 * dp } : { x: W * 0.69, y: 22 * dp, w: W * 0.31 - 10 * dp, h: H - 50 * dp };
+      const zEnd = (e ? e.zimg : rx.ts.reduce((a, b) => a + b, 0) + 100) + 4, z0 = -14, yH = rx.sd + 6;
+      const k = Math.min(main.w / (zEnd - z0), (main.h - 22 * dp) / (2 * yH));
+      const X = (z) => main.x + (z - z0) * k, Y = (y) => main.y + (main.h - 22 * dp) / 2 - y * k;
+      o.strokeStyle = line; o.lineWidth = dp; o.setLineDash([5 * dp, 4 * dp]);
+      o.beginPath(); o.moveTo(X(z0), Y(0)); o.lineTo(X(zEnd), Y(0)); o.stroke(); o.setLineDash([]);
+      // glass elements
+      let zv = 0; const zs = rx.cs.map((c, i) => { const z = zv; if (i < rx.ts.length) zv += rx.ts[i]; return z; });
+      const prof = (i, from, to) => { for (let j = 0; j <= 24; j++) { const y = from + (to - from) * j / 24; o.lineTo(X(zs[i] + LD.sag(rx.cs[i], y)), Y(y)); } };
+      for (let i = 0; i < rx.ts.length; i++) {
+        o.beginPath(); o.moveTo(X(zs[i] + LD.sag(rx.cs[i], rx.sd)), Y(rx.sd)); prof(i, rx.sd, -rx.sd); prof(i + 1, -rx.sd, rx.sd); o.closePath();
+        o.fillStyle = acc; o.globalAlpha = rx.glasses[i] === 'F2' ? 0.3 : 0.13; o.fill(); o.globalAlpha = 1;
+        o.strokeStyle = acc; o.lineWidth = 1.2 * dp; o.stroke();
+      }
+      o.fillStyle = muted; o.font = 10 * dp + 'px ' + MONO; const gy = Y(-yH + 1) + 13 * dp;
+      if (rx.ts.length === 1) { o.textAlign = 'center'; o.fillText('N-BK7', X(rx.ts[0] / 2), gy); }
+      else { o.textAlign = 'right'; o.fillText('N-BK7', X(rx.ts[0] / 2) + 4 * dp, gy); o.textAlign = 'left'; o.fillText('F2', X(rx.ts[0] + rx.ts[1] / 2) + 2 * dp, gy); }
+      // the stop at the first vertex
+      o.strokeStyle = ink; o.lineWidth = 3 * dp; o.lineCap = 'butt';
+      o.beginPath(); o.moveTo(X(0), Y(rx.D / 2)); o.lineTo(X(0), Y(yH - 1)); o.moveTo(X(0), Y(-rx.D / 2)); o.lineTo(X(0), Y(-yH + 1)); o.stroke(); o.lineCap = 'round';
+      o.font = 11 * dp + 'px ' + MONO;
+      if (!e) return;
+      // rays of the chosen field
+      const [sT, cT] = LD.field(st.deg), fan = [];
+      LD.LAMS.forEach((lam) => {
+        const ns = LD.indices(rx, lam);
+        for (let j = 0; j <= 12; j++) { const pts = [], t = LD.trace(rx, ns, sT, cT, 0, -1 + j / 6, pts); if (t) fan.push({ lam, pts, t, j }); }
+      });
+      o.lineWidth = 1.05 * dp; o.globalAlpha = 0.75;
+      [...fan].sort((a, b) => (a.lam === 'd') - (b.lam === 'd')).forEach(({ lam, pts, t, j }) => {
+        if (j % 2) return;
+        o.strokeStyle = COL[lam]; o.beginPath(); o.moveTo(X(pts[0]), Y(pts[1]));
+        for (let i = 2; i < pts.length; i += 2) o.lineTo(X(pts[i]), Y(pts[i + 1]));
+        const u = (e.zimg - t[2]) / t[5]; o.lineTo(X(e.zimg), Y(t[1] + u * t[4])); o.stroke();
+      });
+      o.globalAlpha = 1;
+      o.strokeStyle = ink; o.lineWidth = 2 * dp; o.beginPath(); o.moveTo(X(e.zimg), Y(yH * 0.55)); o.lineTo(X(e.zimg), Y(-yH * 0.55)); o.stroke();
+      o.fillStyle = muted; o.textAlign = 'center'; o.fillText('image', X(e.zimg), Y(-yH * 0.55) + 14 * dp);
+      o.textAlign = 'center'; o.fillText('stop', X(0), Y(yH - 1) - 5 * dp);
+      o.textAlign = 'center'; o.fillText('f = 100 mm, image ' + e.bfl.toFixed(1).replace('-', '−') + ' mm behind the lens', main.x + main.w / 2, main.y + main.h - 4 * dp);
+      // close-up: ±Lz along the axis around the image plane, stretched across
+      const f = e.fields[st.deg ? 1 : 0], n = f.x.length; let cy = 0; for (let i = 0; i < n; i++) cy += f.y[i] + e.dz * f.sy[i]; cy /= n;
+      const rho = []; for (let i = 0; i <= 20; i++) rho.push(i / 20);
+      let span = 0; LD.LAMS.forEach((l) => LD.longitudinal(rx, l, rho).forEach((v) => { if (v !== null) span = Math.max(span, Math.abs(v - (e.zimg - e.zpar))); }));
+      const Lz = Math.max(0.05, niceUp(span * 1.3)), Ly = 1.2 * Lz / (2 * st.N) + 1.3 * Math.max(f.rms, 0.002);
+      const IX = (z) => ins.x + (z - (e.zimg - Lz)) / (2 * Lz) * ins.w, IY = (y) => ins.y + ins.h / 2 - (y - cy) / Ly * ins.h / 2;
+      o.save(); o.beginPath(); o.rect(ins.x, ins.y, ins.w, ins.h); o.clip();
+      o.strokeStyle = line; o.lineWidth = dp; o.setLineDash([3 * dp, 3 * dp]); o.beginPath(); o.moveTo(ins.x, IY(cy)); o.lineTo(ins.x + ins.w, IY(cy)); o.stroke(); o.setLineDash([]);
+      o.lineWidth = 1.1 * dp; o.globalAlpha = 0.8;
+      fan.forEach(({ lam, t }) => {
+        const a = (e.zimg - Lz - t[2]) / t[5], b = (e.zimg + Lz - t[2]) / t[5];
+        o.strokeStyle = COL[lam]; o.beginPath(); o.moveTo(IX(e.zimg - Lz), IY(t[1] + a * t[4])); o.lineTo(IX(e.zimg + Lz), IY(t[1] + b * t[4])); o.stroke();
+      });
+      o.globalAlpha = 1; o.strokeStyle = ink; o.lineWidth = 2 * dp; o.beginPath(); o.moveTo(IX(e.zimg), ins.y); o.lineTo(IX(e.zimg), ins.y + ins.h); o.stroke();
+      o.restore();
+      o.strokeStyle = line; o.lineWidth = dp; o.strokeRect(ins.x, ins.y, ins.w, ins.h);
+      o.fillStyle = muted; o.textAlign = 'left';
+      o.fillText('close-up of the focus', ins.x, ins.y - 6 * dp);
+      const fmt = (v) => (v >= 1 ? v.toFixed(1) : v >= 0.1 ? v.toFixed(2) : v.toFixed(3));
+      o.fillText('←→ ' + fmt(2 * Lz) + ' mm   ↕ ' + fmt(2 * Ly) + ' mm', ins.x, ins.y + ins.h + 15 * dp);
+    }
+    function axes(o, P, dp, muted, line) {
+      o.strokeStyle = line; o.lineWidth = dp; o.strokeRect(P.x, P.y, P.w, P.h);
+    }
+    function drawSpot() {
+      const g = fit(cvS, 1); if (!g) return;
+      const { W, H, s: dp } = g, o = cvS.getContext('2d'); frame(o, W, H, dp);
+      const { e } = model; if (!e) return;
+      const ink = css('--ink'), muted = css('--muted'), line = css('--line');
+      const f = e.fields[st.deg ? 1 : 0], n = f.x.length, px = new Float64Array(n), py = new Float64Array(n);
+      let cx = 0, cy = 0, far = 0;
+      for (let i = 0; i < n; i++) { px[i] = f.x[i] + e.dz * f.sx[i]; py[i] = f.y[i] + e.dz * f.sy[i]; cx += px[i]; cy += py[i]; }
+      cx /= n; cy /= n;
+      for (let i = 0; i < n; i++) far = Math.max(far, Math.hypot(px[i] - cx, py[i] - cy));
+      const airy = 1.22 * LD.WL.d * st.N, half = [10, 20, 50, 100, 200, 500, 1000].find((h) => h >= Math.max(um(far) * 1.08, airy * 1.5)) || 1000;
+      const bar = { 10: 5, 20: 10, 50: 20, 100: 50, 200: 100, 500: 200, 1000: 500 }[half];
+      const P = { x: 6 * dp, y: 6 * dp, w: W - 12 * dp, h: H - 12 * dp }, ox = P.x + P.w / 2, oy = P.y + P.h / 2, k = (P.w / 2) / half;
+      o.strokeStyle = line; o.lineWidth = dp; o.setLineDash([3 * dp, 4 * dp]);
+      o.beginPath(); o.moveTo(P.x, oy); o.lineTo(P.x + P.w, oy); o.moveTo(ox, P.y); o.lineTo(ox, P.y + P.h); o.stroke();
+      o.beginPath(); o.arc(ox, oy, airy * k, 0, 7); o.strokeStyle = muted; o.setLineDash([4 * dp, 3 * dp]); o.stroke(); o.setLineDash([]);
+      o.save(); o.beginPath(); o.rect(P.x, P.y, P.w, P.h); o.clip();
+      const nr = n / 3, rD = Math.max(1, 1.35 * dp);
+      for (let w = 2; w >= 0; w--) {
+        o.fillStyle = COL[LD.LAMS[w]]; o.globalAlpha = 0.85;
+        for (let i = w * nr; i < (w + 1) * nr; i++) { o.beginPath(); o.arc(ox + um(px[i] - cx) * k, oy - um(py[i] - cy) * k, rD, 0, 7); o.fill(); }
+      }
+      o.restore(); o.globalAlpha = 1;
+      o.fillStyle = muted; o.textAlign = 'left';
+      if (airy * k > 14 * dp) { const ax = ox + airy * k * 0.72 + 3 * dp, ay = oy - airy * k * 0.72 - 3 * dp, aw = o.measureText('Airy').width; o.fillStyle = css('--sunken'); o.globalAlpha = 0.85; o.fillRect(ax - 2 * dp, ay - 10 * dp, aw + 4 * dp, 13 * dp); o.globalAlpha = 1; o.fillStyle = muted; o.fillText('Airy', ax, ay); }
+      o.fillStyle = ink; o.font = '600 ' + 12 * dp + 'px ' + MONO; o.fillText('RMS ' + um(f.rms).toFixed(1) + ' µm', P.x + 8 * dp, P.y + 18 * dp);
+      o.font = 11 * dp + 'px ' + MONO; o.fillStyle = muted; o.textAlign = 'right'; o.fillText(st.deg ? '2° field' : 'on axis', P.x + P.w - 8 * dp, P.y + 18 * dp);
+      const bx = P.x + 10 * dp, by = P.y + P.h - 12 * dp;
+      o.strokeStyle = ink; o.lineWidth = 2 * dp; o.lineCap = 'butt'; o.beginPath(); o.moveTo(bx, by); o.lineTo(bx + bar * k, by); o.stroke();
+      o.fillStyle = ink; o.textAlign = 'left'; o.fillText(bar + ' µm', bx, by - 6 * dp);
+      o.strokeStyle = line; o.lineWidth = dp; o.strokeRect(P.x, P.y, P.w, P.h);
+    }
+    function drawLong() {
+      const g = fit(cvA, window.matchMedia('(max-width: 640px)').matches ? 0.8 : 1); if (!g) return;
+      const { W, H, s: dp } = g, o = cvA.getContext('2d'); frame(o, W, H, dp);
+      const { rx, e } = model; if (!e) return;
+      const ink = css('--ink'), muted = css('--muted'), line = css('--line');
+      const rho = []; for (let i = 0; i <= 40; i++) rho.push(i / 40);
+      const cur3 = LD.LAMS.map((l) => LD.longitudinal(rx, l, rho)), img = e.zimg - e.zpar;
+      let m = Math.abs(img); cur3.forEach((c) => c.forEach((v) => { if (v !== null) m = Math.max(m, Math.abs(v)); }));
+      const R = niceUp(Math.max(m * 1.08, 0.005));
+      const P = { x: 30 * dp, y: 24 * dp, w: W - 42 * dp, h: H - 64 * dp }, X = (v) => P.x + (v + R) / (2 * R) * P.w, Y = (r) => P.y + P.h - r * P.h;
+      o.strokeStyle = line; o.lineWidth = dp;
+      [-1, -0.5, 0, 0.5, 1].forEach((t) => { o.globalAlpha = t === 0 ? 1 : 0.5; o.beginPath(); o.moveTo(X(t * R), P.y); o.lineTo(X(t * R), P.y + P.h); o.stroke(); });
+      [0.5, 1].forEach((t) => { o.globalAlpha = 0.5; o.beginPath(); o.moveTo(P.x, Y(t)); o.lineTo(P.x + P.w, Y(t)); o.stroke(); });
+      o.globalAlpha = 1; o.strokeRect(P.x, P.y, P.w, P.h);
+      o.fillStyle = muted; o.textAlign = 'center';
+      const dec = R >= 1 ? 1 : R >= 0.1 ? 2 : 3;
+      [-1, 0, 1].forEach((t) => { o.textAlign = t < 0 ? 'left' : t > 0 ? 'right' : 'center'; o.fillText(t === 0 ? '0' : sgn(t * R, dec), X(t * R), P.y + P.h + 15 * dp); });
+      o.textAlign = 'center';
+      o.fillText('focus shift (mm)', P.x + P.w / 2, P.y + P.h + 32 * dp);
+      o.textAlign = 'right'; [0, 0.5, 1].forEach((t) => o.fillText(String(t), P.x - 5 * dp, Y(t) + 4 * dp));
+      o.textAlign = 'left'; o.fillText('pupil height ↑', P.x, P.y - 9 * dp);
+      o.strokeStyle = ink; o.setLineDash([4 * dp, 3 * dp]); o.lineWidth = 1.2 * dp;
+      o.beginPath(); o.moveTo(X(img), P.y); o.lineTo(X(img), P.y + P.h); o.stroke(); o.setLineDash([]);
+      o.save(); o.beginPath(); o.rect(P.x, P.y, P.w, P.h); o.clip();
+      cur3.forEach((c, w) => {
+        o.strokeStyle = COL[LD.LAMS[w]]; o.lineWidth = 2 * dp; o.beginPath(); let pen = false;
+        c.forEach((v, i) => { if (v === null) { pen = false; return; } if (pen) o.lineTo(X(v), Y(rho[i])); else { o.moveTo(X(v), Y(rho[i])); pen = true; } });
+        o.stroke();
+      });
+      o.restore();
+      // legend
+      let lx = P.x + P.w; o.textAlign = 'right';
+      [['656 nm', 'C'], ['588', 'd'], ['486', 'F']].forEach(([t, l]) => { o.fillStyle = muted; o.fillText(t, lx, P.y - 9 * dp); lx -= o.measureText(t).width + 4 * dp; o.fillStyle = COL[l]; o.fillRect(lx - 10 * dp, P.y - 14 * dp, 10 * dp, 3 * dp); lx -= 18 * dp; });
+    }
+    function describe() {
+      const { e, why } = model, fN = 'f/' + st.N;
+      if (!e) return 'At ' + fN + ' this shape can’t be built: ' + (why === 'steep' ? 'a surface would have to curve more than a hemisphere across the aperture.' : 'some rays would miss the glass or be totally reflected inside it.') + ' Move a slider back, or press Reset.';
+      const airy = 1.22 * LD.WL.d * st.N, r0 = um(e.rms0), r2 = um(e.rms2);
+      let t = (st.kind === 'single' ? 'Singlet' : 'Doublet') + ' at ' + fN + ': the RMS spot radius is ' + r0.toFixed(1) + ' µm on axis and ' + r2.toFixed(1) + ' µm at 2°, against an Airy radius of ' + airy.toFixed(1) + ' µm. ';
+      const lca = Math.abs(e.lca);
+      t += lca < 0.005 ? 'Blue (486 nm) and red (656 nm) light now focus within 0.01 mm of each other. ' : 'Blue (486 nm) light focuses ' + lca.toFixed(2) + ' mm ' + (e.lca > 0 ? 'closer to the lens than' : 'farther from the lens than') + ' red (656 nm). ';
+      if (st.kind === 'single') t += 'In yellow light alone the spot would be ' + um(e.mono).toFixed(1) + ' µm' + (e.mono * e.mono < 0.5 * e.rms0 * e.rms0 ? ', so most of the blur is colour, which bending cannot fix. The doublet can.' : ', so spherical aberration matters as much as colour here: bending reduces it, and the doublet fixes the colour.');
+      else if (Math.max(r0, r2) < airy) t += 'The spot now fits inside the Airy disk, so diffraction, not the lens’s aberrations, mostly limits sharpness.';
+      else if (e.lca > 0.3) t += 'The flint is still too weak to cancel the crown’s colour error; try Optimize.';
+      else if (e.lca < -0.3) t += 'The flint is now too strong and over-corrects the colour; try Optimize.';
+      return t.trim();
+    }
+    function draw() {
+      syncOutputs(); compute();
+      drawLayout();
+      if (model.e) { drawSpot(); drawLong(); } else { nothing(cvS, 1, 'no spot'); nothing(cvA, window.matchMedia('(max-width: 640px)').matches ? 0.8 : 1, 'no rays'); }
+      const t = (note ? note + ' ' : '') + describe();
+      if (t !== said) { out.textContent = t; said = t; }
+      out.classList.toggle('diff', !model.e);
+    }
+    function stopAnim() { cancelAnimationFrame(anim); anim = 0; bOpt.disabled = false; }
+    function optimize() {
+      stopAnim(); compute();
+      const c = cur(), path = LD.optimize(st.kind, [c.X, c.p], st.N);
+      if (!path) { note = 'Optimize needs a lens that can be built; move the sliders back first.'; draw(); return; }
+      const m0 = path[0].merit, m1 = path[path.length - 1].merit, steps = path.length - 1;
+      const done = () => {
+        const e = model.e, by = st.kind === 'single' ? 'bending ' + sgn(cur().X, 2) : 'bending ' + sgn(cur().X, 2) + ' and flint power ' + sgn(cur().p, 2);
+        note = steps ? 'Optimize ran ' + steps + ' damped least squares step' + (steps > 1 ? 's' : '') + ', moving the merit (RMS over both fields) from ' + um(m0).toFixed(1) + ' to ' + um(m1).toFixed(1) + ' µm at ' + by + '.' : 'Already at the optimum for this aperture: merit ' + um(m1).toFixed(1) + ' µm.';
+        draw(); bOpt.disabled = false;
+      };
+      const put = (v) => { c.X = v[0]; if (st.kind === 'doublet') c.p = v[1]; setVal(sB, c.X); setVal(sP, c.p); };
+      if (reduceMotion || steps === 0) { put(path[path.length - 1].v); done(); return; }
+      // keep the steps that matter, then ease from one to the next
+      const keep = [path[0]]; path.slice(1).forEach((q, i) => { if (keep[keep.length - 1].merit - q.merit > 0.01 * keep[keep.length - 1].merit || i === path.length - 2) keep.push(q); });
+      const seg = Math.min(260, 1500 / (keep.length - 1)); let i = 0, t0 = performance.now();
+      bOpt.disabled = true; note = 'Optimizing…';
+      const tick = (t) => {
+        const u = Math.min(1, (t - t0) / seg), ea = 1 - Math.pow(1 - u, 3), a = keep[i].v, b = keep[i + 1].v;
+        put(a.map((x, j) => x + (b[j] - x) * ea)); draw();
+        if (u >= 1) { i++; t0 = t; if (i >= keep.length - 1) { anim = 0; done(); return; } }
+        anim = requestAnimationFrame(tick);
+      };
+      anim = requestAnimationFrame(tick);
+    }
+    function init() {
+      syncSliders();
+      sB.addEventListener('input', () => { stopAnim(); note = ''; cur().X = +sB.value; draw(); });
+      sP.addEventListener('input', () => { stopAnim(); note = ''; cur().p = +sP.value; draw(); });
+      sN.addEventListener('input', () => { stopAnim(); note = ''; st.N = +sN.value; draw(); });
+      segGroup($('ld-kind'), (d) => { stopAnim(); note = ''; st.kind = d.k; syncSliders(); draw(); });
+      segGroup($('ld-field'), (d) => { st.deg = +d.f; draw(); });
+      bOpt.addEventListener('click', optimize);
+      bRes.addEventListener('click', () => { stopAnim(); note = ''; st.N = 5; st[st.kind] = { ...DEF[st.kind] }; syncSliders(); draw(); });
       redraws.push(draw);
       draw();
     }
