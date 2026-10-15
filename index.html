@@ -529,7 +529,7 @@ html.lb-open { overflow: hidden; }
 .oref { max-width: 52em; font-size: 13px; color: var(--muted); }
 .ochips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .ochips .lbl { margin-right: 4px; }
-.ochips button { font: 500 13px var(--font-body); color: var(--muted); background: var(--sunken); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; transition: color .2s, background-color .2s, border-color .2s; }
+.ochips button { font: 500 13px/1.4 var(--font-body); color: var(--muted); background: var(--sunken); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; transition: color .2s, background-color .2s, border-color .2s; }
 .ochips button:hover { color: var(--ink); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
 .ochips button[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
 .ocv { display: block; width: 100%; height: auto; max-width: 100%; border-radius: 8px; touch-action: pan-y; }
@@ -556,6 +556,14 @@ html.lb-open { overflow: hidden; }
 .ap-prev { width: 44px; height: 44px; border-radius: 6px; background: #000; display: block; }
 .ap-row { display: flex; align-items: center; gap: 12px; }
 #ft-cv { cursor: crosshair; touch-action: none; }
+/* polarization, inside the wave tab */
+.opol { border-top: 1px solid var(--line); padding-top: 24px; margin-top: 8px; }
+.otxt h4 { font-family: var(--font-display); font-weight: 500; font-size: 21px; line-height: 1.25; }
+.pol-states { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.pol-st { display: grid; justify-items: center; align-content: start; gap: 2px; text-align: center; padding: 8px 6px 9px; background: var(--sunken); border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
+.pol-st canvas { width: 64px; height: 64px; margin-bottom: 4px; }
+.pol-st .k { font-size: 12.5px; color: var(--muted); }
+.pol-st .v { font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
 @media (max-width: 1180px) {
   .otab { flex: 1 0 auto; grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; row-gap: 3px; padding: 9px 8px 8px; }
   .otab svg { grid-row: auto; width: 26px; height: 26px; }
@@ -573,6 +581,8 @@ html.lb-open { overflow: hidden; }
   .orow3.ft3 .o-ft { grid-column: 1 / -1; order: -1; width: min(100%, 300px); justify-self: center; }
   .orow2 { gap: 8px; }
   .lens-out { grid-template-columns: 96px minmax(0, 1fr); gap: 10px; }
+  .pol-states { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .otxt h4 { font-size: 19px; }
   .lens-sn .otg { left: 4px; bottom: 4px; padding: 1px 4px; }
   .lens-out .ab-v { font-size: 13.5px; }
 }
@@ -1479,6 +1489,38 @@ html.lb-open { overflow: hidden; }
             </div>
             <p class="ab-v" id="wave-v" aria-live="polite"></p>
             <figcaption class="fig-cap">Each slit is a row of point sources of circular waves (the Huygens–Fresnel picture), summed in your browser over a region about 24 × 16 µm. Brightness is boosted with distance so the far waves stay visible. The lower plot is the far-field (Fraunhofer) intensity of the same slits against angle; the dashed lines on the field mark the same angles.</figcaption>
+          </figure>
+          <div class="otxt opol">
+            <h4>Polarization</h4>
+            <p>The wavelets above are a scalar model, one number at each point. Light’s electric field actually points in a direction across the beam, and that direction is its polarization. Light from the sun or a lamp is unpolarized: its direction changes randomly from moment to moment. A polarizer passes only the part of the field along its axis, so it transmits half of unpolarized light and leaves it polarized; polarized light then follows Malus’s law through a second polarizer. In the 1810s Fresnel and Arago found that two beams polarized at right angles form no interference fringes, one of the clues that light waves are transverse.</p>
+            <p>A wave plate, a thin slice of <span class="term" tabindex="0" data-def="A birefringent material, such as calcite, quartz or a stretched plastic film, has a refractive index that depends on the polarization, so the two components of the field travel at different speeds." data-name="Birefringence">birefringent</span> crystal, delays one component of the field behind the other. A quarter-wave delay with the plate at 45° to linear polarization makes it circular, and a half-wave delay rotates it. Reflection polarizes light too, completely at <span class="term" tabindex="0" data-def="The angle of incidence at which light reflected from glass or water is fully polarized: tan θ_B = n₂/n₁, about 53° for water and 56° for glass." data-name="Brewster’s angle">Brewster’s angle</span>, which is why polarized sunglasses cut glare from water and roads. Between crossed polarizers, birefringence shows the stress frozen into plastic parts, and polarized-light microscopes use it to image ordered structures such as muscle fibres and collagen.</p>
+          </div>
+          <div class="eqs">
+            <div class="eq"><span class="m"><b>E</b> = (<i>E</i><sub><i>x</i></sub>, <i>E</i><sub><i>y</i></sub>) e<sup><i>i</i>(<i>kz</i> − <i>ωt</i>)</sup></span><span class="d">Jones vector: two components set the polarization</span></div>
+            <div class="eq"><span class="m"><i>I</i> = <i>I</i><sub>0</sub> cos<sup>2</sup> <i>θ</i></span><span class="d">Malus’s law, polarizer at <i>θ</i> to the light</span></div>
+            <div class="eq"><span class="m">tan <i>θ</i><sub>B</sub> = <i>n</i><sub>2</sub> / <i>n</i><sub>1</sub></span><span class="d">Brewster’s angle: reflection fully polarized</span></div>
+          </div>
+          <figure class="fig" id="pol-fig" style="margin:0">
+            <div class="fig-head">
+              <span class="fig-title">Try it: polarizers and wave plates</span>
+              <button type="button" class="iconbtn" id="pol-play" aria-pressed="false">Play</button>
+            </div>
+            <div class="ochips" role="group" aria-label="Examples" id="pol-ex"><span class="lbl">Try</span><button type="button" data-ex="crossed">Crossed polarizers</button><button type="button" data-ex="three">Third polarizer</button><button type="button" data-ex="circ">Circular light</button><button type="button" data-ex="hwp">Rotate with λ/2</button></div>
+            <div class="octl"><span class="lbl">Middle element</span><div class="seg" role="group" aria-label="Middle element" id="pol-mid"><button type="button" aria-pressed="true" data-k="none">None</button><button type="button" aria-pressed="false" data-k="pol">Polarizer</button><button type="button" aria-pressed="false" data-k="qwp">λ/4 plate</button><button type="button" aria-pressed="false" data-k="hwp">λ/2 plate</button></div></div>
+            <canvas class="ocv" id="pol-cv" width="1240" height="420" role="img" aria-label="Side view of a light beam passing through a polarizer, an optional middle element and an analyzer to a detector, with the electric field drawn along the beam"></canvas>
+            <div class="pol-states">
+              <div class="pol-st"><canvas id="pol-s0" width="128" height="128" aria-hidden="true"></canvas><span class="k">From the lamp</span><span class="v" id="pol-t0"></span></div>
+              <div class="pol-st"><canvas id="pol-s1" width="128" height="128" aria-hidden="true"></canvas><span class="k">After polarizer 1</span><span class="v" id="pol-t1"></span></div>
+              <div class="pol-st"><canvas id="pol-s2" width="128" height="128" aria-hidden="true"></canvas><span class="k" id="pol-k2">After the middle</span><span class="v" id="pol-t2"></span></div>
+              <div class="pol-st"><canvas id="pol-s3" width="128" height="128" aria-hidden="true"></canvas><span class="k">At the detector</span><span class="v" id="pol-t3"></span></div>
+            </div>
+            <div class="ab-ctl">
+              <div class="ab-s"><label for="pol-a1">Polarizer 1 axis</label><output id="pol-a1-o" for="pol-a1"></output><input type="range" id="pol-a1" min="0" max="180" step="1" value="0"></div>
+              <div class="ab-s"><label for="pol-a2">Middle element axis</label><output id="pol-a2-o" for="pol-a2"></output><input type="range" id="pol-a2" min="0" max="180" step="1" value="45"></div>
+              <div class="ab-s"><label for="pol-a3">Analyzer axis</label><output id="pol-a3-o" for="pol-a3"></output><input type="range" id="pol-a3" min="0" max="180" step="1" value="90"></div>
+            </div>
+            <p class="ab-v" id="pol-v" aria-live="polite"></p>
+            <figcaption class="fig-cap">Computed with Jones calculus in your browser: each element is a 2 × 2 matrix acting on the field’s two components, and the unpolarized lamp is an equal, incoherent mix of two perpendicular polarizations. Angles are measured from the horizontal, as seen looking back toward the lamp. The side view traces the tip of the electric field along the beam, with the wavelength stretched and the oscillation slowed by about 10<sup>15</sup> times; the circles below show the same field end-on.</figcaption>
           </figure>
           <p class="omine"><span class="lbl">Where it meets my work</span>The point-spread function in my <a href="#ab">aberration playground</a> is this calculation for a circular lens: an Airy pattern, distorted by aberrations.</p>
           <p class="oref">Further reading: M. Born and E. Wolf, <i>Principles of Optics</i>, 7th ed. (Cambridge University Press, 1999).</p>
@@ -2901,7 +2943,18 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     const a = e.target.closest && e.target.closest('a[href^="#optics-"]');
     if (a) { const i = panelFor(a.getAttribute('href')); if (i >= 0) select(i); }
   }, true);
-  function fromHash() { const i = panelFor(location.hash); if (i < 0) return false; select(i); requestAnimationFrame(() => panels[i].scrollIntoView()); return true; }
+  // the demos above can change height while the browser is still scrolling, so check the landing once more
+  // unless the reader has started scrolling on their own
+  function settle(el) {
+    let touched = false; const stop = () => { touched = true; }, evs = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+    evs.forEach((t) => window.addEventListener(t, stop, { passive: true }));
+    setTimeout(() => {
+      evs.forEach((t) => window.removeEventListener(t, stop));
+      const top = el.getBoundingClientRect().top;
+      if (!touched && (top < 0 || top > 160)) el.scrollIntoView();
+    }, 1600);
+  }
+  function fromHash() { const i = panelFor(location.hash); if (i < 0) return false; select(i); requestAnimationFrame(() => { panels[i].scrollIntoView(); settle(panels[i]); }); return true; }
   if (!fromHash()) select(0);
   window.addEventListener('hashchange', fromHash);
   const box = root.querySelector('.opanels');
@@ -3247,6 +3300,216 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     }
     return { init, draw: () => { overlay(); farPlot(); }, run(on) { active = on; if (on) kick(); else if (raf) { cancelAnimationFrame(raf); raf = 0; } } };
   })();
+
+  /* ---------- polarization: Jones calculus through a polarizer, a middle element and an analyzer ---------- */
+  // complex numbers are [re, im]; a 2 x 2 matrix is [a, b, c, d] acting on (Ex, Ey)
+  const cm = (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]];
+  const ca = (a, b) => [a[0] + b[0], a[1] + b[1]];
+  const POL = O.pol = {
+    rad: (deg) => deg * Math.PI / 180,
+    polarizer(deg) { const t = POL.rad(deg), c = Math.cos(t), s = Math.sin(t); return [[c * c, 0], [c * s, 0], [c * s, 0], [s * s, 0]]; },
+    // a wave plate with its fast axis at deg: the perpendicular component is delayed by g radians
+    plate(deg, g) {
+      const t = POL.rad(deg), c = Math.cos(t), s = Math.sin(t), e = [Math.cos(g), Math.sin(g)], cs = c * s;
+      return [ca([c * c, 0], cm([s * s, 0], e)), [cs * (1 - e[0]), -cs * e[1]], [cs * (1 - e[0]), -cs * e[1]], ca([s * s, 0], cm([c * c, 0], e))];
+    },
+    apply: (m, j) => [ca(cm(m[0], j[0]), cm(m[1], j[1])), ca(cm(m[2], j[0]), cm(m[3], j[1]))],
+    intensity: (j) => j[0][0] ** 2 + j[0][1] ** 2 + j[1][0] ** 2 + j[1][1] ** 2,
+    middle(kind, deg) { return kind === 'pol' ? POL.polarizer(deg) : kind === 'qwp' ? POL.plate(deg, Math.PI / 2) : kind === 'hwp' ? POL.plate(deg, Math.PI) : null; },
+    // unpolarized light of intensity 1 leaves the first polarizer with intensity 1/2, polarized along its axis
+    chain(a1, kind, a2, a3) {
+      const t = POL.rad(a1), j1 = [[Math.cos(t) / Math.SQRT2, 0], [Math.sin(t) / Math.SQRT2, 0]];
+      const m = POL.middle(kind, a2), j2 = m ? POL.apply(m, j1) : j1, j3 = POL.apply(POL.polarizer(a3), j2);
+      return { j1, j2, j3, I: [1, POL.intensity(j1), POL.intensity(j2), POL.intensity(j3)] };
+    },
+    // orientation (degrees, 0-180) and ellipticity angle (degrees, -45 to 45) from the Stokes parameters
+    state(j) {
+      const [x, y] = j, s0 = POL.intensity(j);
+      if (s0 < 1e-12) return { I: 0, kind: 'none' };
+      const s1 = x[0] ** 2 + x[1] ** 2 - y[0] ** 2 - y[1] ** 2, xy = cm(x, [y[0], -y[1]]), s2 = 2 * xy[0], s3 = -2 * xy[1];
+      const psi = ((Math.atan2(s2, s1) / 2) * 180 / Math.PI + 180) % 180, chi = Math.asin(Math.max(-1, Math.min(1, s3 / s0))) / 2 * 180 / Math.PI;
+      return { I: s0, psi, chi, kind: Math.abs(chi) < 0.5 ? 'linear' : Math.abs(chi) > 44.5 ? 'circular' : 'elliptical' };
+    }
+  };
+  const polDemo = (() => {
+    const cv = $('pol-cv'), out = $('pol-v'), btn = $('pol-play'), s1 = $('pol-a1'), s2 = $('pol-a2'), s3 = $('pol-a3');
+    const icons = [0, 1, 2, 3].map((i) => $('pol-s' + i)), texts = [0, 1, 2, 3].map((i) => $('pol-t' + i)), k2 = $('pol-k2');
+    const LAM = 0.8, ZE = [0, 2.6, 5.2, 7.8, 10.1], R = 1.15;
+    const NAME = { none: 'nothing', pol: 'polarizer 2', qwp: 'λ/4 plate', hwp: 'λ/2 plate' };
+    let kind = 'none', ph = 0, raf = 0, last = 0, active = false, vis = false, playing = !reduceMotion, res = null;
+    const rnd = mulberry(7), ang = Array.from({ length: 64 }, () => rnd() * Math.PI);
+    let shuffleT = 0, shift = 0;
+    const deg = (v) => Math.round(((v % 180) + 180) % 180) + '°';
+    const pct = (x) => { const v = x * 100; return (v < 0.05 ? '0' : v < 10 ? (+v.toFixed(1)).toString() : Math.abs(v - Math.round(v)) < 0.05 ? String(Math.round(v)) : v.toFixed(1)) + '%'; };
+    const rel = (a, b) => { const d = Math.abs(((a - b) % 180 + 180) % 180); return Math.min(d, 180 - d); };
+    function describe(st) {
+      if (st.kind === 'none') return 'no light';
+      if (st.kind === 'linear') return 'linear, ' + deg(st.psi);
+      if (st.kind === 'circular') return 'circular';
+      return 'elliptical, ' + deg(st.psi);
+    }
+    function compute() {
+      const a1 = +s1.value, a2 = +s2.value, a3 = +s3.value;
+      res = POL.chain(a1, kind, a2, a3);
+      res.st = [null, POL.state(res.j1), POL.state(res.j2), POL.state(res.j3)];
+      $('pol-a1-o').textContent = a1 + '°'; $('pol-a2-o').textContent = kind === 'none' ? '—' : a2 + '°'; $('pol-a3-o').textContent = a3 + '°';
+      s2.disabled = kind === 'none'; if (window.__fillRange) window.__fillRange(s2);
+      k2.textContent = kind === 'none' ? 'Middle: nothing' : kind === 'pol' ? 'After polarizer 2' : 'After the ' + NAME[kind];
+      texts[0].textContent = 'unpolarized · 100%';
+      for (let i = 1; i < 4; i++) texts[i].textContent = describe(res.st[i]) + ' · ' + pct(res.I[i]);
+      // readout
+      const I = res.I, t = [];
+      t.push('Unpolarized light loses half its power at polarizer 1, which leaves it polarized at ' + deg(a1) + '.');
+      if (kind === 'none') {
+        const d = rel(a3, a1);
+        t.push(d === 90 ? 'The analyzer is crossed with it, at 90°, so by Malus’s law it passes cos²90° = 0: crossed polarizers block everything.'
+          : 'The analyzer is at ' + d + '° to that, so by Malus’s law it passes cos²' + d + '° = ' + (Math.cos(POL.rad(d)) ** 2).toFixed(2) + ' of it.');
+      } else if (kind === 'pol') {
+        const d12 = rel(a2, a1), d23 = rel(a3, a2);
+        const c2 = (d) => (Math.cos(POL.rad(d)) ** 2).toFixed(2);
+        t.push('Polarizer 2 passes cos²' + d12 + '° = ' + c2(d12) + ' of that and the analyzer cos²' + d23 + '° = ' + c2(d23) + ' of what is left.');
+        if (rel(a3, a1) === 90 && I[3] > 1e-4) t.push('The outer two are crossed and would block everything on their own; the middle one lets light through because each polarizer leaves the light polarized along its own axis.');
+      } else if (kind === 'qwp') {
+        const d = rel(a2, a1), st = res.st[2];
+        t.push(d === 0 || d === 90 ? 'The plate’s axis is parallel or perpendicular to the polarization, so it only delays one component and the light stays linear.'
+          : st.kind === 'circular' ? 'With its axis at 45° to the polarization, the quarter-wave plate delays one component by a quarter cycle and makes the light circular, so the analyzer passes half of it at any angle.'
+          : 'The quarter-wave plate delays one component by a quarter cycle, which turns linear polarization into elliptical.');
+      } else {
+        t.push('The half-wave plate mirrors the polarization about its axis, from ' + deg(a1) + ' to ' + deg(2 * a2 - a1) + ', and absorbs nothing.');
+      }
+      t.push('Light reaching the detector: ' + pct(I[3]) + ' of the lamp’s.');
+      out.textContent = t.join(' ');
+    }
+    // field at position z (in drawing units) for segment i, at the current phase
+    function field(i, z) {
+      if (i === 0) { const a = ang[(Math.floor(z / (LAM * 0.75)) + shift) & 63], v = Math.cos(2 * Math.PI * z / LAM - ph); return [Math.cos(a) * v, Math.sin(a) * v]; }
+      const j = [res.j1, res.j2, res.j3][i - 1], p = 2 * Math.PI * z / LAM - ph, e = [Math.cos(p), Math.sin(p)];
+      return [cm(j[0], e)[0], cm(j[1], e)[0]];
+    }
+    let g = null;
+    function draw() {
+      if (!res) return;
+      const w = cv.clientWidth; if (!w) return;
+      const SY = Math.max(34, Math.min(64, w * 0.1)), KX = 0.42, KY = 0.3;
+      const aspect = (SY * R * (2 + 2 * KY) + 64) / w;
+      g = fit(cv, aspect); if (!g) return;
+      const { W, H, s: dp } = g, o = cv.getContext('2d');
+      const sy = SY * dp, kx = KX * sy, ky = KY * sy, pad = R * kx + 10 * dp;
+      const sz = (W - 2 * pad) / (ZE[4] + 0.4), x0 = pad + 0.1 * sz, yc = 40 * dp + R * sy + R * ky;
+      // x points away from the viewer (up and to the right), y up, z along the beam
+      const P = (x, y, z) => [x0 + z * sz + x * kx, yc - y * sy - x * ky];
+      const ink = css('--ink'), muted = css('--muted'), acc = css('--accent'), warm = css('--warm'), cool = css('--cool'), line = css('--line');
+      o.clearRect(0, 0, W, H); o.lineCap = 'round'; o.lineJoin = 'round'; o.font = 11 * dp + 'px ' + MONO; o.textAlign = 'center';
+      const short = o.measureText('polarizer 1').width > (ZE[2] - ZE[1]) * sz * 0.85;
+      const LBL = short ? { p1: 'pol 1', p2: 'pol 2', qwp: 'λ/4', hwp: 'λ/2', an: 'analyzer' } : { p1: 'polarizer 1', p2: 'polarizer 2', qwp: 'λ/4 plate', hwp: 'λ/2 plate', an: 'analyzer' };
+      // optical axis
+      o.save(); o.strokeStyle = muted; o.globalAlpha = 0.6; o.lineWidth = dp; o.setLineDash([4 * dp, 4 * dp]);
+      o.beginPath(); o.moveTo(...P(0, 0, -0.1)); o.lineTo(...P(0, 0, ZE[4])); o.stroke(); o.restore();
+      // lamp
+      const [lx, ly] = P(0, 0, 0);
+      o.fillStyle = warm; o.beginPath(); o.arc(lx, ly, 7 * dp, 0, 2 * Math.PI); o.fill();
+      o.globalAlpha = 0.25; o.beginPath(); o.arc(lx, ly, 13 * dp, 0, 2 * Math.PI); o.fill(); o.globalAlpha = 1;
+      o.fillStyle = muted; o.fillText('lamp', lx, yc + R * sy + R * ky + 2 * dp);
+      const disc = (z, a, label, sub, plate) => {
+        o.save();
+        o.beginPath();
+        for (let k = 0; k <= 48; k++) { const u = k / 48 * 2 * Math.PI, [X, Y] = P(R * Math.cos(u), R * Math.sin(u), z); k ? o.lineTo(X, Y) : o.moveTo(X, Y); }
+        o.closePath(); o.fillStyle = plate ? warm : cool; o.globalAlpha = 0.13; o.fill(); o.globalAlpha = 0.8; o.strokeStyle = plate ? warm : cool; o.lineWidth = 1.4 * dp; o.stroke();
+        // transmission axis for a polarizer, fast axis for a plate
+        const t = POL.rad(a), c = Math.cos(t) * R * 0.92, s = Math.sin(t) * R * 0.92;
+        o.globalAlpha = 1; o.lineWidth = 2.2 * dp; if (plate) o.setLineDash([6 * dp, 4 * dp]);
+        o.beginPath(); o.moveTo(...P(-c, -s, z)); o.lineTo(...P(c, s, z)); o.stroke(); o.setLineDash([]);
+        const [tx, ty] = P(0, R, z);
+        o.fillStyle = ink; o.fillText(label, tx, 14 * dp); o.fillStyle = muted; o.fillText(sub, tx, 28 * dp);
+        o.restore();
+      };
+      const seg = (i, za, zb) => {
+        const n = Math.max(8, Math.round((zb - za) / LAM * 40)), pts = [];
+        for (let k = 0; k <= n; k++) { const z = za + (zb - za) * k / n; pts.push([z, ...field(i, z)]); }
+        o.save(); o.strokeStyle = acc;
+        o.globalAlpha = 0.35; o.lineWidth = dp;
+        for (let k = 0; k <= n; k += 5) { const [z, ex, ey] = pts[k]; o.beginPath(); o.moveTo(...P(0, 0, z)); o.lineTo(...P(ex, ey, z)); o.stroke(); }
+        o.globalAlpha = 1; o.lineWidth = 2 * dp;
+        o.beginPath();
+        pts.forEach(([z, ex, ey], k) => {
+          const [X, Y] = P(ex, ey, z);
+          if (i === 0 && k && Math.floor(z / (LAM * 0.75)) !== Math.floor(pts[k - 1][0] / (LAM * 0.75))) o.moveTo(X, Y); else if (k) o.lineTo(X, Y); else o.moveTo(X, Y);
+        });
+        o.stroke(); o.restore();
+      };
+      const gap = 0.12;
+      seg(0, ZE[0] + 0.35, ZE[1] - gap);
+      disc(ZE[1], +s1.value, LBL.p1, deg(+s1.value), false);
+      seg(1, ZE[1] + gap, ZE[2] - gap);
+      if (kind !== 'none') disc(ZE[2], +s2.value, kind === 'pol' ? LBL.p2 : LBL[kind], deg(+s2.value), kind !== 'pol');
+      else { const [tx] = P(0, R, ZE[2]); o.fillStyle = muted; o.fillText('(empty)', tx, 28 * dp); }
+      seg(2, ZE[2] + gap, ZE[3] - gap);
+      disc(ZE[3], +s3.value, LBL.an, deg(+s3.value), false);
+      if (res.I[3] > 1e-9) seg(3, ZE[3] + gap, ZE[4] - 0.2);
+      // detector: a square screen that glows with the transmitted power
+      const zd = ZE[4], q = R * 0.8, corners = [[-q, -q], [q, -q], [q, q], [-q, q]].map(([x, y]) => P(x, y, zd));
+      o.beginPath(); corners.forEach(([X, Y], k) => (k ? o.lineTo(X, Y) : o.moveTo(X, Y))); o.closePath();
+      o.fillStyle = '#05070a'; o.fill();
+      o.fillStyle = '#ffd27a'; o.globalAlpha = Math.sqrt(Math.min(1, res.I[3] * 2)); o.fill(); o.globalAlpha = 1;
+      o.strokeStyle = ink; o.lineWidth = 1.2 * dp; o.stroke();
+      const [dx] = P(0, 0, zd), yb = yc + R * sy + R * ky + 2 * dp; o.fillStyle = ink; o.fillText('detector', dx, yb); o.fillStyle = muted; o.fillText(pct(res.I[3]), dx, yb + 14 * dp);
+      drawIcons();
+    }
+    function drawIcons() {
+      icons.forEach((c, i) => {
+        const gg = fit(c, 1); if (!gg) return;
+        const { W, s: dp } = gg, o = c.getContext('2d'), r = W * 0.4, cx = W / 2, cy = W / 2;
+        const muted = css('--muted'), acc = css('--accent');
+        o.clearRect(0, 0, W, W); o.lineCap = 'round';
+        o.strokeStyle = muted; o.globalAlpha = 0.45; o.lineWidth = dp;
+        o.beginPath(); o.arc(cx, cy, r, 0, 2 * Math.PI); o.stroke();
+        o.beginPath(); o.moveTo(cx - r, cy); o.lineTo(cx + r, cy); o.moveTo(cx, cy - r); o.lineTo(cx, cy + r); o.stroke(); o.globalAlpha = 1;
+        o.strokeStyle = acc; o.fillStyle = acc; o.lineWidth = 2 * dp;
+        if (i === 0) {
+          // unpolarized: the field direction jumps at random
+          for (let k = 0; k < 6; k++) { const a = ang[(k * 7 + shift) & 63]; o.globalAlpha = k === 5 ? 1 : 0.18; o.beginPath(); o.moveTo(cx - r * Math.cos(a), cy + r * Math.sin(a)); o.lineTo(cx + r * Math.cos(a), cy - r * Math.sin(a)); o.stroke(); }
+          o.globalAlpha = 1; return;
+        }
+        const j = [res.j1, res.j2, res.j3][i - 1];
+        if (POL.intensity(j) < 1e-9) return;
+        // trace of the field over one cycle, scaled so full-power light would fill the circle
+        o.beginPath();
+        for (let k = 0; k <= 64; k++) { const p = k / 64 * 2 * Math.PI, e = [Math.cos(p), Math.sin(p)], ex = cm(j[0], e)[0], ey = cm(j[1], e)[0]; const X = cx + ex * r, Y = cy - ey * r; k ? o.lineTo(X, Y) : o.moveTo(X, Y); }
+        o.globalAlpha = 0.9; o.stroke(); o.globalAlpha = 1;
+        const e = [Math.cos(-ph), Math.sin(-ph)], ex = cm(j[0], e)[0], ey = cm(j[1], e)[0];
+        o.lineWidth = 1.2 * dp; o.beginPath(); o.moveTo(cx, cy); o.lineTo(cx + ex * r, cy - ey * r); o.stroke();
+        o.beginPath(); o.arc(cx + ex * r, cy - ey * r, 3 * dp, 0, 2 * Math.PI); o.fill();
+      });
+    }
+    function loop(t) {
+      raf = 0; if (!(active && vis && playing)) return;
+      const dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t;
+      ph = (ph + dt * 2 * Math.PI * 0.6) % (2 * Math.PI);
+      shuffleT += dt; if (shuffleT > 0.35) { shuffleT = 0; shift = (shift + 1) & 63; }
+      draw(); raf = requestAnimationFrame(loop);
+    }
+    function kick() { if (!raf && active && vis && playing) { last = 0; raf = requestAnimationFrame(loop); } }
+    function setPlay(on) { playing = on; btn.textContent = on ? 'Pause' : 'Play'; btn.setAttribute('aria-pressed', String(on)); kick(); }
+    function pickMid(k) { kind = k; $('pol-mid').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.k === k))); }
+    const EX = { crossed: [0, 'none', 45, 90], three: [0, 'pol', 45, 90], circ: [0, 'qwp', 45, 90], hwp: [0, 'hwp', 45, 90] };
+    function init() {
+      segGroup($('pol-mid'), (ds) => { kind = ds.k; compute(); draw(); });
+      [s1, s2, s3].forEach((i) => i.addEventListener('input', () => { compute(); draw(); }));
+      $('pol-ex').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+        const [a1, k, a2, a3] = EX[b.dataset.ex]; pickMid(k); setVal(s1, a1); setVal(s2, a2); setVal(s3, a3); compute(); draw();
+      }));
+      btn.addEventListener('click', () => setPlay(!playing));
+      if ('IntersectionObserver' in window) new IntersectionObserver((es) => { vis = es[es.length - 1].isIntersecting; kick(); }).observe(cv);
+      else vis = true;
+      setPlay(playing); compute(); draw();
+      redraws.push(draw);
+    }
+    return { init, draw, run(on) { active = on; if (on) kick(); else if (raf) { cancelAnimationFrame(raf); raf = 0; } } };
+  })();
+  {
+    const wv = demos['optics-wave'];
+    demos['optics-wave'] = { init() { wv.init(); polDemo.init(); }, draw() { wv.draw(); polDemo.draw(); }, run(on) { wv.run(on); polDemo.run(on); } };
+  }
 
   /* ---------- Fourier optics: a coherent 4f system ---------- */
   demos['optics-fourier'] = (() => {
