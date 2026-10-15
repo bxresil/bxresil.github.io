@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="canonical" href="https://bingxili.com/">
+<meta name="google-site-verification" content="-l58kKZ5ltgF5gZJZdRxrYyAIoWXzHgUCDsNRwJZiCI">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -19,7 +20,10 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Bingxi Li, computational imaging, beside a focus-stacked photograph of a pinned weevil">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Bingxi Li","url":"https://bingxili.com/","email":"mailto:bingxi.li@berkeley.edu","affiliation":{"@type":"CollegeOrUniversity","name":"University of California, Berkeley"},"knowsAbout":["Computational imaging","Optical microscopy","Focus stacking","Multi-frame reconstruction"],"sameAs":["https://github.com/bxresil","https://www.linkedin.com/in/bingxi-l-a7383a294/"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Bingxi Li","url":"https://bingxili.com/","email":"mailto:bingxi.li@berkeley.edu","affiliation":{"@type":"CollegeOrUniversity","name":"University of California, Berkeley"},"knowsAbout":["Computational imaging","Optical microscopy","Focus stacking","Multi-frame reconstruction"],"sameAs":["https://github.com/bxresil","https://www.linkedin.com/in/bingxi-l-a7383a294/","https://orcid.org/0009-0004-7611-0633"]}</script>
+<!-- GoatCounter: no cookies. The pages live behind #hash links, so each page is counted as /<page> when the router shows it. -->
+<script>window.goatcounter={no_onload:true};(function(){var q=[];window.__gc=function(){var g=window.goatcounter;if(!g||!g.count)return;while(q.length)g.count({path:q.shift()})};addEventListener('pagechange',function(){var a=document.querySelector('a[data-nav].on'),p=a&&a.dataset.nav;q.push(p&&p!=='about'?'/'+p:'/');window.__gc()})})()</script>
+<script data-goatcounter="https://bingxi.goatcounter.com/count" async src="//gc.zgo.at/count.js" onload="__gc()"></script>
 <title>Bingxi Li</title>
 <meta name="description" content="Bingxi Li: computational imaging, optical microscopy and multi-frame reconstruction. Physics undergraduate (EECS minor) at UC Berkeley.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,6 +116,7 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
 .hl li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
 .hl .k { font-family: var(--font-mono); font-size: 12px; color: var(--muted); padding-top: 2px; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.actions .pf { display: flex; flex-wrap: wrap; gap: 10px; }
 .btn { display: inline-flex; align-items: center; gap: 8px; font: 500 14px var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; text-decoration: none; cursor: pointer; }
 .btn:hover { border-color: var(--accent); color: var(--accent); }
 .btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
@@ -635,6 +640,63 @@ html.lb-open { overflow: hidden; }
 .pg-in { animation: rise .45s var(--ease) backwards; }
 .pcontact { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; }
 .pcontact .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+/* pointer: a reticle dot that sits exactly on the pointer and a lens ring that trails it. When the ring moves fast its
+   red and blue edges separate, like lateral colour in a simple lens; it opens over anything clickable, closes like a
+   shutter on press, and a click sends out two faint rings. Mouse only; text fields keep the system cursor. */
+@property --cc-d { syntax: "<length>"; inherits: true; initial-value: 28px; }
+html.cc, html.cc * { cursor: none !important; }
+html.cc :is(input:not([type="range"], [type="checkbox"], [type="radio"], [type="button"], [type="submit"], [type="reset"], [type="color"], [type="file"]), textarea, select, [contenteditable]:not([contenteditable="false"])) { cursor: auto !important; }
+.cc-l { --cc-halo: color-mix(in srgb, var(--bg) 78%, transparent); position: fixed; left: 0; top: 0; z-index: 2147483647; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity .18s; will-change: transform; }
+html.cc .cc-l.on { opacity: 1; }
+html.cc .cc-l[data-m="native"] { opacity: 0; }
+.cc-l i { position: absolute; left: 0; top: 0; display: block; }
+.cc-dot i { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1.5px var(--cc-halo); transition: transform .15s var(--ease); }
+.cc-dot[data-m="link"] i { transform: scale(.7); }
+.cc-dot:is([data-m="zoom"], [data-m="help"], [data-m="no"]) i { transform: scale(0); }
+.cc-ring { --cc-d: 28px; --cc-k: 1; transition: opacity .18s, --cc-d .22s var(--ease); }
+.cc-ring .cc-o, .cc-ring .cc-ca { width: var(--cc-d); height: var(--cc-d); border-radius: 50%; }
+.cc-ring .cc-o { transform: translate(-50%, -50%) scale(var(--cc-k)); border: 1.5px solid var(--accent); box-shadow: 0 0 0 1px var(--cc-halo), inset 0 0 0 1px var(--cc-halo); transition: transform .18s var(--ease), background-color .2s, border-color .2s, border-width .2s; }
+.cc-ring .cc-ca { opacity: var(--cc-a, 0); border: 1.5px solid; }
+.cc-ring .cc-ca.r { border-color: var(--ca-r); transform: translate(calc(-50% + var(--cc-x, 0px)), calc(-50% + var(--cc-y, 0px))) scale(var(--cc-k)); }
+.cc-ring .cc-ca.b { border-color: var(--ca-b); transform: translate(calc(-50% - var(--cc-x, 0px)), calc(-50% - var(--cc-y, 0px))) scale(var(--cc-k)); }
+/* four ticks on the rim, like the marks on a lens barrel; they grow outward into a crosshair over the viewers */
+.cc-o .cc-t { left: 50%; top: 50%; width: 1.5px; height: 4px; margin-left: -.75px; background: var(--accent); border-radius: 1px; transform-origin: 50% 0; transform: rotate(var(--r)) translateY(calc(var(--cc-d) / -2 + 2px)); transition: height .2s var(--ease), transform .2s var(--ease), opacity .2s; }
+.cc-t.e { --r: 90deg; } .cc-t.s { --r: 180deg; } .cc-t.w { --r: 270deg; } .cc-t.n { --r: 0deg; }
+.cc-o .cc-v { left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border: solid var(--accent); border-width: 1.5px 0 0 1.5px; opacity: 0; transition: opacity .2s, transform .2s var(--ease); }
+.cc-o .cc-v.l { transform: translateX(calc(var(--cc-d) / -2 - 4px)) rotate(-45deg); }
+.cc-o .cc-v.r { transform: translateX(calc(var(--cc-d) / 2 + 4px)) rotate(135deg); }
+.cc-o .cc-g { left: 50%; top: 50%; opacity: 0; transition: opacity .2s; }
+.cc-o .cc-g::before, .cc-o .cc-g::after { content: ""; position: absolute; left: 0; top: 0; background: var(--accent); border-radius: 1px; }
+.cc-ring[data-m="link"] { --cc-d: 42px; }
+.cc-ring[data-m="link"] .cc-o { background: color-mix(in srgb, var(--accent) 12%, transparent); border-width: 1px; }
+.cc-ring[data-m="link"] .cc-t { height: 0; opacity: 0; }
+.cc-ring[data-m="aim"] { --cc-d: 16px; }
+/* over the viewers the ring drops away and leaves a crosshair, so it frames the viewer's own probe instead of covering it */
+.cc-ring[data-m="aim"] .cc-o { border-color: transparent; box-shadow: none; }
+.cc-ring[data-m="aim"] .cc-ca { display: none; }
+.cc-ring[data-m="aim"] .cc-t { width: 2px; height: 7px; margin-left: -1px; box-shadow: 0 0 0 1px var(--cc-halo); transform: rotate(var(--r)) translateY(calc(var(--cc-d) / -2 - 10px)); }
+.cc-ring[data-m="ew"] { --cc-d: 22px; }
+.cc-ring[data-m="ew"] .cc-t, .cc-ring[data-m="grabbing"] .cc-t { opacity: 0; }
+.cc-ring[data-m="ew"] .cc-v { opacity: 1; }
+.cc-ring[data-m="grab"] { --cc-d: 34px; }
+.cc-ring[data-m="grabbing"] { --cc-d: 22px; }
+.cc-ring[data-m="grabbing"] .cc-o { border-width: 2.5px; }
+.cc-ring[data-m="zoom"] { --cc-d: 38px; }
+.cc-ring[data-m="zoom"] .cc-t, .cc-ring[data-m="help"] .cc-t, .cc-ring[data-m="no"] .cc-t { opacity: 0; }
+.cc-ring[data-m="zoom"] .cc-g, .cc-ring[data-m="no"] .cc-g, .cc-ring[data-m="help"] .cc-g { opacity: 1; }
+.cc-ring[data-m="zoom"] .cc-g::before { width: 10px; height: 1.5px; margin: -.75px 0 0 -5px; }
+.cc-ring[data-m="zoom"] .cc-g::after { width: 1.5px; height: 10px; margin: -5px 0 0 -.75px; }
+.cc-ring[data-m="help"] { --cc-d: 32px; }
+.cc-ring[data-m="help"] .cc-g::before { content: "?"; background: none; width: 20px; margin: -.68em 0 0 -10px; text-align: center; font: 500 13px/1.36 var(--font-mono); color: var(--accent); }
+.cc-ring[data-m="no"] { --cc-d: 22px; }
+.cc-ring[data-m="no"] .cc-o { border-color: var(--muted); }
+.cc-ring[data-m="no"] .cc-g::before { width: 22px; height: 1.5px; margin: -.75px 0 0 -11px; background: var(--muted); transform: rotate(-45deg); }
+.cc-ring[data-p] { --cc-k: .78; }
+.cc-ring[data-m="link"][data-p] .cc-o { background: color-mix(in srgb, var(--accent) 24%, transparent); }
+.cc-rp { position: absolute; left: 0; top: 0; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; border: 1px solid var(--accent); opacity: 0; animation: cc-rp .55s var(--ease) forwards; }
+.cc-rp + .cc-rp { width: 80px; height: 80px; margin: -40px 0 0 -40px; animation-delay: .07s; }
+@keyframes cc-rp { from { transform: scale(.2); opacity: .5; } to { transform: scale(1); opacity: 0; } }
+@media print { .cc-l { display: none !important; } }
 </style>
 
 </head>
@@ -675,6 +737,7 @@ html.lb-open { overflow: hidden; }
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm1 2.4V17h16V7.4l-8 5.2-8-5.2ZM5.6 7 12 11.2 18.4 7H5.6Z"/></svg>
           bingxi.li@berkeley.edu
         </button>
+        <div class="pf">
         <a class="btn" href="https://github.com/bxresil" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
           GitHub
@@ -683,6 +746,11 @@ html.lb-open { overflow: hidden; }
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
           LinkedIn
         </a>
+        <a class="btn" href="https://orcid.org/0009-0004-7611-0633" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24ZM6.45 6.2a.95.95 0 1 0 1.9 0 .95.95 0 0 0-1.9 0ZM6.7 8.4h1.4v9.2H6.7V8.4Zm3.3 0h3.6c2.9 0 4.6 2 4.6 4.6s-1.7 4.6-4.6 4.6H10V8.4Zm1.4 1.3v6.6h2.1c2 0 3.2-1.3 3.2-3.3s-1.2-3.3-3.2-3.3h-2.1Z"/></svg>
+          ORCID
+        </a>
+        </div>
       </div>
     </div>
 
@@ -1828,6 +1896,7 @@ html.lb-open { overflow: hidden; }
         <div><span class="k">Email</span><a class="v mono" id="email-v" href="mailto:bingxi.li@berkeley.edu">bingxi.li@berkeley.edu</a><button class="iconbtn" type="button" data-copy="bingxi.li@berkeley.edu" aria-label="Copy email address">Copy</button></div>
         <div><span class="k">GitHub</span><span class="v"><a href="https://github.com/bxresil" target="_blank" rel="noopener">github.com/bxresil</a></span><span></span></div>
         <div><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/bingxi-l-a7383a294/" target="_blank" rel="noopener">linkedin.com/in/bingxi-l-a7383a294</a></span><span></span></div>
+        <div><span class="k">ORCID</span><span class="v"><a href="https://orcid.org/0009-0004-7611-0633" target="_blank" rel="noopener">orcid.org/0009-0004-7611-0633</a></span><span></span></div>
         <div><span class="k">CV</span><span class="v"><a href="assets/Bingxi_Li_CV.pdf" target="_blank" rel="noopener">Bingxi_Li_CV.pdf</a></span><span></span></div>
         <div><span class="k">Based in</span><span class="v">Berkeley, California</span><span></span></div>
       </div>
@@ -4470,6 +4539,115 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     };
   })();
   update();
+})();
+</script>
+
+<script>
+/* ---------- pointer: a reticle dot on the pointer and a lens ring that trails it (styles: the cc- rules) ----------
+   The ring takes its shape from the cursor the page's own CSS asks for at that spot (pointer, crosshair, ew-resize, ...),
+   read from the stylesheet rules, so new widgets get the right shape without touching this code. */
+(function () {
+  const mm = (q) => window.matchMedia && window.matchMedia(q);
+  const fine = mm('(hover: hover) and (pointer: fine)');
+  if (!fine || !fine.matches || !document.body) return;
+  const still = mm('(prefers-reduced-motion: reduce)'), root = document.documentElement;
+  const layer = (cls, html) => { const d = document.createElement('div'); d.className = 'cc-l ' + cls; d.setAttribute('aria-hidden', 'true'); d.innerHTML = html; return d; };
+  const fx = layer('cc-fx', '');
+  const ring = layer('cc-ring', '<i class="cc-ca r"></i><i class="cc-ca b"></i><i class="cc-o"><i class="cc-t n"></i><i class="cc-t e"></i><i class="cc-t s"></i><i class="cc-t w"></i><i class="cc-v l"></i><i class="cc-v r"></i><i class="cc-g"></i></i>');
+  const dot = layer('cc-dot', '<i></i>');
+
+  /* every stylesheet rule that sets a cursor, with a rough specificity so the most specific one wins */
+  const ok = (n, s) => { try { return n.matches(s); } catch (e) { return false; } };
+  const valid = (s) => { try { root.matches(s); return true; } catch (e) { return false; } };
+  const mqs = new Map(), mqOk = (q) => { if (!mqs.has(q)) mqs.set(q, mm(q)); const l = mqs.get(q); return !l || l.matches; };
+  const split = (sel) => { const out = []; let d = 0, cur = ''; for (const ch of sel) { if (ch === '(') d++; else if (ch === ')') d--; if (ch === ',' && !d) { out.push(cur); cur = ''; } else cur += ch; } out.push(cur); return out.map((p) => p.trim()).filter(Boolean); };
+  const weight = (s) => (s.match(/#[\w-]+/g) || []).length * 10000
+    + (s.match(/\.[\w-]+|\[[^\]]*\]|:(?!not\(|is\(|where\()[\w-]+/g) || []).length * 100
+    + (s.replace(/\[[^\]]*\]|"[^"]*"/g, '').match(/(?:^|[\s>+~(])[a-zA-Z][\w-]*/g) || []).length;
+  const PSEUDO_EL = /::?(?:before|after|first-line|first-letter|marker|placeholder|selection|backdrop|file-selector-button|-webkit-[\w-]+|-moz-[\w-]+)(?:\([^)]*\))?/g;
+  const rules = [];
+  const collect = (list, mq) => {
+    for (const r of list) {
+      if (r.selectorText != null && r.style) {
+        const v = r.style.getPropertyValue('cursor').trim();
+        if (!v || r.selectorText.indexOf('html.cc') >= 0) continue;
+        for (const part of split(r.selectorText)) {
+          const sel = part.replace(PSEUDO_EL, '').trim() || '*';
+          if (/[>+~]$/.test(sel) || !valid(sel)) continue;
+          rules.push({ sel, v: v.split(',').pop().trim(), w: weight(sel), mq });
+        }
+      } else if (r.cssRules) {
+        const m = r.media && r.media.mediaText;
+        collect(r.cssRules, m ? (mq || []).concat(m) : mq);
+      }
+    }
+  };
+  for (const sh of document.styleSheets) { try { collect(sh.cssRules, null); } catch (e) { /* the cross-origin font sheet */ } }
+  const NATIVE = 'input:not([type="range"],[type="checkbox"],[type="radio"],[type="button"],[type="submit"],[type="reset"],[type="color"],[type="file"]),textarea,select,[contenteditable]:not([contenteditable="false"])';
+  const want = (el) => {
+    for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+      if (ok(n, NATIVE)) return 'text';
+      const inl = n.style && n.style.cursor; if (inl && inl !== 'inherit') return inl;
+      let best = null;
+      for (const r of rules) if ((!best || r.w >= best.w) && (!r.mq || r.mq.every(mqOk)) && ok(n, r.sel)) best = r;
+      if (best && best.v !== 'inherit') return best.v;
+      if (n.localName === 'a' && n.hasAttribute('href')) return 'pointer';
+    }
+    return 'auto';
+  };
+  const MODE = { pointer: 'link', crosshair: 'aim', cell: 'aim', grab: 'grab', move: 'grab', 'all-scroll': 'grab', grabbing: 'grabbing',
+    'ew-resize': 'ew', 'col-resize': 'ew', 'e-resize': 'ew', 'w-resize': 'ew', 'zoom-in': 'zoom', 'zoom-out': 'zoom', help: 'help',
+    'not-allowed': 'no', 'no-drop': 'no', text: 'native', 'vertical-text': 'native', none: 'native' };
+
+  let x = 0, y = 0, rx = 0, ry = 0, t0 = 0, raf = 0, over = null, dirty = false, probe = false, on = false, mode = '';
+  const setMode = (m) => { if (m !== mode) { mode = m; ring.dataset.m = m; dot.dataset.m = m; } };
+  // a modal dialog (the photo viewer) sits in the top layer, above any z-index, so the layers move into it while it is open
+  const host = () => { const d = document.querySelector('dialog[open]'); return d && ok(d, ':modal') ? d : document.body; };
+  const place = () => { const h = host(); if (ring.parentNode !== h) h.append(fx, ring, dot); };
+  const show = (v) => { if (v === on) return; on = v; fx.classList.toggle('on', v); ring.classList.toggle('on', v); dot.classList.toggle('on', v); };
+  const frame = (t) => {
+    raf = 0;
+    const dt = t0 ? Math.min(64, t - t0) : 16; t0 = t;
+    if (probe) { probe = false; const el = document.elementFromPoint(x, y); if (el && el !== over) { over = el; dirty = true; } }
+    if (dirty) { dirty = false; place(); setMode(MODE[want(over)] || 'idle'); }
+    const k = still.matches ? 1 : 1 - Math.exp(-dt / 45);
+    rx += (x - rx) * k; ry += (y - ry) * k;
+    const lx = x - rx, ly = y - ry, L = Math.hypot(lx, ly), s = still.matches ? 0 : Math.min(1, L / 30), m = 3.2 * s;
+    dot.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+    ring.style.transform = 'translate3d(' + rx.toFixed(2) + 'px,' + ry.toFixed(2) + 'px,0)';
+    ring.style.setProperty('--cc-a', s.toFixed(3));
+    ring.style.setProperty('--cc-x', (L ? lx / L * m : 0).toFixed(2) + 'px');
+    ring.style.setProperty('--cc-y', (L ? ly / L * m : 0).toFixed(2) + 'px');
+    if (L > 0.05) raf = requestAnimationFrame(frame); else t0 = 0;
+  };
+  const kick = () => { if (!raf) raf = requestAnimationFrame(frame); };
+  const off = () => { root.classList.remove('cc'); show(false); };
+  const at = (e) => {
+    if (!on) { rx = e.clientX; ry = e.clientY; }
+    x = e.clientX; y = e.clientY; over = e.target; dirty = true;
+    root.classList.add('cc'); show(true); kick();
+  };
+  // a click sends out two faint rings, like the first rings of an Airy pattern
+  const ripple = () => {
+    place();
+    for (let i = 0; i < 2; i++) {
+      const r = document.createElement('i'); r.className = 'cc-rp'; r.style.left = x + 'px'; r.style.top = y + 'px';
+      const done = () => r.remove(); r.addEventListener('animationend', done); setTimeout(done, 1200); fx.appendChild(r);
+    }
+  };
+  document.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') at(e); else off(); }, { capture: true, passive: true });
+  document.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') { off(); return; }
+    at(e);
+    if (e.button === 0) { ring.dataset.p = ''; if (!still.matches && mode !== 'native') ripple(); }
+  }, { capture: true, passive: true });
+  const up = () => { if (!('p' in ring.dataset)) return; delete ring.dataset.p; dirty = true; kick(); };
+  window.addEventListener('pointerup', up, true);
+  window.addEventListener('pointercancel', up, true);
+  window.addEventListener('scroll', () => { if (on) { probe = true; kick(); } }, { capture: true, passive: true });
+  document.addEventListener('mouseout', (e) => { if (!e.relatedTarget) off(); });
+  window.addEventListener('blur', off);
+  place();
 })();
 </script>
 </body>
