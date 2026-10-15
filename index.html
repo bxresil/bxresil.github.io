@@ -3,6 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://bingxili.com/">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1016" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bingxi Li">
+<meta property="og:url" content="https://bingxili.com/">
+<meta property="og:title" content="Bingxi Li · Computational imaging">
+<meta property="og:description" content="Computational imaging, optical microscopy and multi-frame reconstruction. Physics undergraduate (EECS minor) at UC Berkeley.">
+<meta property="og:image" content="https://bingxili.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bingxi Li, computational imaging, beside a focus-stacked photograph of a pinned weevil">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Bingxi Li","url":"https://bingxili.com/","email":"mailto:bingxi.li@berkeley.edu","affiliation":{"@type":"CollegeOrUniversity","name":"University of California, Berkeley"},"knowsAbout":["Computational imaging","Optical microscopy","Focus stacking","Multi-frame reconstruction"],"sameAs":["https://github.com/bxresil","https://www.linkedin.com/in/bingxi-l-a7383a294/"]}</script>
 <title>Bingxi Li</title>
 <meta name="description" content="Bingxi Li: computational imaging, optical microscopy and multi-frame reconstruction. Physics undergraduate (EECS minor) at UC Berkeley.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1393,7 +1410,7 @@ html.lb-open { overflow: hidden; }
                 <p>Inspecting fine structures and fusion artifacts in those composites made me want to know which measurements supported each displayed detail. I organize the source images for reproducible focal-stack analysis, and this work led directly to my selection experiments (UIBS) and to a tool that shows which source slice most likely supports each detail of a fused image (FocusStack2XR).</p>
               </div>
               <figure class="photo">
-                <img src="assets/setup.jpg" alt="Macro imaging station: a camera with a ring flash on a motorized rail and its controller, next to a monitor showing focal slices of the weevil and a fused bee composite" width="1600" height="1067">
+                <img src="assets/setup.jpg" loading="lazy" decoding="async" alt="Macro imaging station: a camera with a ring flash on a motorized rail and its controller, next to a monitor showing focal slices of the weevil and a fused bee composite" width="1600" height="1067">
                 <figcaption>The macro imaging station I use for focal stacks.</figcaption>
               </figure>
             </div>
@@ -2676,8 +2693,15 @@ document.addEventListener('input', (e) => { if (e.target.matches && e.target.mat
     prevBtn.addEventListener('click', (ev) => { ev.stopPropagation(); userTouched = true; showSpec(cur - 1, -1); });
     nextBtn.addEventListener('click', (ev) => { ev.stopPropagation(); userTouched = true; showSpec(cur + 1, 1); });
   }
+  // the next specimen is fetched ahead so swiping is instant; on a slow or data-saving connection that waits
+  // until the reader reaches for the viewer
+  const pfSlow = (() => { const c = navigator.connection; return !!(c && (c.saveData || /2g|3g/.test(c.effectiveType || ''))); })();
+  let pfWait = false, pfIntent = false;
+  const pfGo = () => { pfIntent = true; if (pfWait) { pfWait = false; prefetch(); } };
+  ['pointerenter', 'focusin', 'touchstart'].forEach((t) => stage.addEventListener(t, pfGo, { passive: true, once: true }));
   function prefetch() {
     if (!multi) return;
+    if (pfSlow && !pfIntent) { pfWait = true; return; }
     const nx = SPECS[(cur + 1) % SPECS.length], pv = SPECS[(cur - 1 + SPECS.length) % SPECS.length];
     [src(nx, nx.comp), src(nx, nx.maps), ...nx.slices.map((f) => src(nx, f)), src(pv, pv.comp)].forEach((u) => { const im = new Image(); im.src = u; });
   }
